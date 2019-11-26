@@ -7,6 +7,6 @@ declare(strict_types=1);
  * @return array
  */
 function resultadosBusqueda(string $busqueda,DB $db):array{
-    $productosBusqueda = new Product_model($db);
+    $productosBusqueda = new ProductoModel($db);
     return $productosBusqueda->getPorBuscador($busqueda);
 }

@@ -16,7 +16,7 @@ function editarProducto(array $datos,DB $db,Producto $productoEditado):array
     if (empty($errores)) {        // si los datos a sanear y validar = OK
 
         /* Subir producto a la base de datos*/
-        $productosConsulta = new Product_model($db);
+        $productosConsulta = new ProductoModel($db);
 
         // 1.Obtener datos saneandos
         $producto = $productosConsulta->getData();

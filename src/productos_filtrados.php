@@ -10,27 +10,13 @@ declare(strict_types=1);
  */
 function productos_filtrados(DB $db):array {
     // Obtener productos por categoria o fecha o las dos.
-    $productos = filtroCategoria($db);
+    $modelo = new ProductoModel($db);
+    $productos = $modelo->getCategoryByQuery();
     if ($_SERVER['REQUEST_METHOD']==='GET'){
         $productos = filtroFecha($productos,$db);
     }
 
     return $productos;
-}
-
-/**
- * @param $db
- * @return array
- */
-function filtroCategoria(DB $db):array {
-    if(!array_key_exists('categoria',$_GET)){
-        $categoria = 'todo';
-    }else
-        $categoria = $_GET['categoria'];
-    require_once ('./src/categoria_tienda.php');
-    $productos_tienda = categoria_tienda($categoria,$db);
-
-    return $productos_tienda;
 }
 
 /**
@@ -48,7 +34,7 @@ function filtroFecha(array $productos,DB $db):array{
         $fecha_final = filter_input(INPUT_GET,'fecha_final',FILTER_SANITIZE_STRING);
 
         // Obtener productos segun la categoria en las fechas marcadas
-        $productosConsulta = new Product_model($db);
+        $productosConsulta = new ProductoModel($db);
         $productos = $productosConsulta->getPorDosFechas($fecha_inicial,$fecha_final,getCategoria());
     }
     return $productos;
@@ -91,6 +77,6 @@ function getCategoria():int{
  * Stock de cada categoria
  */
 function getStockCategorias(DB $db,int $categoria){
-    $num_stock = new Product_model($db);
+    $num_stock = new ProductoModel($db);
     return $num_stock->getTotalStockCategorias($categoria);
 }

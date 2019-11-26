@@ -18,7 +18,7 @@ function crearProducto(array $datos,DB $db):array {
             $producto->setFotoProd('/imgs/productos/default_product_image.png');
 
         /* Subir producto a la base de datos*/
-        $productosConsulta = new Product_model($db);
+        $productosConsulta = new ProductoModel($db);
         // 1.Obtener datos saneandos
         $producto = $productosConsulta->getData();
 

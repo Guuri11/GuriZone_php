@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Consulta a la ddbb de todos los Productos
  */
 function importar_productos(DB $db): array{
-    $productosConsulta = new Product_model($db);
+    $productosConsulta = new ProductoModel($db);
     $resultado = $productosConsulta->getAllCatalogados();
     return $resultado;
 }

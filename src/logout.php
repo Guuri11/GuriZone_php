@@ -8,7 +8,7 @@ function logout(){
     global $db;
     try{
         // 1. Transformar usuario a anonimo
-        $usuario_modelo = new Usuario_model($db);
+        $usuario_modelo = new UsuarioModel($db);
         $user = $usuario_modelo->getById(1);
     }catch (PDOException $exception){
         die($exception->getMessage());

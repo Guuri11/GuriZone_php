@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-require_once('./src/clases/Entity/Producto.php');
 /**
  * Class Product_model
  * Las consultas en las que se pida que 'descatalogado' sea 0 son las que estan dadas de altas, las otras son de baja
@@ -9,7 +8,7 @@ require_once('./src/clases/Entity/Producto.php');
  * @NOTA_Jorda: En todas los metodos tienen el caso de que la consulta tenga en cuenta o no que este descatalogado
  *              excepto getAll()
  */
-class Product_model{
+class ProductoModel{
     /********************************************* ATRIBUTOS *********************************************/
     private $db;
 
@@ -80,6 +79,47 @@ class Product_model{
             return $stmt->fetchAll();
         }catch (PDOException $exception){
             die($exception->getMessage());
+        }
+    }
+
+    /**
+     * Traduce el valor de la categoria asignada por query y obtiene los productos de dicha categoria
+     * @return array
+     * */
+    public function getCategoryByQuery():array{
+        if(!array_key_exists('categoria',$_GET))
+            $categoria = 'todo';
+        else
+            $categoria = $_GET['categoria'];
+
+        // Forzar minusculas
+        strtolower($categoria);
+        try{
+            switch ($categoria){
+                case 'todo':
+                    $categoria = 0;
+                    break;
+                case 'accesorios':
+                    $categoria = 1;
+                    break;
+                case 'ropa':
+                    $categoria = 2;
+                    break;
+                case 'zapatillas':
+                    $categoria = 3;
+                    break;
+                default:
+                    $categoria = 0;
+            }
+            // Devolver productos por su categoria o todos en caso de que sea 0
+            if ($categoria === 0){
+                return $resultado = $this->getAllCatalogados();
+            }else
+                return  $resultado = $this->getByCategory($categoria);
+
+        }catch (PDOException $e){
+            echo $e->getMessage();
+            die();
         }
     }
 
@@ -391,6 +431,8 @@ class Product_model{
             die($exception->getMessage());
         }
     }
+
+
 
     /**
      * @param Producto $producto

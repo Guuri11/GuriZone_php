@@ -8,7 +8,7 @@ declare(strict_types=1);
  * Funcion simple pero es para simplificar el codigo del controlador
  */
 function productoSolicitado(int $id,DB $db):Producto{
-    $productosConsulta = new Product_model($db);
+    $productosConsulta = new ProductoModel($db);
     $producto = $productosConsulta->getById($id);
     return $producto;
 }

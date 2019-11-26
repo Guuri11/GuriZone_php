@@ -29,7 +29,7 @@ class Paginacion
         $this->categoria = $this->categoriaSolicitada();
         $this->fechas = $this->fechasSolicitadas();
         $this->busqueda = $busqueda;
-        $productosConsulta = new Product_model($db);
+        $productosConsulta = new ProductoModel($db);
         $this->productos = $productosConsulta->getProdsTienda($this->producto_inicial,$this->productos_pagina,$busqueda,$this->categoria,$this->fechas,$descatalogados);
 
     }

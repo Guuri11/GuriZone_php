@@ -3,13 +3,15 @@ declare(strict_types=1);
 /**
  * TODO pasar todas las funciones a Modelo
  * TODO pasarlo todo a namespaces y Use
+ * TODO renombrar todas las variables
  */
 require_once('./src/clases/Entity/DB.php');
 require_once('./src/clases/Entity/Producto.php');
-require_once('./src/clases/Model/Product_model.php');
+require_once('./src/clases/Model/ProductoModel.php');
 require_once('./src/clases/Entity/GuriZone.php');
 require_once('./src/clases/Entity/Usuario.php');
-require_once('./src/clases/Model/Usuario_model.php');
+require_once('./src/clases/Entity/Paginacion.php');
+require_once('./src/clases/Model/UsuarioModel.php');
 require_once ('./src/importar_productos.php');
 require_once('./src/confirmar_admin.php');
 require_once ('./src/conexionDB.php');
@@ -26,17 +28,17 @@ $cookieValue = "anonimo";     // establecer sesión de anonimo
 
 
 $db = conexionDB();
-//TODO convertir
+//TODO convertir el db a db->getconnection()
 $productos = importar_productos($db);
 $guriZone = new GuriZone($productos);  // variable de informacion de la tienda online
-$productosModelo = new Product_model($db);
+$productosModelo = new ProductoModel($db);
 
 // Ultimo producto subido para mostrar en una parte de la vista
 $ultimoProducto = $productosModelo->getLatestProduct();
 
 // Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
 try{
-    $usuario_modelo = new Usuario_model($db);
+    $usuario_modelo = new UsuarioModel($db);
     // Si no encuentra la cookie asignar usuario como anonimo
     $cookieValue = $_COOKIE[$cookieName] ?? 'anonimo';
     $user = $usuario_modelo->getByName($cookieValue);
@@ -57,7 +59,7 @@ switch ($page){
             logout();
         }
         // Obtener producto mas vendidos y mas nuevos
-            $productosConsulta = new Product_model($db);
+            $productosConsulta = new ProductoModel($db);
             $productosTT = $productosConsulta->getTT();
             $novedades = $productosConsulta->getNovedades()
             ;
@@ -96,11 +98,13 @@ switch ($page){
             // Eliminar un producto:
             // 1. Si se ha solicitado eliminar un producto
             if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST)){
-                require_once ('./src/eliminar_producto.php');
-                // Limpiar id
                 $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
                 // Eliminarlo
-                eliminarProducto($id,$db);
+                $resultado = $productosModelo->delete(intval($id));
+                if (!$resultado)
+                    header('Location ?page=error');
+                else
+                    header('Location ?page=gestion');
             }
 
             // Gestion de paginacion:
@@ -115,7 +119,6 @@ switch ($page){
             // Limpiar pagina solicitada
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
             require_once('./src/productos_filtrados.php');
-            require_once('./src/clases/Entity/Paginacion.php');
 
             // Productos solicitados por el usuario a traves de filtros
             $productos_tienda = productos_filtrados($db);

@@ -22,7 +22,7 @@ function login():string{
         global $user;
         try{
             // Cambiar rol de usuario
-            $usuario_modelo = new Usuario_model($db);
+            $usuario_modelo = new UsuarioModel($db);
             $user = $usuario_modelo->getByRol($id);
         }catch (PDOException $exception){
             die($exception->getMessage());

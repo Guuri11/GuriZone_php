@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
-require_once('./src/clases/Entity/Producto.php');
 
-/**
- * Class Product_model
- */
-class Usuario_model{
+
+class CategoriasModel
+{
     /********************************************* ATRIBUTOS *********************************************/
     private $db;
 
