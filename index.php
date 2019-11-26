@@ -8,6 +8,8 @@ declare(strict_types=1);
 require_once('./src/clases/Entity/DB.php');
 require_once('./src/clases/Entity/Producto.php');
 require_once('./src/clases/Model/ProductoModel.php');
+require_once ('./src/clases/Entity/Categorias.php');
+require_once ('./src/clases/Model/CategoriasModel.php');
 require_once('./src/clases/Entity/GuriZone.php');
 require_once('./src/clases/Entity/Usuario.php');
 require_once('./src/clases/Entity/Paginacion.php');
@@ -59,10 +61,8 @@ switch ($page){
             logout();
         }
         // Obtener producto mas vendidos y mas nuevos
-            $productosConsulta = new ProductoModel($db);
-            $productosTT = $productosConsulta->getTT();
-            $novedades = $productosConsulta->getNovedades()
-            ;
+            $productosTT = $productosModelo->getTT();
+            $novedades = $productosModelo->getNovedades();
         require("views/$page.view.php");
         break;
     }
@@ -82,7 +82,7 @@ switch ($page){
     case 'dashboard':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName]) == true){
+        if (confirmarAdmin($_COOKIE[$cookieName])){
             require("views/$page.view.php");
         } else{
             $page='login';      // si no es admin -> redirigir al login
@@ -94,9 +94,9 @@ switch ($page){
     case 'gestion':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName]) == true){
+        if (confirmarAdmin($_COOKIE[$cookieName])){
             // Eliminar un producto:
-            // 1. Si se ha solicitado eliminar un producto
+            // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST)){
                 $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
                 // Eliminarlo
@@ -118,10 +118,10 @@ switch ($page){
 
             // Limpiar pagina solicitada
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-            require_once('./src/productos_filtrados.php');
 
             // Productos solicitados por el usuario a traves de filtros
-            $productos_tienda = productos_filtrados($db);
+            $productos_tienda = $productosModelo->getProductosFiltrados();
+
             // Datos de la paginacion y productos de la pagina actual
             $paginacion = new Paginacion(count($productos_tienda),10,$pagina,$db,"",0);
 
@@ -136,12 +136,11 @@ switch ($page){
     case 'crear_producto':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName]) == true){
+        if (confirmarAdmin($_COOKIE[$cookieName])){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 require_once('./src/crear_producto.php');
             // Recoger datos validados y saneados del formulario de crear producto
-                $datos = datos();
-                $errores = crearProducto($datos,$db);
+                $errores = $productosModelo->crearProducto();
             }
             require("views/$page.view.php");
         } else{
@@ -154,7 +153,7 @@ switch ($page){
     case 'editar_producto':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName]) == true){
+        if (confirmarAdmin($_COOKIE[$cookieName])){
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
                 header('Location: ?page=error');
@@ -206,7 +205,6 @@ switch ($page){
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
 
             require_once ('src/resultadosBusqueda.php');
-            require_once('./src/productos_filtrados.php');
             require_once('./src/clases/Entity/Paginacion.php');
 
             // Sanear busqueda solicitada
@@ -229,17 +227,16 @@ switch ($page){
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'], FILTER_VALIDATE_INT);
 
-            require_once('./src/productos_filtrados.php');
             require_once('./src/clases/Entity/Paginacion.php');
 
             // Productos solicitados por el usuario a traves de filtros
-            $productos_tienda = productos_filtrados($db);
+            $productos_tienda = $productosModelo->getProductosFiltrados();
             $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $db, "", 1);
         }
             // Obtener el numero de productos por categoria
-            $stockAccesorios = getStockCategorias($db,1);
-            $stockRopa = getStockCategorias($db,2);
-            $stockZapatillas = getStockCategorias($db,3);
+            $stockAccesorios = $productosModelo->getTotalStockCategorias(1);
+            $stockRopa = $productosModelo->getTotalStockCategorias(2);
+            $stockZapatillas = $productosModelo->getTotalStockCategorias(3);
 
             require("views/$page.view.php");
 

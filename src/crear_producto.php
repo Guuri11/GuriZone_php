@@ -7,10 +7,15 @@ declare(strict_types=1);
  */
 function crearProducto(array $datos,DB $db):array {
     $errores = [];
-    // validar los campos que no son cadenas
-    $datos = validacionInputsProducto($datos);
-    // si los datos a sanear y validar = OK
-    $errores = camposRequeridos($datos);
+    $datos = $_POST;
+
+    // 1. Comprobar que estan todos los campos requeridos
+    foreach ($datos as $dato => $valor){
+        if(empty($valor) && $dato!='urlfoto' && $dato!='descatalogado'){ // podria no tener foto... y descatalogado si es 0 lo considera como vacio
+            $errores[]="ERROR: Campo requerido vacio: ".$dato;
+        }
+    }
+    // Si todos los campos requeridos estan rellenados:
     if (empty($errores)){
         $producto = new Producto();
         // indicar foto por defecto si no existe dicha imagen
@@ -30,43 +35,11 @@ function crearProducto(array $datos,DB $db):array {
             $resultado = $productosConsulta->insert($producto);     // subirlo a la ddbb
             if (!$resultado)
                 $errores[]="Error al crear producto";
-        }
-
-        else{
+        }else{
             return $errores;
         }
 
         return $errores;
     }
     return $errores;
-}
-
-/**
- * @return array
- */
-function datos():array {    // datos de $_POST
-    $datos = $_POST;
-    return $datos;
-}
-
-/**
- * @param $datos
- * @return array
- */
-function validacionInputsProducto($datos):array {
-    $datos['categoria'] = filter_input(INPUT_POST,'categoria',FILTER_VALIDATE_INT);
-    $datos['subcategoria'] = filter_input(INPUT_POST,'subcategoria',FILTER_VALIDATE_INT);
-    $datos['stock'] = filter_input(INPUT_POST,'stock',FILTER_VALIDATE_INT);
-
-    return $datos;
-}
-
-function camposRequeridos($campos):array {
-    $requeridos = [];
-    foreach ($campos as $campo => $valor){       // por cada valor del campo comprobar si esta vacio o no.
-        if(empty($valor) && $campo!='urlfoto' && $campo!='descatalogado'){ // podria no tener foto... y descatalogado si es 0 lo considera como vacio
-            $requeridos[]="ERROR: Campo requerido vacio: ".$campo;
-        }
-    }
-    return $requeridos;
 }

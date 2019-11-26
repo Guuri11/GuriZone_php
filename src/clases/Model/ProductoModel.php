@@ -287,6 +287,71 @@ class ProductoModel{
     /**
      * @return array
      */
+    public function getProductosFiltrados():array{
+        try{
+            // FILTRAR POR CATEGORIA
+            $productos = $this->getCategoryByQuery();
+
+            // FILTRO POR FECHAS
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
+
+                // Almacenar fechas saneadas en una variable
+                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
+                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
+
+                // Obtener productos segun la categoria en las fechas marcadas
+                $categoriaConsulta = new CategoriasModel($this->db);
+                $productos = $this->getPorDosFechas($fecha_inicial, $fecha_final, $categoriaConsulta->getByQuery());
+            }
+
+            return $productos;
+        }catch (PDOException $exception){
+            die($exception->getMessage());
+        }
+    }
+
+    public function crearProducto():array {
+        $errores = [];
+        $datos = $_POST;
+
+        // 1. Comprobar que estan todos los campos requeridos
+        foreach ($datos as $dato => $valor) {
+            if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
+                $errores[] = "ERROR: Campo requerido vacio: " . $dato;
+            }
+        }
+
+        // Si todos los campos requeridos estan rellenados:
+        if (empty($errores)) {
+            $producto = new Producto();
+            // indicar foto por defecto si no existe dicha imagen
+            if (empty($producto->getFotoProd()))
+                $producto->setFotoProd('/imgs/productos/default_product_image.png');
+
+            // 2.Obtener datos saneandos
+            $producto = $this->getData();
+
+            // 3.Validar datos
+            $errores = $this->validateCrearProducto($producto);
+
+            // 4. Ejecutar insercion a la BBDD
+            if (empty($errores)){
+                $resultado = $this->insert($producto);
+                if (!$resultado)
+                    $errores[]="Error al crear producto";
+            }else{
+                return $errores;
+            }
+
+            return $errores;
+        }
+
+        return $errores;
+    }
+
+    /**
+     * @return array
+     */
     public function getTT():array {
         try{
             $stmt = $this->db->query('SELECT * FROM `Producto` WHERE descatalogado=0 ORDER BY num_ventas_prod DESC LIMIT 5');
