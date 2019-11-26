@@ -1,0 +1,9 @@
+{
+  "database": {
+    "user": "admin",
+    "password": "admin",
+    "dsn": "mysql: host=localhost; dbname=GuriZone",
+    "options": {
+    }
+  }
+}

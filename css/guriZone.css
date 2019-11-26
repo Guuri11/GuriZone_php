@@ -1,0 +1,33 @@
+body {
+    background-color: rgb(230, 230, 230);
+}
+
+footer.guriFooter, header.guriHeader{
+    background-color: white;
+}
+
+.gurizone-login, .gurizone-contact, .gurizone-gestion, .gurizone-crear, .guri-tienda, .gurizone-inicio, .gurizone-perfil{
+  background-color: white;
+  border-radius: 2em;
+}
+
+.cut{
+    overflow: hidden;
+    max-width: 200px;
+    white-space: nowrap;/*
+    text-overflow: ellipsis;
+
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    transition: all 1s;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;*/
+}
+
+.cut:hover{
+    white-space: initial;
+    overflow: visible;
+    cursor: pointer;
+}
+
+
