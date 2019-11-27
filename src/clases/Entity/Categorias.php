@@ -11,7 +11,7 @@ class Categorias
      */
     public function getIdCat():int
     {
-        return $this->id_cat;
+        return intval($this->id_cat);
     }
 
     /**

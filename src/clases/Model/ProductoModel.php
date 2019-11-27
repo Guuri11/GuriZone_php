@@ -67,59 +67,18 @@ class ProductoModel{
      * @param int $category
      * @return array
      */
-    public function getByCategory(int $category,int $descatalogado=0):array {
+    public function getByCategory(int $categoria,int $descatalogado=0):array {
         try{
             if ($descatalogado == 0)
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod');
             else
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod AND descatalogado=0');
-            $stmt->bindParam('categoria_prod', $category, PDO::PARAM_INT);
+            $stmt->bindParam('categoria_prod', $categoria, PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
             die($exception->getMessage());
-        }
-    }
-
-    /**
-     * Traduce el valor de la categoria asignada por query y obtiene los productos de dicha categoria
-     * @return array
-     * */
-    public function getCategoryByQuery():array{
-        if(!array_key_exists('categoria',$_GET))
-            $categoria = 'todo';
-        else
-            $categoria = $_GET['categoria'];
-
-        // Forzar minusculas
-        strtolower($categoria);
-        try{
-            switch ($categoria){
-                case 'todo':
-                    $categoria = 0;
-                    break;
-                case 'accesorios':
-                    $categoria = 1;
-                    break;
-                case 'ropa':
-                    $categoria = 2;
-                    break;
-                case 'zapatillas':
-                    $categoria = 3;
-                    break;
-                default:
-                    $categoria = 0;
-            }
-            // Devolver productos por su categoria o todos en caso de que sea 0
-            if ($categoria === 0){
-                return $resultado = $this->getAllCatalogados();
-            }else
-                return  $resultado = $this->getByCategory($categoria);
-
-        }catch (PDOException $e){
-            echo $e->getMessage();
-            die();
         }
     }
 
@@ -284,32 +243,6 @@ class ProductoModel{
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getProductosFiltrados():array{
-        try{
-            // FILTRAR POR CATEGORIA
-            $productos = $this->getCategoryByQuery();
-
-            // FILTRO POR FECHAS
-            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
-
-                // Almacenar fechas saneadas en una variable
-                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
-                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
-
-                // Obtener productos segun la categoria en las fechas marcadas
-                $categoriaConsulta = new CategoriasModel($this->db);
-                $productos = $this->getPorDosFechas($fecha_inicial, $fecha_final, $categoriaConsulta->getByQuery());
-            }
-
-            return $productos;
-        }catch (PDOException $exception){
-            die($exception->getMessage());
-        }
-    }
-
     public function crearProducto():array {
         $errores = [];
         $datos = $_POST;
@@ -384,7 +317,7 @@ class ProductoModel{
      * @param int $descatalogado
      * @return array
      */
-    public function getPorDosFechas(string $fecha_inicial,string $fecha_final,int $categoria,int $descatalogado=0):array {
+    public function getPorDosFechas(string $fecha_inicial,string $fecha_final,int $categoria=0,int $descatalogado=0):array {
         try{
             // EN EL CASO DE QUE NO SE ESPECIFIQUE LA CATEGORIA NI SE FILTRE POR FECHA
             if ($categoria == 0 && empty($fechas)){

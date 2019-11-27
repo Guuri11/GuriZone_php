@@ -34,6 +34,7 @@ $db = conexionDB();
 $productos = importar_productos($db);
 $guriZone = new GuriZone($productos);  // variable de informacion de la tienda online
 $productosModelo = new ProductoModel($db);
+$categoriaModelo = new CategoriasModel($db);
 
 // Ultimo producto subido para mostrar en una parte de la vista
 $ultimoProducto = $productosModelo->getLatestProduct();
@@ -95,7 +96,7 @@ switch ($page){
     {
         // Capa de proteccion para acceder al dashboard
         if (confirmarAdmin($_COOKIE[$cookieName])){
-            // Eliminar un producto:
+            /** Eliminar un producto: **/
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST)){
                 $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
@@ -107,22 +108,39 @@ switch ($page){
                     header('Location ?page=gestion');
             }
 
-            // Gestion de paginacion:
-            // 1. Si la pagina introducida es menor de 1 o no existe poner la pagina 1
+            /** Productos solicitados por el usuario a traves de filtros **/
+            // Filtro por categoria
+
+            // asignar valor a categoria en caso de que no se especifique
+            if (!array_key_exists('categoria',$_GET))
+                $_GET['categoria']='todo';
+            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
+
+            // Obtener todos los productos o los de la categoria especificada
+            if ($categoria == 'todo')
+                $productos_tienda = $productosModelo->getAllCatalogados();
+            else{
+                $categoria = $categoriaModelo->getByTipoCat($categoria);
+                $productos_tienda = $productosModelo->getByCategory($categoria->getIdCat());
+            }
+
+            // Filtro por fecha
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
+
+                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
+                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
+
+                // Obtener productos segun la categoria en las fechas marcadas
+                $categoria = $categoriaModelo->getByTipoCat($categoria);
+                $productos_tienda = $productosModelo->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
+            }
+
+            /** Gestion de paginacion: **/
+            // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
             if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
                 $_GET['pg']=1;
 
-            // Si la categoria no se ha especificado recoger todos los productos
-            if (!array_key_exists('categoria',$_GET))
-                $_GET['categoria']='todo';
-
-            // Limpiar pagina solicitada
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-
-            // Productos solicitados por el usuario a traves de filtros
-            $productos_tienda = $productosModelo->getProductosFiltrados();
-
-            // Datos de la paginacion y productos de la pagina actual
             $paginacion = new Paginacion(count($productos_tienda),10,$pagina,$db,"",0);
 
             require("views/$page.view.php");

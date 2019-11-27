@@ -25,29 +25,19 @@ class CategoriasModel
         }
     }
 
-    public function getByQuery():int{
-        if(!array_key_exists('categoria',$_GET)){
-            $categoria = 'todo';
-        }else
-            $categoria = $_GET['categoria'];
-
-        switch ($categoria){
-            case 'todo':
-                $categoria = 0;
-                break;
-            case 'accesorios':
-                $categoria = 1;
-                break;
-            case 'ropa':
-                $categoria = 2;
-                break;
-            case 'zapatillas':
-                $categoria = 3;
-                break;
-            default:
-                $categoria = 0;
+    public function getByTipoCat(string $tipo_cat):Categorias{
+        try{
+            $stmt = $this->db->prepare('SELECT * FROM Categorias WHERE tipo_cat=:tipo_cat');
+            $stmt->bindParam(':tipo_cat',$tipo_cat,PDO::PARAM_STR);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Categorias');
+            $stmt->execute();
+            return $stmt->fetch();
+        }catch (PDOException $exception){
+            $categoria = new Categorias();
+            $categoria->setIdCat(0);
+            $categoria->setTipoCat('Todo');
+            return $categoria;
         }
-        return $categoria;
     }
 
 }
