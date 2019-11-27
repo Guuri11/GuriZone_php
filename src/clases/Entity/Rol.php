@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 class Rol{
-    /********************************************* ATRIBUTOS *********************************************/
 
     private $rol;
     private $tipoRol;
-    /********************************************* CONSTRUCTOR ********************************************
+
+    /**
      * @param int $rol
      */
     public function __construct(int $rol){
@@ -14,7 +14,6 @@ class Rol{
         $this->setTipoRol($this->rol);
     }
 
-    /********************************************* METODOS *********************************************/
     /**
      * @return mixed
      */

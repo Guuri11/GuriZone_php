@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 /**
- * TODO pasar todas las funciones a Modelo
  * TODO pasarlo todo a namespaces y Use
  * TODO renombrar todas las variables
  */
@@ -10,13 +9,9 @@ require_once('./src/clases/Entity/Producto.php');
 require_once('./src/clases/Model/ProductoModel.php');
 require_once ('./src/clases/Entity/Categorias.php');
 require_once ('./src/clases/Model/CategoriasModel.php');
-require_once('./src/clases/Entity/GuriZone.php');
 require_once('./src/clases/Entity/Usuario.php');
 require_once('./src/clases/Entity/Paginacion.php');
 require_once('./src/clases/Model/UsuarioModel.php');
-require_once ('./src/importar_productos.php');
-require_once('./src/confirmar_admin.php');
-require_once ('./src/conexionDB.php');
 
 require __DIR__.'/config/bootstrap.php';
 
@@ -29,15 +24,13 @@ $cookieValue = "anonimo";     // establecer sesión de anonimo
 }
 
 
-$db = conexionDB();
-//TODO convertir el db a db->getconnection()
-$productos = importar_productos($db);
-$guriZone = new GuriZone($productos);  // variable de informacion de la tienda online
-$productosModelo = new ProductoModel($db);
-$categoriaModelo = new CategoriasModel($db);
+$db = new DB();
+$categoriaConsulta = new CategoriasModel($db);
+$productosConsulta = new ProductoModel($db);
+
 
 // Ultimo producto subido para mostrar en una parte de la vista
-$ultimoProducto = $productosModelo->getLatestProduct();
+$ultimoProducto = $productosConsulta->getLatestProduct();
 
 // Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
 try{
@@ -62,8 +55,8 @@ switch ($page){
             logout();
         }
         // Obtener producto mas vendidos y mas nuevos
-            $productosTT = $productosModelo->getTT();
-            $novedades = $productosModelo->getNovedades();
+            $productosTT = $productosConsulta->getTT();
+            $novedades = $productosConsulta->getNovedades();
         require("views/$page.view.php");
         break;
     }
@@ -83,10 +76,11 @@ switch ($page){
     case 'dashboard':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName])){
+        if ($_COOKIE[$cookieName] === 'admin'){
             require("views/$page.view.php");
         } else{
-            $page='login';      // si no es admin -> redirigir al login
+            $page ='login';     // si no es admin -> redirigir al login
+            require_once ("views/$page.view.php");
         }
 
         break;
@@ -95,13 +89,14 @@ switch ($page){
     case 'gestion':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName])){
+        if ($_COOKIE[$cookieName] === 'admin'){
             /** Eliminar un producto: **/
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST)){
                 $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
-                // Eliminarlo
-                $resultado = $productosModelo->delete(intval($id));
+
+                // 2. Eliminar producto TODO: confirmacion del delete
+                $resultado = $productosConsulta->delete(intval($id));
                 if (!$resultado)
                     header('Location ?page=error');
                 else
@@ -118,10 +113,10 @@ switch ($page){
 
             // Obtener todos los productos o los de la categoria especificada
             if ($categoria == 'todo')
-                $productos_tienda = $productosModelo->getAllCatalogados();
+                $productos = $productosConsulta->getAll();
             else{
-                $categoria = $categoriaModelo->getByTipoCat($categoria);
-                $productos_tienda = $productosModelo->getByCategory($categoria->getIdCat());
+                $categoria = $categoriaConsulta->getByTipoCat($categoria);
+                $productos = $productosConsulta->getByCategory($categoria->getIdCat());
             }
 
             // Filtro por fecha
@@ -131,8 +126,8 @@ switch ($page){
                 $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
-                $categoria = $categoriaModelo->getByTipoCat($categoria);
-                $productos_tienda = $productosModelo->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
+                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
             }
 
             /** Gestion de paginacion: **/
@@ -141,7 +136,7 @@ switch ($page){
                 $_GET['pg']=1;
 
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos_tienda),10,$pagina,$db,"",0);
+            $paginacion = new Paginacion(count($productos),10,$pagina,$db,"",0);
 
             require("views/$page.view.php");
         } else{
@@ -154,11 +149,35 @@ switch ($page){
     case 'crear_producto':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName])){
+        if ($_COOKIE[$cookieName] === 'admin'){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                require_once('./src/crear_producto.php');
-            // Recoger datos validados y saneados del formulario de crear producto
-                $errores = $productosModelo->crearProducto();
+                $errores=[];
+                $datos = $_POST;
+                // 1. Comprobar que estan todos los campos requeridos
+                foreach ($datos as $dato => $valor) {
+                    if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
+                        $errores[] = "ERROR: Campo requerido vacio: " . $dato;
+                    }
+                }
+                if (empty($errores)) {
+                    $producto = new Producto();
+                    // indicar foto por defecto si no existe dicha imagen
+                    if (empty($producto->getFotoProd()))
+                         $producto->setFotoProd('/imgs/productos/default_product_image.png');
+                    
+                    // 2.Obtener datos saneandos
+                    $producto = $productosConsulta->getData();
+
+                    // 3.Validar datos
+                    $errores = $productosConsulta->validateCrearProducto($producto);
+
+                    // 4. Ejecutar insercion a la BBDD
+                    if (empty($errores)){
+                        $resultado = $productosConsulta->insert($producto);
+                        if (!$resultado)
+                            $errores[]="Error al crear producto";
+                    }
+                }
             }
             require("views/$page.view.php");
         } else{
@@ -171,15 +190,14 @@ switch ($page){
     case 'editar_producto':
     {
         // Capa de proteccion para acceder al dashboard
-        if (confirmarAdmin($_COOKIE[$cookieName])){
+        if ($_COOKIE[$cookieName] === 'admin'){
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
                 header('Location: ?page=error');
             }else
                 $id = $_GET['id'];
-            require_once ('./src/producto.php');
             try{
-                $productoSeleccionado = productoSolicitado(intval($id),$db);
+                $productoSeleccionado = $productosConsulta->getById(intval($id));
             }catch (ErrorException $errorException){
                 $page="error";
             }
@@ -187,11 +205,32 @@ switch ($page){
             $resultado = false;
             // Obtener datos del formulario
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                require_once ('./src/editar_producto.php');
-                // recoger datos validados y saneados del formulario de crear producto
-                $datos = datos();
-                $errores = editarProducto($datos,$db,$productoSeleccionado);
-                // en la vista confirmara si se ha hecho con existo o no la actualizacion
+                $errores=[];
+                $datos = $_POST;
+
+                // 1. Comprobar que estan todos los campos requeridos
+                foreach ($datos as $dato => $valor) {
+                    if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
+                        $errores[] = "ERROR: Campo requerido vacio: " . $dato;
+                    }
+                }
+
+                if (empty($errores)) {
+                    // 1.Obtener datos saneandos
+                    $producto = $productosConsulta->getData();
+                    $producto->setIdProd($productoSeleccionado->getIdProd());
+                    $producto->setNumVentasProd($productoSeleccionado->getNumVentasProd());
+
+                    // 2.Validar datos
+                    $errores = $productosConsulta->validate($producto);
+
+                    // 3. Ejecutar insercion a la BBDD
+                    if (empty($errores)){
+                        $resultado = $productosConsulta->update($producto);     // subirlo a la ddbb
+                        if ($resultado === false)
+                            $errores[]="Error al modificar producto";
+                    }
+                }
             }
 
             require("views/$page.view.php");
@@ -200,6 +239,11 @@ switch ($page){
             require_once ("views/$page.view.php");
         }
         break;
+    }
+
+    case 'borrar':
+    {
+
     }
 
     case 'contactus':
@@ -211,50 +255,65 @@ switch ($page){
 
     case 'tienda':
     {
-        /* RESULTADOS DE LA BARRA DE BUSQUEDA */
+        /** RESULTADOS DE LA BARRA DE BUSQUEDA **/
         if($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
+            // Sanear busqueda solicitada
+            $busqueda = filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            // PRODUCTOS OBTENIDOS POR LA BUSQUEDA
+            $resultados = $productosConsulta->getPorBuscador($busqueda);
+
             // Controlar el valor de la pagina solicitada
             if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
                 $_GET['pg']=1;
-            // Si no se ha solicitado categoria buscar productos sin tener dicho campo en cuenta
-            if (!array_key_exists('categoria',$_GET))
-                $_GET['categoria']='todo';
+
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
 
-            require_once ('src/resultadosBusqueda.php');
-            require_once('./src/clases/Entity/Paginacion.php');
-
-            // Sanear busqueda solicitada
-            $busqueda = filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_SANITIZE_FULL_SPECIAL_CHARS);                   // BUSQUEDA DEL USUARIO
-            $resultados = resultadosBusqueda($busqueda,$db);// PRODUCTOS OBTENIDOS POR LA BUSQUEDA
             // Recoge datos de la paginacion y sus productos segun la pagina actual
             $paginacion = new Paginacion(count($resultados),12,$pagina,$db,$busqueda,1);
 
         }else {
-            /* MOSTRAR PRODUCTOS DE LA TIENDA */
+
+            /** Productos solicitados por el usuario a traves de filtros **/
+            // Filtro por categoria:
+            // asignar valor a categoria en caso de que no se especifique
+            if (!array_key_exists('categoria',$_GET))
+                $_GET['categoria']='todo';
+            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
+
+            // Obtener todos los productos o los de la categoria especificada
+            if ($categoria == 'todo')
+                $productos_tienda = $productosConsulta->getAllCatalogados();
+            else{
+                $categoria = $categoriaConsulta->getByTipoCat($categoria);
+                $productos_tienda = $productosConsulta->getByCategory($categoria->getIdCat());
+            }
+
+            // Filtro por fecha:
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
+
+                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
+                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
+
+                // Obtener productos segun la categoria en las fechas marcadas
+                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                $productos_tienda = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
+            }
+
+            /** Gestion de paginacion: **/
 
             // Controlar el valor de la pagina solicitada
             if (!array_key_exists('pg', $_GET) || $_GET['pg'] <= 0)
                 $_GET['pg'] = 1;
-
-            // Si no se ha solicitado categoria buscar productos sin tener dicho campo en cuenta
-            if (!array_key_exists('categoria', $_GET))
-                $_GET['categoria'] = 'todo';
-
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'], FILTER_VALIDATE_INT);
-
-            require_once('./src/clases/Entity/Paginacion.php');
-
-            // Productos solicitados por el usuario a traves de filtros
-            $productos_tienda = $productosModelo->getProductosFiltrados();
             $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $db, "", 1);
         }
             // Obtener el numero de productos por categoria
-            $stockAccesorios = $productosModelo->getTotalStockCategorias(1);
-            $stockRopa = $productosModelo->getTotalStockCategorias(2);
-            $stockZapatillas = $productosModelo->getTotalStockCategorias(3);
+            $stockAccesorios = $productosConsulta->getTotalStockCategorias(1);
+            $stockRopa = $productosConsulta->getTotalStockCategorias(2);
+            $stockZapatillas = $productosConsulta->getTotalStockCategorias(3);
 
             require("views/$page.view.php");
 
@@ -271,15 +330,14 @@ switch ($page){
             header('Location: ?page=error');
         }else
             $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
-        require_once ('./src/producto.php');
-        $productoSeleccionado = productoSolicitado($id,$db);
+        $productoSeleccionado = $productosConsulta->getById(intval($id));
         require("views/$page.view.php");
         break;
     }
     case 'perfil':
     {
         // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if (confirmarAdmin($_COOKIE[$cookieName]) == true || $_COOKIE[$cookieName]=='usuario')
+        if ($_COOKIE[$cookieName] === 'admin' || $_COOKIE[$cookieName]=='usuario')
             require("views/$page.view.php");
         else{
             require_once ('views/login.view.php');

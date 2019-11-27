@@ -6,16 +6,14 @@ require_once('./src/clases/Entity/Producto.php');
  * Class Product_model
  */
 class UsuarioModel{
-    /********************************************* ATRIBUTOS *********************************************/
     private $db;
 
-    /********************************************* CONSTRUCTOR ******************************************
+    /**
      * @param $db
      */
     function __construct(DB $db){
         $this->db = $db;
     }
-    /********************************************* METODOS ***********************************************/
     public function getById(int $id):Usuario{
         $stmt = $this->db->prepare('SELECT * FROM Usuario WHERE id_cli=:id');
         $stmt->bindParam(':id',$id,PDO::PARAM_INT);

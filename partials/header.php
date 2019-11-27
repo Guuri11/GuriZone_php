@@ -21,18 +21,18 @@
                     <div class="site-top-icons">
                         <ul>
                             <?php if($cookieValue === "anonimo"){ // SI EL USER ES ANONIMO: OPCION REGISTRARSE?>
-                            <li><a href="#registrarse"><span class="icon icon-person_add"></span></a>
-                            <li><a href="?page=login"><span class="icon icon-sign-in"></span></a></li>
+                            <li><a href="#registrarse"><span class="icon icon-person_add "></span> REGISTRARSE</a>
+                            <li><a href="?page=login"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
                             <?php }elseif($cookieValue === "usuario"){ // SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT?>
-                                <li><a href="?page=index&logout=true"><span class="icon icon-sign-out"></span></a></li>
-                                <li><a href="#"><span class="icon icon-home"></span></a></li>
+                                <li><a href="?page=index&logout=true"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
+                                <li><a href="#"><span class="icon icon-home"></span> MI PERFIL</a></li>
                             <?php }elseif($cookieValue === "admin"){     // SI EL USUARIO ES ADMIN: OPCION DASHBOARD Y LOGOUT?>
-                                <li><a href="?logout=true"><span class="icon icon-sign-out"></span></a></li>
-                                <li><a href="?page=dashboard"><span class="icon icon-dashboard"></span></a></li>
+                                <li><a href="?logout=true"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
+                                <li><a href="?page=dashboard"><span class="icon icon-dashboard"></span> ADMIN</a></li>
                             <?php } ?>
                             <li>
                                 <a href="#" class="site-cart">
-                                    <span class="icon icon-shopping_cart"></span>
+                                    <span class="icon icon-shopping_cart"></span> CARRITO
                                 </a>
                             </li>
                             <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>

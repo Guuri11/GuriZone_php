@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 class Producto{
-    /********************************************* ATRIBUTOS *********************************************/
+
     private $id_prod;
     private $modelo_prod;
     private $marca_prod;
@@ -19,12 +19,6 @@ class Producto{
     private $descripcion;
     private $cantidad;
     private $descatalogado;
-
-
-    /********************************************* CONSTRUCTOR *********************************************/
-
-
-    /********************************************* METODOS *********************************************/
 
     public function setAll($atributos){
         $this->modelo_prod = $atributos['modelo'];

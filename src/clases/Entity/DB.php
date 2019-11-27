@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 class DB extends PDO {
 
-    /********************************************* ATRIBUTOS *********************************************/
     private $dsn;
     private $user;
     private $password;
 
-    /********************************************* CONTRUCTOR *********************************************/
     public function __construct(){
         $datosJSON = file_get_contents('./config/app.json');
         $datos = json_decode($datosJSON,true);
@@ -16,9 +14,9 @@ class DB extends PDO {
         $this->user = $datos['database']['user'];
         $this->password = $datos['database']['password'];
         parent::__construct($this->dsn,$this->user,$this->password,array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8"));
+        $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    /********************************************* METODOS *********************************************/
 
     /**
      * @return string

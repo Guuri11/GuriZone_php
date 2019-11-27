@@ -6,7 +6,6 @@ declare(strict_types=1);
  */
 class Paginacion
 {
-    /********************************************* ATRIBUTOS *********************************************/
     private $num_productos;
     private $productos_pagina;
     private $num_paginas;
@@ -17,7 +16,7 @@ class Paginacion
     private $categoria;
     private $fechas;
     private $busqueda;
-    /********************************************* CONSTRUCTOR *********************************************/
+
     public function __construct(int $num_productos, int $productos_pagina,int $pagina,DB $db,string $busqueda="", int $descatalogados=0)
     {
         $this->num_productos = $num_productos;
@@ -33,8 +32,6 @@ class Paginacion
         $this->productos = $productosConsulta->getProdsTienda($this->producto_inicial,$this->productos_pagina,$busqueda,$this->categoria,$this->fechas,$descatalogados);
 
     }
-
-    /********************************************* METODOS *********************************************/
 
     /**
      * @return int

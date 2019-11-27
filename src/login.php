@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-require_once('./src/datosRequeridos.php');
 /**
  * @return string
  */
@@ -17,7 +16,7 @@ function login():string{
         // 1. Email&Contraseña rellenados?
         // 2. Existe el email en la base de datos?
         // 3. Coincide la contraseña con el email introducido?
-    if (datosRequeridos($datos,$datos) && checkEmail($db,$email) && checkPassword($db,$password,$email)){   // SI LOGIN OK CAMBIAMOS
+    if (datosRequeridos($datos) && checkEmail($db,$email) && checkPassword($db,$password,$email)){   // SI LOGIN OK CAMBIAMOS
         $id = getIDLogin($db,$email,$password); // Obtener ID del usuario
         global $user;
         try{
@@ -109,4 +108,19 @@ function getIDLogin(DB $db, string $email, string $password): int{
     }catch (PDOException $e){
         echo $e->getMessage();
     }
+}
+
+function datosRequeridos(array $camposRequeridos):bool{
+    $validar = true;
+    // por cada valor del campo comprobar si esta vacio o no.
+    foreach ($camposRequeridos as $campo => $valor){
+        // podria no tener foto... y descatalogado si es 0 lo considera como vacio
+        if(empty($valor) && $campo!='urlfoto' && $campo!='descatalogado'){
+            echo "<p><strong>ERROR: Campo requerido vacio: </strong><em>$campo</em>";
+            if($validar === true)       // SI HA HABIDO ERROR Y SIGUE VERDADERO CAMBIARLO A FALSO
+                $validar = false;
+        }
+    }
+
+    return $validar;        // devuelve el estado de la validacion
 }

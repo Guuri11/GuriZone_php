@@ -9,16 +9,16 @@ declare(strict_types=1);
  *              excepto getAll()
  */
 class ProductoModel{
-    /********************************************* ATRIBUTOS *********************************************/
+
     private $db;
 
-    /********************************************* CONSTRUCTOR ******************************************
+    /**
      * @param $db
      */
     function __construct(DB $db){
         $this->db = $db;
     }
-    /********************************************* METODOS ***********************************************/
+
     public  function getAll(): array {
         try{
             $stmt = $this->db->query('SELECT * FROM Producto');
@@ -243,45 +243,6 @@ class ProductoModel{
         }
     }
 
-    public function crearProducto():array {
-        $errores = [];
-        $datos = $_POST;
-
-        // 1. Comprobar que estan todos los campos requeridos
-        foreach ($datos as $dato => $valor) {
-            if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
-                $errores[] = "ERROR: Campo requerido vacio: " . $dato;
-            }
-        }
-
-        // Si todos los campos requeridos estan rellenados:
-        if (empty($errores)) {
-            $producto = new Producto();
-            // indicar foto por defecto si no existe dicha imagen
-            if (empty($producto->getFotoProd()))
-                $producto->setFotoProd('/imgs/productos/default_product_image.png');
-
-            // 2.Obtener datos saneandos
-            $producto = $this->getData();
-
-            // 3.Validar datos
-            $errores = $this->validateCrearProducto($producto);
-
-            // 4. Ejecutar insercion a la BBDD
-            if (empty($errores)){
-                $resultado = $this->insert($producto);
-                if (!$resultado)
-                    $errores[]="Error al crear producto";
-            }else{
-                return $errores;
-            }
-
-            return $errores;
-        }
-
-        return $errores;
-    }
-
     /**
      * @return array
      */
@@ -355,7 +316,7 @@ class ProductoModel{
      */
     public function getTotalStockCategorias(int $categoria){
         try{
-            $stmt = $this->db->prepare('SELECT count(id_prod) as "stock" FROM `Producto` WHERE categoria_prod = :categoria');
+            $stmt = $this->db->prepare('SELECT count(id_prod) as "stock" FROM `Producto` WHERE categoria_prod = :categoria AND descatalogado=0');
             $stmt->bindParam(':categoria',$categoria,PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -374,10 +335,8 @@ class ProductoModel{
     public function getPorBuscador(string $busqueda,int $descatalogado=0):array {
         try{
             $busqueda = '%'.$busqueda.'%';
-            if ($descatalogado==0)
-                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda');
-            else
-                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda');
+
+            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda');
             $stmt->bindParam(':busqueda',$busqueda,PDO::PARAM_STR);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
             $stmt->execute();
@@ -460,7 +419,7 @@ class ProductoModel{
         if (!is_int($producto->getNumVentasProd()))
             $errors[]="Cantidad de ventas del producto no es un numero";
         //precio
-        if (!filter_var($producto->getStockProd(),FILTER_VALIDATE_FLOAT))
+        if (!filter_var($producto->getPrecioUnidad(),FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_FRACTION))
             $errors[]="Cantidad de precio no es un float";
         //foto
         $foto = explode(".",$producto->getFotoProd());
@@ -516,7 +475,7 @@ class ProductoModel{
         $producto->setTalla(strtolower(htmlspecialchars(trim(filter_input(INPUT_POST,'talla',FILTER_SANITIZE_STRING)))));
         $producto->setTallaDisp((int)htmlspecialchars(trim(filter_input(INPUT_POST,'stock',FILTER_SANITIZE_NUMBER_INT))));
         $producto->setStockProd((int)htmlspecialchars(trim(filter_input(INPUT_POST,'stock',FILTER_SANITIZE_NUMBER_INT))));
-        $producto->setPrecioUnidad((int)htmlspecialchars(trim(filter_input(INPUT_POST,'precio',FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION))));
+        $producto->setPrecioUnidad((float)htmlspecialchars(trim(filter_input(INPUT_POST,'precio',FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION))));
         $producto->setDescatalogado((int)htmlspecialchars(trim(filter_input(INPUT_POST,'descatalogado',FILTER_SANITIZE_NUMBER_INT))));
         $producto->setFotoProd(htmlspecialchars(trim(filter_input(INPUT_POST,'urlfoto',FILTER_SANITIZE_URL))));
         $producto->setDescripcion(htmlspecialchars(trim(filter_input(INPUT_POST,'descripcion',FILTER_SANITIZE_STRING))));
