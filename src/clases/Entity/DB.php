@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace  App\Entity;
+namespace  App\clases\Entity;
 
 use PDO;
 

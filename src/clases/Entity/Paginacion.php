@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Model\ProductoModel;
-use App\Entity\DB;
 use PDO;
 
 /**

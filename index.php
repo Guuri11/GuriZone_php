@@ -4,12 +4,12 @@ declare(strict_types=1);
  * TODO pasarlo todo a namespaces y Use
  */
 
-use App\Entity\DB;
 use App\Entity\Producto;
 use App\Entity\Paginacion;
 use App\Model\ProductoModel;
 use App\Model\CategoriasModel;
 use App\Model\UsuarioModel;
+use App\clases\Entity\DB;
 
 require __DIR__.'/config/bootstrap.php';
 
