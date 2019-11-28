@@ -1,6 +1,12 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Entity;
+
+use App\Model\ProductoModel;
+use App\Entity\DB;
+use PDO;
+
 /**
  * Class Paginacion
  */
@@ -17,7 +23,7 @@ class Paginacion
     private $fechas;
     private $busqueda;
 
-    public function __construct(int $num_productos, int $productos_pagina,int $pagina,DB $db,string $busqueda="", int $descatalogados=0)
+    public function __construct(int $num_productos, int $productos_pagina,int $pagina,PDO $db,string $busqueda="", int $descatalogados=0)
     {
         $this->num_productos = $num_productos;
         $this->productos_pagina = $productos_pagina;

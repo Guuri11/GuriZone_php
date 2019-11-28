@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+
+use App\Entity\DB;
 /**
  * @return string
  */
@@ -21,7 +24,7 @@ function login():string{
         global $user;
         try{
             // Cambiar rol de usuario
-            $usuario_modelo = new UsuarioModel($db);
+            $usuario_modelo = new UsuarioModel($db->getConnection());
             $user = $usuario_modelo->getByRol($id);
         }catch (PDOException $exception){
             die($exception->getMessage());

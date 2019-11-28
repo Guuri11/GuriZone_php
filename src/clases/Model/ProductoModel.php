@@ -1,5 +1,13 @@
 <?php
 declare(strict_types=1);
+
+namespace App\Model;
+
+use PDO;
+use PDOException;
+use App\Entity\Producto;
+
+
 /**
  * Class Product_model
  * Las consultas en las que se pida que 'descatalogado' sea 0 son las que estan dadas de altas, las otras son de baja
@@ -11,18 +19,19 @@ declare(strict_types=1);
 class ProductoModel{
 
     private $db;
+    protected $className = 'App\Entity\Producto';
 
     /**
      * @param $db
      */
-    function __construct(DB $db){
+    function __construct(PDO $db){
         $this->db = $db;
     }
 
     public  function getAll(): array {
         try{
             $stmt = $this->db->query('SELECT * FROM Producto');
-            $productos = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $productos = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
 
             return $productos;
         }catch (PDOException $exception){
@@ -36,7 +45,7 @@ class ProductoModel{
     public function getAllCatalogados():array {
         try{
             $stmt = $this->db->query('SELECT * FROM Producto where descatalogado=0');
-            $productos = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $productos = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
 
             return $productos;
         }catch (PDOException $exception){
@@ -55,7 +64,7 @@ class ProductoModel{
             else
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_prod = :id AND descatalogado = 0');
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetch();
         }catch (PDOException $exception){
@@ -74,7 +83,7 @@ class ProductoModel{
             else
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod AND descatalogado=0');
             $stmt->bindParam('categoria_prod', $categoria, PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
@@ -167,7 +176,7 @@ class ProductoModel{
     public function getLatestProduct():Producto{
         try{
             $stmt = $this->db->query('SELECT * FROM `Producto` WHERE descatalogado=0 AND fecha_salida IN(SELECT MAX(fecha_salida) FROM Producto)');
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetch();
         }catch (PDOException $exception){
@@ -197,7 +206,7 @@ class ProductoModel{
                 $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
                 $stmt->bindParam(':final',$final,PDO::PARAM_INT);
                 $stmt->bindParam(':categoria',$categoria,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
 
                 /**@CASO_2: Buscar por fecha **/
@@ -210,7 +219,7 @@ class ProductoModel{
                 $stmt->bindParam(':final',$final,PDO::PARAM_INT);
                 $stmt->bindParam(':fecha_inicial', $fechas['fecha_inicial']);
                 $stmt->bindParam(':fecha_final', $fechas['fecha_final']);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
 
                 /**@CASO_3: Buscar por la barra de busqueda **/
@@ -223,7 +232,7 @@ class ProductoModel{
                 $stmt->bindParam(':busqueda',$busqueda,PDO::PARAM_STR);
                 $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
                 $stmt->bindParam(':final',$final,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
             }else{
                 /**@CASO_4: Sacar todos los productos **/
@@ -233,7 +242,7 @@ class ProductoModel{
                     $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 LIMIT :inicio , :final');
                 $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
                 $stmt->bindParam(':final',$final,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
 
             }
@@ -249,7 +258,7 @@ class ProductoModel{
     public function getTT():array {
         try{
             $stmt = $this->db->query('SELECT * FROM `Producto` WHERE descatalogado=0 ORDER BY num_ventas_prod DESC LIMIT 5');
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
@@ -263,7 +272,7 @@ class ProductoModel{
     public function getNovedades():array {
         try{
             $stmt = $this->db->query('SELECT * FROM `Producto` WHERE descatalogado=0 ORDER BY fecha_salida DESC LIMIT 5');
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
@@ -288,7 +297,7 @@ class ProductoModel{
                     $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
                 $stmt->bindParam(':fecha_inicial', $fecha_inicial);
                 $stmt->bindParam(':fecha_final', $fecha_final);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
                 return $stmt->fetchAll();
             }else{
@@ -300,7 +309,7 @@ class ProductoModel{
                 $stmt->bindParam(':categoria_prod',$categoria,PDO::PARAM_INT);
                 $stmt->bindParam(':fecha_inicial', $fecha_inicial,PDO::PARAM_STR);
                 $stmt->bindParam(':fecha_final', $fecha_final,PDO::PARAM_STR);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
                 return $stmt->fetchAll();
             }
@@ -338,7 +347,7 @@ class ProductoModel{
 
             $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda');
             $stmt->bindParam(':busqueda',$busqueda,PDO::PARAM_STR);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Producto');
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){

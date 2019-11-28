@@ -2,16 +2,14 @@
 declare(strict_types=1);
 /**
  * TODO pasarlo todo a namespaces y Use
- * TODO renombrar todas las variables
  */
-require_once('./src/clases/Entity/DB.php');
-require_once('./src/clases/Entity/Producto.php');
-require_once('./src/clases/Model/ProductoModel.php');
-require_once ('./src/clases/Entity/Categorias.php');
-require_once ('./src/clases/Model/CategoriasModel.php');
-require_once('./src/clases/Entity/Usuario.php');
-require_once('./src/clases/Entity/Paginacion.php');
-require_once('./src/clases/Model/UsuarioModel.php');
+
+use App\Entity\DB;
+use App\Entity\Producto;
+use App\Entity\Paginacion;
+use App\Model\ProductoModel;
+use App\Model\CategoriasModel;
+use App\Model\UsuarioModel;
 
 require __DIR__.'/config/bootstrap.php';
 
@@ -25,8 +23,8 @@ $cookieValue = "anonimo";     // establecer sesión de anonimo
 
 
 $db = new DB();
-$categoriaConsulta = new CategoriasModel($db);
-$productosConsulta = new ProductoModel($db);
+$categoriaConsulta = new CategoriasModel($db->getConnection());
+$productosConsulta = new ProductoModel($db->getConnection());
 
 
 // Ultimo producto subido para mostrar en una parte de la vista
@@ -34,7 +32,7 @@ $ultimoProducto = $productosConsulta->getLatestProduct();
 
 // Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
 try{
-    $usuario_modelo = new UsuarioModel($db);
+    $usuario_modelo = new UsuarioModel($db->getConnection());
     // Si no encuentra la cookie asignar usuario como anonimo
     $cookieValue = $_COOKIE[$cookieName] ?? 'anonimo';
     $user = $usuario_modelo->getByName($cookieValue);
@@ -55,8 +53,8 @@ switch ($page){
             logout();
         }
         // Obtener producto mas vendidos y mas nuevos
-            $productosTT = $productosConsulta->getTT();
-            $novedades = $productosConsulta->getNovedades();
+        $productosTT = $productosConsulta->getTT();
+        $novedades = $productosConsulta->getNovedades();
         require("views/$page.view.php");
         break;
     }
@@ -136,7 +134,7 @@ switch ($page){
                 $_GET['pg']=1;
 
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos),10,$pagina,$db,"",0);
+            $paginacion = new Paginacion(count($productos),10,$pagina,$db->getConnection(),"",0);
 
             require("views/$page.view.php");
         } else{
@@ -271,7 +269,7 @@ switch ($page){
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
 
             // Recoge datos de la paginacion y sus productos segun la pagina actual
-            $paginacion = new Paginacion(count($resultados),12,$pagina,$db,$busqueda,1);
+            $paginacion = new Paginacion(count($resultados),12,$pagina,$db->getConnection(),$busqueda,1);
 
         }else {
 
@@ -308,7 +306,7 @@ switch ($page){
                 $_GET['pg'] = 1;
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'], FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $db, "", 1);
+            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $db->getConnection(), "", 1);
         }
             // Obtener el numero de productos por categoria
             $stockAccesorios = $productosConsulta->getTotalStockCategorias(1);
@@ -323,7 +321,7 @@ switch ($page){
         // el numero de productos que hay para hacer la paginacion. Esos datos contiene distintos valores que se aplican
         // en la vista para realizar la logica paginacion
     }
-    case 'producto':
+    case $this->className:
     {
         // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
         if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
@@ -337,7 +335,7 @@ switch ($page){
     case 'perfil':
     {
         // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if ($_COOKIE[$cookieName] === 'admin' || $_COOKIE[$cookieName]=='usuario')
+        if ($_COOKIE[$cookieName] === 'admin' || $_COOKIE[$cookieName]==$this->className)
             require("views/$page.view.php");
         else{
             require_once ('views/login.view.php');

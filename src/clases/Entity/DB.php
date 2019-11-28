@@ -1,11 +1,16 @@
 <?php
 declare(strict_types=1);
 
-class DB extends PDO {
+namespace  App\Entity;
+
+use PDO;
+
+class DB {
 
     private $dsn;
     private $user;
     private $password;
+    private $connection;
 
     public function __construct(){
         $datosJSON = file_get_contents('./config/app.json');
@@ -13,57 +18,17 @@ class DB extends PDO {
         $this->dsn = $datos['database']['dsn'];
         $this->user = $datos['database']['user'];
         $this->password = $datos['database']['password'];
-        parent::__construct($this->dsn,$this->user,$this->password,array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8"));
-        $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getDsn(): string
-    {
-        return $this->dsn;
+        $this->connection = new PDO($this->dsn,$this->user,$this->password,array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8"));
+        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
     }
 
     /**
-     * @param string $dsn
+     * @return PDO
      */
-    public function setDsn(string $dsn)
+    public function getConnection():PDO
     {
-        $this->dsn = $dsn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUser(): string
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param string $user
-     */
-    public function setUser(string $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword(string $password)
-    {
-        $this->password = $password;
+        return $this->connection;
     }
 
 }

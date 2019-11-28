@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+
+use App\Model\UsuarioModel;
 /**
  * Cerrar sesion del usuario
  */
@@ -8,7 +10,7 @@ function logout(){
     global $db;
     try{
         // 1. Transformar usuario a anonimo
-        $usuario_modelo = new UsuarioModel($db);
+        $usuario_modelo = new UsuarioModel($db->getConnection());
         $user = $usuario_modelo->getById(1);
     }catch (PDOException $exception){
         die($exception->getMessage());
