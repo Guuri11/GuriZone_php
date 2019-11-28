@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 
-use App\Entity\DB;
+use App\DB;
+use App\Model\UsuarioModel;
+
 /**
  * @return string
  */
@@ -19,8 +21,8 @@ function login():string{
         // 1. Email&Contraseña rellenados?
         // 2. Existe el email en la base de datos?
         // 3. Coincide la contraseña con el email introducido?
-    if (datosRequeridos($datos) && checkEmail($db,$email) && checkPassword($db,$password,$email)){   // SI LOGIN OK CAMBIAMOS
-        $id = getIDLogin($db,$email,$password); // Obtener ID del usuario
+    if (datosRequeridos($datos) && checkEmail($db->getConnection(),$email) && checkPassword($db->getConnection(),$password,$email)){   // SI LOGIN OK CAMBIAMOS
+        $id = getIDLogin($db->getConnection(),$email,$password); // Obtener ID del usuario
         global $user;
         try{
             // Cambiar rol de usuario
@@ -49,7 +51,7 @@ function login():string{
  * @param $email
  * @return bool
  */
-function checkEmail(DB $db, $email):bool{
+function checkEmail(PDO $db, $email):bool{
     $email = filter_var($email,FILTER_SANITIZE_EMAIL);   // sanear email...
     if (filter_var($email,FILTER_VALIDATE_EMAIL)){      // si tiene un formato de email correcto...
         try{
@@ -73,7 +75,7 @@ function checkEmail(DB $db, $email):bool{
  * @param $email
  * @return bool
  */
-function checkPassword(DB $db, $password, $email):bool {
+function checkPassword(PDO $db, $password, $email):bool {
     // Conseguir la contraseña del email solicitado, y compararlo con la contrasena introducida
     try{
         $checkPasswd = $db->prepare('SELECT password FROM Usuario where email=:email AND password=:password');
@@ -97,7 +99,7 @@ function checkPassword(DB $db, $password, $email):bool {
  * @param string $password
  * @return int
  */
-function getIDLogin(DB $db, string $email, string $password): int{
+function getIDLogin(PDO $db, string $email, string $password): int{
     try{
         //consulta del ID que solicita el usuario
         $idConsulta = $db->prepare('SELECT id_cli FROM Usuario where email=:email AND password=:password');

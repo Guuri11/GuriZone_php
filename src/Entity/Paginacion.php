@@ -5,7 +5,6 @@ namespace App\Entity;
 
 use App\Model\ProductoModel;
 use PDO;
-
 /**
  * Class Paginacion
  */

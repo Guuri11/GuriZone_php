@@ -100,10 +100,7 @@
                             <a href="?page=editar_producto&id=<?php echo $producto->getIdProd();?>"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
                         </div>
                         <div>
-                            <form action="<?= $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; ?>" method="post">
-                                <input type="hidden" name="id" value="<?php echo $producto->getIdProd(); ?>">
-                            <input type="submit" class="btn btn-danger" value="Eliminar">
-                            </form>
+                            <a href="?page=borrar&id=<?php echo $producto->getIdProd(); ?>"><input type="button" class="btn btn-danger" value="Eliminar"></a>
                         </div>
                     </td>
                 </tr>

@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
-/**
- * TODO pasarlo todo a namespaces y Use
- */
 
 use App\Entity\Producto;
 use App\Entity\Paginacion;
 use App\Model\ProductoModel;
 use App\Model\CategoriasModel;
 use App\Model\UsuarioModel;
-use App\clases\Entity\DB;
+use App\DB;
 
 require __DIR__.'/config/bootstrap.php';
 
@@ -88,18 +85,6 @@ switch ($page){
     {
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
-            /** Eliminar un producto: **/
-            // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
-            if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST)){
-                $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
-
-                // 2. Eliminar producto TODO: confirmacion del delete
-                $resultado = $productosConsulta->delete(intval($id));
-                if (!$resultado)
-                    header('Location ?page=error');
-                else
-                    header('Location ?page=gestion');
-            }
 
             /** Productos solicitados por el usuario a traves de filtros **/
             // Filtro por categoria
@@ -241,7 +226,27 @@ switch ($page){
 
     case 'borrar':
     {
+        // Capa de proteccion para acceder al dashboard
+        if ($_COOKIE[$cookieName] === 'admin'){
+        /** Eliminar un producto: **/
+        // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
+            $confirmacion = false;
+        if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST) && $confirmacion){
+            $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
 
+            // 2. Eliminar producto TODO: confirmacion del delete
+            $resultado = $productosConsulta->delete(intval($id));
+            if (!$resultado)
+                header('Location ?page=error');
+            else
+                header('Location ?page=gestion');
+        }
+        require_once ("views/$page.view.php");
+        } else{
+            $page ='login';     // si no es admin -> redirigir al login
+            require_once ("views/$page.view.php");
+        }
+        break;
     }
 
     case 'contactus':
@@ -321,7 +326,7 @@ switch ($page){
         // el numero de productos que hay para hacer la paginacion. Esos datos contiene distintos valores que se aplican
         // en la vista para realizar la logica paginacion
     }
-    case $this->className:
+    case 'producto':
     {
         // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
         if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
