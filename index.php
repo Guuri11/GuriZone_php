@@ -119,7 +119,7 @@ switch ($page){
                 $_GET['pg']=1;
 
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos),10,$pagina,$db->getConnection(),"",0);
+            $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
 
             require("views/$page.view.php");
         } else{
@@ -274,7 +274,7 @@ switch ($page){
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
 
             // Recoge datos de la paginacion y sus productos segun la pagina actual
-            $paginacion = new Paginacion(count($resultados),12,$pagina,$db->getConnection(),$busqueda,1);
+            $paginacion = new Paginacion(count($resultados),12,$pagina,$productosConsulta,$busqueda,1);
 
         }else {
 
@@ -311,7 +311,7 @@ switch ($page){
                 $_GET['pg'] = 1;
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'], FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $db->getConnection(), "", 1);
+            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $productosConsulta, "", 1);
         }
             // Obtener el numero de productos por categoria
             $stockAccesorios = $productosConsulta->getTotalStockCategorias(1);

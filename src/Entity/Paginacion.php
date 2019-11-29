@@ -21,7 +21,7 @@ class Paginacion
     private $fechas;
     private $busqueda;
 
-    public function __construct(int $num_productos, int $productos_pagina,int $pagina,PDO $db,string $busqueda="", int $descatalogados=0)
+    public function __construct(int $num_productos, int $productos_pagina,int $pagina,ProductoModel $productoConsulta,string $busqueda="", int $descatalogados=0)
     {
         $this->num_productos = $num_productos;
         $this->productos_pagina = $productos_pagina;
@@ -32,8 +32,7 @@ class Paginacion
         $this->categoria = $this->categoriaSolicitada();
         $this->fechas = $this->fechasSolicitadas();
         $this->busqueda = $busqueda;
-        $productosConsulta = new ProductoModel($db);
-        $this->productos = $productosConsulta->getProdsTienda($this->producto_inicial,$this->productos_pagina,$busqueda,$this->categoria,$this->fechas,$descatalogados);
+        $this->productos = $productoConsulta->getProdsTienda($this->producto_inicial,$this->productos_pagina,$busqueda,$this->categoria,$this->fechas,$descatalogados);
 
     }
 
