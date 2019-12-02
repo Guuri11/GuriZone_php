@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Model\ProductoModel;
-use PDO;
 /**
  * Class Paginacion
  */
@@ -33,7 +32,6 @@ class Paginacion
         $this->fechas = $this->fechasSolicitadas();
         $this->busqueda = $busqueda;
         $this->productos = $productoConsulta->getProdsTienda($this->producto_inicial,$this->productos_pagina,$busqueda,$this->categoria,$this->fechas,$descatalogados);
-
     }
 
     /**

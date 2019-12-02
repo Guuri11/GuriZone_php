@@ -225,14 +225,11 @@ class ProductoModel{
 
                 /**@CASO_3: Buscar por la barra de busqueda **/
             }elseif ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
-                $busqueda = '%'.$busqueda.'%';
-                if ($descatalogado==0)
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda LIMIT :inicio , :final');
-                else
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda LIMIT :inicio , :final');
-                $stmt->bindParam(':busqueda',$busqueda,PDO::PARAM_STR);
-                $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
-                $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE ? OR marca_prod LIKE ? LIMIT ? , ?');
+                $stmt->bindValue(1,"%$busqueda%",PDO::PARAM_STR);
+                $stmt->bindValue(2,"%$busqueda%",PDO::PARAM_STR);
+                $stmt->bindValue(3,$inicio,PDO::PARAM_INT);
+                $stmt->bindValue(4,$final,PDO::PARAM_INT);
                 $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
             }else{
@@ -342,12 +339,11 @@ class ProductoModel{
      * @param int $descatalogado
      * @return array
      */
-    public function getPorBuscador(string $busqueda,int $descatalogado=0):array {
+    public function getPorBuscador(string $busqueda):array {
         try{
-            $busqueda = '%'.$busqueda.'%';
-
-            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda');
-            $stmt->bindParam(':busqueda',$busqueda,PDO::PARAM_STR);
+            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE ? OR marca_prod LIKE ?');
+            $stmt->bindValue(1,"%$busqueda%",PDO::PARAM_STR);
+            $stmt->bindValue(2,"%$busqueda%",PDO::PARAM_STR);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();

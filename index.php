@@ -265,10 +265,12 @@ switch ($page){
 
             // PRODUCTOS OBTENIDOS POR LA BUSQUEDA
             $resultados = $productosConsulta->getPorBuscador($busqueda);
-
             // Controlar el valor de la pagina solicitada
             if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
                 $_GET['pg']=1;
+            if (!array_key_exists('categoria',$_GET))
+                $_GET['categoria']='todo';
+            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
 
             // Sanear pagina solicitada
             $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
