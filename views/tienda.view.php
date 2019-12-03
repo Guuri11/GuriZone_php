@@ -77,19 +77,19 @@
                                     </ul>
                                     <?php }elseif(array_key_exists('fecha_inicial',$_GET) && array_key_exists('fecha_final',$_GET)){?>
                                     <ul>
-                                        <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                                        <li><a href="?page=tienda&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                                         <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                            <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                            <li><a href="?page=tienda&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                                         <?php } ?>
-                                        <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                                        <li><a href="?page=tienda&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
                                     </ul>
                                     <?php }else{ ?>
                                     <ul>
-                                        <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                                        <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                                         <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                            <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                            <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                                         <?php } ?>
-                                        <li><a href="?page=tienda&categoria=<?php echo $_GET['categoria']?>&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                                        <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
                                     </ul>
                                     <?php } ?>
                                 </div>
