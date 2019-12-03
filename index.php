@@ -268,6 +268,7 @@ switch ($page){
             // Controlar el valor de la pagina solicitada
             if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
                 $_GET['pg']=1;
+
             if (!array_key_exists('categoria',$_GET))
                 $_GET['categoria']='todo';
             $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));

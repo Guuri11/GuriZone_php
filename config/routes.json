@@ -1,0 +1,10 @@
+{
+  "GuriZone/": {
+    "controller": "Producto",
+    "methods": "index"
+  },
+  "GuriZone/tienda": {
+    "controller": "Producto",
+    "methods": "tienda"
+  }
+}

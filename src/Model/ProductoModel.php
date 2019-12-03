@@ -225,11 +225,11 @@ class ProductoModel{
 
                 /**@CASO_3: Buscar por la barra de busqueda **/
             }elseif ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
-                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE ? OR marca_prod LIKE ? LIMIT ? , ?');
-                $stmt->bindValue(1,"%$busqueda%",PDO::PARAM_STR);
-                $stmt->bindValue(2,"%$busqueda%",PDO::PARAM_STR);
-                $stmt->bindValue(3,$inicio,PDO::PARAM_INT);
-                $stmt->bindValue(4,$final,PDO::PARAM_INT);
+                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda2 LIMIT :inicio , :final');
+                $stmt->bindValue(":busqueda","%$busqueda%",PDO::PARAM_STR);
+                $stmt->bindValue(":busqueda2","%$busqueda%",PDO::PARAM_STR);
+                $stmt->bindValue(":inicio",$inicio,PDO::PARAM_INT);
+                $stmt->bindValue(":final",$final,PDO::PARAM_INT);
                 $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
                 $stmt->execute();
             }else{
@@ -341,9 +341,9 @@ class ProductoModel{
      */
     public function getPorBuscador(string $busqueda):array {
         try{
-            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE ? OR marca_prod LIKE ?');
-            $stmt->bindValue(1,"%$busqueda%",PDO::PARAM_STR);
-            $stmt->bindValue(2,"%$busqueda%",PDO::PARAM_STR);
+            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda2');
+            $stmt->bindValue(':busqueda',"%$busqueda%",PDO::PARAM_STR);
+            $stmt->bindValue(':busqueda2',"%$busqueda%",PDO::PARAM_STR);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
             return $stmt->fetchAll();
