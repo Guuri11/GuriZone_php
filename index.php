@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 use App\Entity\Producto;
 use App\Entity\Paginacion;
-use App\Model\ProductoModel;
-use App\Model\CategoriasModel;
 use App\Model\UsuarioModel;
 use App\DB;
+use App\Core\Request;
+use App\Core\Router;
+
+
 
 require __DIR__.'/config/bootstrap.php';
 
-//TODO href search GG
+$di = new \App\Utils\DependencyInjector();
 
 // Gestion usuario
 $cookieName = "usuario";
@@ -22,12 +24,11 @@ $cookieValue = "anonimo";     // establecer sesión de anonimo
 
 
 $db = new DB();
-$categoriaConsulta = new CategoriasModel($db->getConnection());
-$productosConsulta = new ProductoModel($db->getConnection());
+$di->set('PDO', $db->getConnection());
+$request = new Request();
 
-
-// Ultimo producto subido para mostrar en una parte de la vista
-$ultimoProducto = $productosConsulta->getLatestProduct();
+$route = new Router($di);
+$route->route($request);
 
 // Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
 try{
@@ -41,21 +42,14 @@ try{
 
 
 
-$page = $_GET['page']??"index";
-switch ($page){
+//$page = $_GET['page']??"index";
+$action = $_GET['action'] ?? "indexARR";
+
+switch ($action){
 
     case 'index':
     {
-        // Usuario hace logout
-        if (isset($_GET['logout'])){
-            require_once ('./src/logout.php');
-            logout();
-        }
-        // Obtener producto mas vendidos y mas nuevos
-        $productosTT = $productosConsulta->getTT();
-        $novedades = $productosConsulta->getNovedades();
-        require("views/$page.view.php");
-        break;
+
     }
     case 'login':
     {
@@ -149,7 +143,7 @@ switch ($page){
                     // indicar foto por defecto si no existe dicha imagen
                     if (empty($producto->getFotoProd()))
                          $producto->setFotoProd('/imgs/productos/default_product_image.png');
-                    
+
                     // 2.Obtener datos saneandos
                     $producto = $productosConsulta->getData();
 
