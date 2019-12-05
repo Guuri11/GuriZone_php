@@ -23,4 +23,5 @@ class ProductoController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
         require("views/index.view.php");
     }
+
 }

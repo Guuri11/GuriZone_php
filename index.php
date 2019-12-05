@@ -27,8 +27,7 @@ $db = new DB();
 $di->set('PDO', $db->getConnection());
 $request = new Request();
 
-$route = new Router($di);
-$route->route($request);
+
 
 // Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
 try{
@@ -40,11 +39,12 @@ try{
     die($exception->getMessage());
 }
 
-
+$route = new Router($di);
+$route->route($request);
 
 //$page = $_GET['page']??"index";
 $action = $_GET['action'] ?? "indexARR";
-
+/*
 switch ($action){
 
     case 'index':
@@ -82,7 +82,6 @@ switch ($action){
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
 
-            /** Productos solicitados por el usuario a traves de filtros **/
             // Filtro por categoria
 
             // asignar valor a categoria en caso de que no se especifique
@@ -109,7 +108,6 @@ switch ($action){
                 $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
             }
 
-            /** Gestion de paginacion: **/
             // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
             if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
                 $_GET['pg']=1;
@@ -224,7 +222,6 @@ switch ($action){
     {
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
-        /** Eliminar un producto: **/
         // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             $confirmacion = false;
         if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST) && $confirmacion){
@@ -254,7 +251,6 @@ switch ($action){
 
     case 'tienda':
     {
-        /** RESULTADOS DE LA BARRA DE BUSQUEDA **/
         if($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
             // Sanear busqueda solicitada
             $busqueda = filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -273,7 +269,6 @@ switch ($action){
 
         }else {
 
-            /** Productos solicitados por el usuario a traves de filtros **/
             // Filtro por categoria:
             // asignar valor a categoria en caso de que no se especifique
             if (!array_key_exists('categoria',$_GET))
@@ -299,7 +294,6 @@ switch ($action){
                 $productos_tienda = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
             }
 
-            /** Gestion de paginacion: **/
 
             // Controlar el valor de la pagina solicitada
             if (!array_key_exists('pg', $_GET) || $_GET['pg'] <= 0)
@@ -344,7 +338,6 @@ switch ($action){
     }
     default:
     {
-        require("views/error.view.php");
 
     }
-}
+}*/

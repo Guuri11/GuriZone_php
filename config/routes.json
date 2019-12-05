@@ -1,17 +1,17 @@
 {
-  "GuriZone_2/": {
+  "GuriZone/": {
     "controller": "Producto",
     "method": "index"
   },
-  "GuriZone_2/tienda/:categoria/:page": {
+  "GuriZone/tienda/:categoria/:page": {
     "controller": "Producto",
-    "method": "tienda",
+    "method": "showByCategory",
     "params": {
       "categoria": "string",
       "page": "number"
     }
   },
-  "GuriZone_2/tienda/:fecha_inicial/:fecha_final/:page": {
+  "GuriZone/tienda/:fecha_inicial/:fecha_final/:page": {
     "controller": "Producto",
     "method": "tienda",
     "params": {
@@ -20,7 +20,7 @@
       "page": "number"
     }
   },
-  "GuriZone_2/tienda/:search/:page": {
+  "GuriZone/tienda/:search/:page": {
     "controller": "Producto",
     "method": "tienda",
     "params": {
@@ -28,40 +28,40 @@
       "page": "number"
     }
   },
-  "GuriZone_2/producto/:id": {
+  "GuriZone/producto/:id": {
     "controller": "Producto",
     "method": "showProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone_2/login": {
+  "GuriZone/login": {
     "controller": "Usuario",
     "method": "login"
   },
-  "GuriZone_2/dashboard": {
+  "GuriZone/dashboard": {
     "controller": "Usuario",
     "method": "dashboard"
   },
-  "GuriZone_2/producto/crear": {
+  "GuriZone/producto/crear": {
     "controller": "Producto",
     "method": "crearProducto"
   },
-  "GuriZone_2/editar/:id": {
+  "GuriZone/editar/:id": {
     "controller": "Producto",
     "method": "editarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone_2/borrar/:id": {
+  "GuriZone/borrar/:id": {
     "controller": "Producto",
     "method": "borrarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone_2/:usuario": {
+  "GuriZone/:usuario": {
     "controller": "Usuario",
     "method": "perfil",
     "params": {

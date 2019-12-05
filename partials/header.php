@@ -14,15 +14,15 @@
 
                 <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                     <div >
-                        <a href="?page=index" class=""><img class="img-fluid gurilogo" src="./imgs/logo_black.png" width="45%"></a>
+                        <a href="<?php global $route; echo $route->generateURL('Producto','index')?>" class=""><img class="img-fluid gurilogo" src="./imgs/logo_black.png" width="45%"></a>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 order-3 order-md-3 text-right">
                     <div class="site-top-icons">
                         <ul>
-                            <?php if($cookieValue === "anonimo"){ // SI EL USER ES ANONIMO: OPCION REGISTRARSE?>
+                            <?php global $cookieValue;if($cookieValue === "anonimo"){ // SI EL USER ES ANONIMO: OPCION REGISTRARSE?>
                             <li><a href="#registrarse"><span class="icon icon-person_add "></span> REGISTRARSE</a>
-                            <li><a href="?page=login"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
+                            <li><a href="<?php global $route; echo $route->generateURL('Usuario','login')?>"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
                             <?php }elseif($cookieValue === "usuario"){ // SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT?>
                                 <li><a href="?page=index&logout=true"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
                                 <li><a href="#"><span class="icon icon-home"></span> MI PERFIL</a></li>
@@ -46,7 +46,7 @@
     <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
             <ul class="site-menu js-clone-nav d-none d-md-block">
-                <li><a href="?page=index">Inicio</a></li>
+                <li><a href="<?php global $route; echo $route->generateURL('Producto','index')?>">Inicio</a></li>
                 <li class="has-children">
                     <a href="?page=tienda&categoria=todo&pg=1">Tienda</a>
                     <ul class="dropdown">
