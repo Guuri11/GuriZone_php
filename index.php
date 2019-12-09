@@ -41,9 +41,8 @@ try{
 
 $route = new Router($di);
 $route->route($request);
-
 //$page = $_GET['page']??"index";
-$action = $_GET['action'] ?? "indexARR";
+//$action = $_GET['action'] ?? "indexARR";
 /*
 switch ($action){
 
@@ -317,13 +316,7 @@ switch ($action){
     }
     case 'producto':
     {
-        // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
-        if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
-            header('Location: ?page=error');
-        }else
-            $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
-        $productoSeleccionado = $productosConsulta->getById(intval($id));
-        require("views/$page.view.php");
+
         break;
     }
     case 'perfil':

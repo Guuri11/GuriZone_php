@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <h3 class="footer-heading mb-4">Promo</h3>
-                <a href="?page=producto&id=<?php echo $ultimoProducto->getIdProd()?>" class="block-6">
+                <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$ultimoProducto->getIdProd()])?>" class="block-6">
                     <img src=".<?php echo $ultimoProducto->getFotoProd()?>" alt="Image placeholder" class="img-fluid rounded mb-4">
                     <h3 class="font-weight-light  mb-0">Nuevos productos!</h3>
                     <p><?php echo $ultimoProducto->getModeloProd()?></p>
@@ -64,7 +64,7 @@
             <div class="col-md-12">
                 <p>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy; GuriZone 2019 <span class="float-right">2 CFGS DAW</span></a>
+                    <span class="float-left">Copyright &copy; Colorlib </span> GuriZone 2019 <span class="float-right">2 CFGS DAW</span></a>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 </p>
             </div>

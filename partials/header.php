@@ -14,7 +14,7 @@
 
                 <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                     <div >
-                        <a href="<?php global $route; echo $route->generateURL('Producto','index')?>" class=""><img class="img-fluid gurilogo" src="./imgs/logo_black.png" width="45%"></a>
+                        <a href="<?php global $route; echo $route->generateURL('Producto','index')?>" class=""><img class="img-fluid gurilogo" src="./imgs/logo_black.png"" width="45%"></a>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 order-3 order-md-3 text-right">
@@ -22,13 +22,13 @@
                         <ul>
                             <?php global $cookieValue;if($cookieValue === "anonimo"){ // SI EL USER ES ANONIMO: OPCION REGISTRARSE?>
                             <li><a href="#registrarse"><span class="icon icon-person_add "></span> REGISTRARSE</a>
-                            <li><a href="<?php global $route; echo $route->generateURL('Usuario','login')?>"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','login')?>"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
                             <?php }elseif($cookieValue === "usuario"){ // SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT?>
-                                <li><a href="?page=index&logout=true"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
-                                <li><a href="#"><span class="icon icon-home"></span> MI PERFIL</a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','logout')?>"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','perfil')?>"><span class="icon icon-home"></span> MI PERFIL</a></li>
                             <?php }elseif($cookieValue === "admin"){     // SI EL USUARIO ES ADMIN: OPCION DASHBOARD Y LOGOUT?>
-                                <li><a href="?logout=true"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
-                                <li><a href="?page=dashboard"><span class="icon icon-dashboard"></span> ADMIN</a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','logout')?>"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','dashboard')?>"><span class="icon icon-dashboard"></span> ADMIN</a></li>
                             <?php } ?>
                             <li>
                                 <a href="#" class="site-cart">
@@ -46,17 +46,17 @@
     <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
             <ul class="site-menu js-clone-nav d-none d-md-block">
-                <li><a href="<?php global $route; echo $route->generateURL('Producto','index')?>">Inicio</a></li>
+                <li><a href="<?php echo $route->generateURL('Producto','index')?>">Inicio</a></li>
                 <li class="has-children">
-                    <a href="?page=tienda&categoria=todo&pg=1">Tienda</a>
+                    <a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"todo",'page'=>1])?>">Tienda</a>
                     <ul class="dropdown">
-                        <li><a href="?page=tienda&categoria=accesorios&pg=1">Accesorios</a></li>
-                        <li><a href="?page=tienda&categoria=ropa&pg=1">Ropa</a></li>
-                        <li><a href="?page=tienda&categoria=zapatillas&pg=1">Zapatillas</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"accesorios",'page'=>1])?>">Accesorios</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"ropa",'page'=>1])?>">Ropa</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"zapatillas",'page'=>1])?>">Zapatillas</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Sobre Nosotros</a></li>
-                <li><a href="?page=contactus">Contáctanos</a></li>
+                <li><a href="<?php echo $route->generateURL('Producto','contacto')?>">Contáctanos</a></li>
             </ul>
         </div>
     </nav>

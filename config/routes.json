@@ -5,7 +5,7 @@
   },
   "GuriZone/tienda/:categoria/:page": {
     "controller": "Producto",
-    "method": "showByCategory",
+    "method": "mostrarPorCategoria",
     "params": {
       "categoria": "string",
       "page": "number"
@@ -13,7 +13,7 @@
   },
   "GuriZone/tienda/:fecha_inicial/:fecha_final/:page": {
     "controller": "Producto",
-    "method": "tienda",
+    "method": "mostrarPorFecha",
     "params": {
       "fecha_inicial": "string",
       "fecha_final": "string",
@@ -22,7 +22,7 @@
   },
   "GuriZone/tienda/:search/:page": {
     "controller": "Producto",
-    "method": "tienda",
+    "method": "mostrarPorBusqueda",
     "params": {
       "search": "string",
       "page": "number"
@@ -30,7 +30,7 @@
   },
   "GuriZone/producto/:id": {
     "controller": "Producto",
-    "method": "showProducto",
+    "method": "mostrarProducto",
     "params": {
       "id": "number"
     }
@@ -39,22 +39,26 @@
     "controller": "Usuario",
     "method": "login"
   },
+  "GuriZone/logout": {
+    "controller": "Usuario",
+    "method": "logout"
+  },
   "GuriZone/dashboard": {
     "controller": "Usuario",
     "method": "dashboard"
   },
-  "GuriZone/producto/crear": {
+  "GuriZone/dashboard/producto/crear": {
     "controller": "Producto",
     "method": "crearProducto"
   },
-  "GuriZone/editar/:id": {
+  "GuriZone/dashboard/editar/:id": {
     "controller": "Producto",
     "method": "editarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone/borrar/:id": {
+  "GuriZone/dashboard/borrar/:id": {
     "controller": "Producto",
     "method": "borrarProducto",
     "params": {
@@ -67,5 +71,9 @@
     "params": {
       "usuario": "string"
     }
+  },
+  "GuriZone/:contacto": {
+    "controller": "Usuario",
+    "method": "contactanos"
   }
 }

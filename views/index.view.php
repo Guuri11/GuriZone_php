@@ -32,7 +32,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                        <a class="block-2-item" href="?page=tienda&categoria=accesorios&pg=1">
+                        <a class="block-2-item" href="<?php global $route; echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'accesorios','page'=>1])?>">
                             <figure class="image">
                                 <img src="imgs/backgrounds/accesorios.jpg" alt="" class="img-fluid">
                             </figure>
@@ -43,7 +43,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                        <a class="block-2-item" href="?page=tienda&categoria=ropa&pg=1">
+                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"zapatillas",'page'=>1])?>">
                             <figure class="image">
                                 <img src="imgs/backgrounds/ropa.jpg" alt="" class="img-fluid">
                             </figure>
@@ -54,7 +54,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                        <a class="block-2-item" href="?page=tienda&categoria=zapatillas&pg=1">
+                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'zapatillas','page'=>1])?>">
                             <figure class="image">
                                 <img src="imgs/backgrounds/zapatillas.jpg" alt="" class="img-fluid">
                             </figure>
@@ -83,7 +83,7 @@
                         <div class="nonloop-block-3 owl-carousel">
                             <?php foreach ($productosTT as $producto){ ?>
                                 <div class="item">
-                                    <a href="?page=producto&id=<?php echo $producto->getIdProd()?>" class="block-6">
+                                    <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>" class="block-6">
                                         <div class="block-4 text-center shadow">
                                             <figure class="block-4-image">
                                                 <img src=".<?php echo $producto->getFotoProd()?>" alt="Image placeholder" class="img-fluid">
@@ -118,7 +118,7 @@
                         <div class="nonloop-block-3 owl-carousel">
                             <?php foreach ($novedades as $producto){ ?>
                                 <div class="item">
-                                    <a href="?page=producto&id=<?php echo $producto->getIdProd()?>" class="block-6">
+                                    <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>" class="block-6">
                                         <div class="block-4 text-center shadow">
                                             <figure class="block-4-image">
                                                 <img src=".<?php echo $producto->getFotoProd()?>" alt="Image placeholder" class="img-fluid">
