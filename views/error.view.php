@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>GuriZone</title>
-    <link rel="icon" href="imgs/logo_draw_black.png">
+    <link rel="icon" href="../imgs/logo_draw_black.png">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
