@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="site-wrap">
-    <?php  require_once ('./partials/header.php');?>
+    <?php  require_once('./partials/header.php');?>
     <div class="justify-content-center gurizone-login p-lg-2 m-lg-3 p-md-4 m-md-3 p-sm-4 m-sm-5">
     <h1 class="text-center">ERROR 404 :0</h1>
     <hr>
@@ -32,16 +32,16 @@
         <h3 class="text-danger text-center">Error en el recurso solicitado</h3>
     </div>
     </div>
-    <?php  require_once ('./partials/footer.php');?>
+    <?php  require_once('./partials/footer.php');?>
 </div>
 
-<script src="../js/jquery-3.3.1.min.js"></script>
-<script src="../js/jquery-ui.js"></script>
-<script src="../js/popper.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/owl.carousel.min.js"></script>
-<script src="../js/jquery.magnific-popup.min.js"></script>
-<script src="../js/aos.js"></script>
-<script src="../js/main.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>

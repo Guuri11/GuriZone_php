@@ -21,5 +21,7 @@ function logout(){
     $cookieValue = $user->getTipoRol();
     setcookie($cookieName,$cookieValue, time()+(86400*30),"/"); // Login con anonimo = Logout
     // redirigir al menu
-    header('Location: ?page=index');
+    global $route;
+    header("Location: ".$route->generateURL('Producto','index')); // redirigir al perfil
+
 }

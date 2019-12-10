@@ -37,7 +37,8 @@ function login():string{
         $cookieValue = $user->getTipoRol();
         setcookie($cookieName,$cookieValue, time()+(86400*30),"/");
         $_COOKIE[$cookieName] = $cookieValue;
-        header('Location: ?page=perfil'); // redirigir al perfil
+        global $route;
+        header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
         return "";
     }else{
         $error = "Email o contraseña incorrecto! Vuelva a intentarlo";

@@ -52,8 +52,6 @@ class ProductoController extends AbstractController
         $categoria = $datos['categoria'];
         $pagina = $datos['page'];
 
-        var_dump($categoria);
-        var_dump($pagina);
     }
 
 }

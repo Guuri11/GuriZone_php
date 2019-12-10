@@ -52,15 +52,7 @@ switch ($action){
     }
     case 'login':
     {
-        // Si se ha recibido datos desde el login.view
-        if ($_SERVER['REQUEST_METHOD']==='POST'){
-            require_once ('./src/login.php');
-        // Realizar login y recoger posibles errores
-            $error = login();
-        }
 
-        require("views/$page.view.php");
-        break;
     }
 
     case 'dashboard':
@@ -321,13 +313,7 @@ switch ($action){
     }
     case 'perfil':
     {
-        // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if ($_COOKIE[$cookieName] === 'admin' || $_COOKIE[$cookieName]==$this->className)
-            require("views/$page.view.php");
-        else{
-            require_once ('views/login.view.php');
-        }
-        break;
+
     }
     default:
     {

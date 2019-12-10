@@ -65,12 +65,9 @@
       "id": "number"
     }
   },
-  "GuriZone/:usuario": {
+  "GuriZone/mi_perfil": {
     "controller": "Usuario",
-    "method": "perfil",
-    "params": {
-      "usuario": "string"
-    }
+    "method": "perfil"
   },
   "GuriZone/:contacto": {
     "controller": "Usuario",
