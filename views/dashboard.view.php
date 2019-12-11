@@ -30,13 +30,13 @@
             <h1 class="text-center text-black-50">DASHBOARD</h1>
             <div class="row text-center">
                 <div class="col-12">
-                    <a href="?page=crear_producto"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">CREAR PRODUCTO</button></a>
+                    <a href="<?php echo $route->generateURL('Producto','crearProducto')?>"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">CREAR PRODUCTO</button></a>
                 </div>
                 <div class="col-12">
-                    <a href="?page=perfil"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">PERFIL</button></a>
+                    <a href="<?php echo $route->generateURL('Usuario','perfil')?>"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">PERFIL</button></a>
                 </div>
                 <div class="col-12">
-                    <a href="?page=gestion"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">GESTIONAR PRODUCTOS</button></a>
+                    <a href="<?php echo $route->generateURL('Usuario','gestion')?>"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">GESTIONAR PRODUCTOS</button></a>
                 </div>
             </div>
         </div>

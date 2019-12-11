@@ -47,6 +47,10 @@
     "controller": "Usuario",
     "method": "dashboard"
   },
+  "GuriZone/dashboard/gestion": {
+    "controller": "Usuario",
+    "method": "gestion"
+  },
   "GuriZone/dashboard/producto/crear": {
     "controller": "Producto",
     "method": "crearProducto"
@@ -69,7 +73,7 @@
     "controller": "Usuario",
     "method": "perfil"
   },
-  "GuriZone/:contacto": {
+  "GuriZone/contacto": {
     "controller": "Usuario",
     "method": "contactanos"
   }

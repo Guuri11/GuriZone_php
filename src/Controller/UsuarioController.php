@@ -59,6 +59,16 @@ class UsuarioController extends AbstractController
         }
     }
 
+    public function contactanos(){
+        global $cookieValue,$cookieName,$user;
+        $productosConsulta = new ProductoModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+        $rutaFotoLogo = "./imgs/logo_black.png";
+        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
+
+        require ("views/contactus.view.php");
+    }
+
 
 
 

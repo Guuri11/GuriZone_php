@@ -43,7 +43,6 @@ class Router
                 $route = str_replace(':' . $name, self::$regexPatters[$type], $route);
             }
         }
-
         return $route;
     }
 
@@ -75,7 +74,6 @@ class Router
 
         $pathParts = explode('/', $path);
         $routeParts = explode('/', $route);
-
         foreach ($routeParts as $key => $routePart) {
             if (strpos($routePart, ':') === 0) {
                 $name = substr($routePart, 1);

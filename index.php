@@ -57,16 +57,6 @@ switch ($action){
 
     case 'dashboard':
     {
-        // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
-            require("views/$page.view.php");
-        } else{
-            $page ='login';     // si no es admin -> redirigir al login
-            require_once ("views/$page.view.php");
-        }
-
-        break;
-    }
 
     case 'gestion':
     {
@@ -235,9 +225,7 @@ switch ($action){
 
     case 'contactus':
     {
-        // Literalmente solo esta de adorno xd
-        require("views/$page.view.php");
-        break;
+
     }
 
     case 'tienda':
