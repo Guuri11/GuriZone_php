@@ -3,30 +3,9 @@
     "controller": "Producto",
     "method": "index"
   },
-  "GuriZone/tienda/:categoria/:page": {
+  "GuriZone/catalogo": {
     "controller": "Producto",
-    "method": "mostrarPorCategoria",
-    "params": {
-      "categoria": "string",
-      "page": "number"
-    }
-  },
-  "GuriZone/tienda/:fecha_inicial/:fecha_final/:page": {
-    "controller": "Producto",
-    "method": "mostrarPorFecha",
-    "params": {
-      "fecha_inicial": "string",
-      "fecha_final": "string",
-      "page": "number"
-    }
-  },
-  "GuriZone/tienda/:search/:page": {
-    "controller": "Producto",
-    "method": "mostrarPorBusqueda",
-    "params": {
-      "search": "string",
-      "page": "number"
-    }
+    "method": "catalogo"
   },
   "GuriZone/producto/:id": {
     "controller": "Producto",

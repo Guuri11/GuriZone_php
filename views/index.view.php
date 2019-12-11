@@ -32,7 +32,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                        <a class="block-2-item" href="<?php global $route; echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'accesorios','page'=>1])?>">
+                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=accesorios&page=1">
                             <figure class="image">
                                 <img src="imgs/backgrounds/accesorios.jpg" alt="" class="img-fluid">
                             </figure>
@@ -43,7 +43,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"zapatillas",'page'=>1])?>">
+                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=ropa&page=1">
                             <figure class="image">
                                 <img src="imgs/backgrounds/ropa.jpg" alt="" class="img-fluid">
                             </figure>
@@ -54,7 +54,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'zapatillas','page'=>1])?>">
+                        <a class="block-2-item" href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=zapatillas&page=1">
                             <figure class="image">
                                 <img src="imgs/backgrounds/zapatillas.jpg" alt="" class="img-fluid">
                             </figure>

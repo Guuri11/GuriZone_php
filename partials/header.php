@@ -5,8 +5,7 @@
             <div class="row align-items-center">
 
                 <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-                    <form action="index.php" method="get" class="site-block-top-search">
-                        <input type="hidden" name="page" value="tienda">
+                    <form action="<?php global $route;echo $route->generateURL('Producto','catalogo')?>" method="get" class="site-block-top-search">
                         <button type="submit" class="icon icon-search mr-5 bg-white"></button>
                         <input type="text" class="form-control border-0" name="search" placeholder="Search">
                     </form>
@@ -48,11 +47,11 @@
             <ul class="site-menu js-clone-nav d-none d-md-block">
                 <li><a href="<?php echo $route->generateURL('Producto','index')?>">Inicio</a></li>
                 <li class="has-children">
-                    <a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'todo','page'=>'1'])?>">Tienda</a>
+                    <a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=todo&page=1">Tienda</a>
                     <ul class="dropdown">
-                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>'accesorios','page'=>1])?>">Accesorios</a></li>
-                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"ropa",'page'=>1])?>">Ropa</a></li>
-                        <li><a href="<?php echo $route->generateURL('Producto','mostrarPorCategoria',['categoria'=>"zapatillas",'page'=>1])?>">Zapatillas</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=accesorios&page=1">Accesorios</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=ropa&page=1">Ropa</a></li>
+                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=zapatillas&page=1">Zapatillas</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Sobre Nosotros</a></li>

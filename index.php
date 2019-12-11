@@ -60,89 +60,12 @@ switch ($action){
 
     case 'gestion':
     {
-        // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
 
-            // Filtro por categoria
-
-            // asignar valor a categoria en caso de que no se especifique
-            if (!array_key_exists('categoria',$_GET))
-                $_GET['categoria']='todo';
-            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
-
-            // Obtener todos los productos o los de la categoria especificada
-            if ($categoria == 'todo')
-                $productos = $productosConsulta->getAll();
-            else{
-                $categoria = $categoriaConsulta->getByTipoCat($categoria);
-                $productos = $productosConsulta->getByCategory($categoria->getIdCat());
-            }
-
-            // Filtro por fecha
-            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
-
-                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
-                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
-
-                // Obtener productos segun la categoria en las fechas marcadas
-                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
-                $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
-            }
-
-            // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
-            if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
-                $_GET['pg']=1;
-
-            $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
-
-            require("views/$page.view.php");
-        } else{
-            $page ='login';     // si no es admin -> redirigir al login
-            require_once ("views/$page.view.php");
-        }
-        break;
     }
 
     case 'crear_producto':
     {
-        // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
-            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                $errores=[];
-                $datos = $_POST;
-                // 1. Comprobar que estan todos los campos requeridos
-                foreach ($datos as $dato => $valor) {
-                    if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
-                        $errores[] = "ERROR: Campo requerido vacio: " . $dato;
-                    }
-                }
-                if (empty($errores)) {
-                    $producto = new Producto();
-                    // indicar foto por defecto si no existe dicha imagen
-                    if (empty($producto->getFotoProd()))
-                         $producto->setFotoProd('/imgs/productos/default_product_image.png');
 
-                    // 2.Obtener datos saneandos
-                    $producto = $productosConsulta->getData();
-
-                    // 3.Validar datos
-                    $errores = $productosConsulta->validateCrearProducto($producto);
-
-                    // 4. Ejecutar insercion a la BBDD
-                    if (empty($errores)){
-                        $resultado = $productosConsulta->insert($producto);
-                        if (!$resultado)
-                            $errores[]="Error al crear producto";
-                    }
-                }
-            }
-            require("views/$page.view.php");
-        } else{
-            $page ='login';     // si no es admin -> redirigir al login
-            require_once ("views/$page.view.php");
-        }
-        break;
     }
 
     case 'editar_producto':
@@ -230,69 +153,6 @@ switch ($action){
 
     case 'tienda':
     {
-        if($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
-            // Sanear busqueda solicitada
-            $busqueda = filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-            // PRODUCTOS OBTENIDOS POR LA BUSQUEDA
-            $resultados = $productosConsulta->getPorBuscador($busqueda);
-            // Controlar el valor de la pagina solicitada
-            if(!array_key_exists('pg',$_GET) || $_GET['pg']<=0)
-                $_GET['pg']=1;
-
-            // Sanear pagina solicitada
-            $pagina = filter_var($_GET['pg'],FILTER_VALIDATE_INT);
-
-            // Recoge datos de la paginacion y sus productos segun la pagina actual
-            $paginacion = new Paginacion(count($resultados),12,$pagina,$productosConsulta,$busqueda,1);
-
-        }else {
-
-            // Filtro por categoria:
-            // asignar valor a categoria en caso de que no se especifique
-            if (!array_key_exists('categoria',$_GET))
-                $_GET['categoria']='todo';
-            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
-
-            // Obtener todos los productos o los de la categoria especificada
-            if ($categoria == 'todo')
-                $productos_tienda = $productosConsulta->getAllCatalogados();
-            else{
-                $categoria = $categoriaConsulta->getByTipoCat($categoria);
-                $productos_tienda = $productosConsulta->getByCategory($categoria->getIdCat());
-            }
-
-            // Filtro por fecha:
-            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
-
-                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
-                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
-
-                // Obtener productos segun la categoria en las fechas marcadas
-                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
-                $productos_tienda = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
-            }
-
-
-            // Controlar el valor de la pagina solicitada
-            if (!array_key_exists('pg', $_GET) || $_GET['pg'] <= 0)
-                $_GET['pg'] = 1;
-            // Sanear pagina solicitada
-            $pagina = filter_var($_GET['pg'], FILTER_VALIDATE_INT);
-            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $productosConsulta, "", 1);
-        }
-            // Obtener el numero de productos por categoria
-            $stockAccesorios = $productosConsulta->getTotalStockCategorias(1);
-            $stockRopa = $productosConsulta->getTotalStockCategorias(2);
-            $stockZapatillas = $productosConsulta->getTotalStockCategorias(3);
-
-            require("views/$page.view.php");
-
-        break;
-
-        // La vista cogera los obj's de la variable 'datos', los de 'productos_tienda' los coge como referencia para saber
-        // el numero de productos que hay para hacer la paginacion. Esos datos contiene distintos valores que se aplican
-        // en la vista para realizar la logica paginacion
     }
     case 'producto':
     {

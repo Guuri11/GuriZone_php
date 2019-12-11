@@ -33,10 +33,10 @@
                     <div class="btn-group mr-1 ml-md-auto float-right">
                         <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Filtrar por Categoria</button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                            <a class="dropdown-item" href="?page=gestion&categoria=todo&pg=1">Todo</a>
-                            <a class="dropdown-item" href="?page=gestion&categoria=accesorios&pg=1">Accesorios</a>
-                            <a class="dropdown-item" href="?page=gestion&categoria=ropa&pg=1">Ropa</a>
-                            <a class="dropdown-item" href="?page=gestion&categoria=zapatillas&pg=1">Zapatillas</a>
+                            <a class="dropdown-item" href="<?php global $route; echo $route->generateURL('Usuario','gestion')?>?categoria=todo&page=1">Todo</a>
+                            <a class="dropdown-item" href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=accesorios&page=1">Accesorios</a>
+                            <a class="dropdown-item" href="?page=gestion&categoria=ropa&page=1">Ropa</a>
+                            <a class="dropdown-item" href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=zapatillas&page=1">Zapatillas</a>
                         </div>
                     </div>
                     <!--FIN FILTRO CATEGORIA-->
@@ -44,8 +44,7 @@
                     <div>
                         <div class="mt-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Filtrar por fecha</h3>
-                            <form action="<?= $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; ?>" method="get">
-                                <input type="hidden" name="page" value="gestion">
+                            <form action="<?php echo $route->generateURL('Usuario','gestion')?>" method="get">
                                 <label for="fecha_inicial" class="d-flex text-black">Fecha Inicial</label>
                                 <input type="date" id="fecha_inicial" name="fecha_inicial" class="mr-2 mt-1 form-control">
                                 <label for="fecha_final" class="d-flex text-black">Fecha Final</label>
@@ -81,7 +80,7 @@
                 <tbody>
                 <?php foreach ($paginacion->getProductos() as $producto){ ?>
                 <tr>
-                    <td><a href="?page=producto&id=<?php echo $producto->getIdProd(); ?>"><?php echo $producto->getIdProd(); ?></a></td>
+                    <td><a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>; ?>"><?php echo $producto->getIdProd(); ?></a></td>
                     <td><?php echo $producto->getModeloProd(); ?></td>
                     <td><?php echo $producto->getMarcaProd(); ?></td>
                     <td><?php echo $producto->getCategoriaProd(); ?></td>
@@ -115,19 +114,19 @@
                     <div class="site-block-27">
                     <?php if(array_key_exists('fecha_inicial',$_GET) && array_key_exists('fecha_final',$_GET)){?>
                         <ul>
-                            <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                             <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                             <?php } ?>
-                            <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
                         </ul>
                         <?php }else{ ?>
                         <ul>
-                            <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&pg=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                             <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&pg=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                             <?php } ?>
-                            <li><a href="?page=gestion&categoria=<?php echo $_GET['categoria']?>&pg=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
                         </ul>
                         <?php }?>
                     </div>
