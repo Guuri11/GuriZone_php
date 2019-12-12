@@ -27,6 +27,11 @@ class UsuarioController extends AbstractController
         require("views/login.view.php");
     }
 
+    public function logout(){
+        require_once ('src/logout.php');
+        logout();
+    }
+
     public function perfil(){
 
         global $cookieValue,$cookieName,$user;

@@ -1,13 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use App\Entity\Producto;
-use App\Entity\Paginacion;
 use App\Model\UsuarioModel;
 use App\DB;
 use App\Core\Request;
 use App\Core\Router;
-
 
 
 require __DIR__.'/config/bootstrap.php';
@@ -25,6 +22,32 @@ $cookieValue = "anonimo";     // establecer sesión de anonimo
 
 $db = new DB();
 $di->set('PDO', $db->getConnection());
+
+$log = new \Monolog\Logger('eventos');
+try {
+    $log->pushHandler(
+        new \Monolog\Handler\StreamHandler(__DIR__ . '/app.log', \Monolog\Logger::INFO)
+    );
+} catch (Exception $e) {
+    echo "error";
+}
+//Injectar en el di el logger
+$di->set('Logger',$log);
+
+
+
+//Carreguem l'entorn de twig
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/templates');
+$twig = new \Twig\Environment($loader);
+
+//Afegim una instancia de router a la plantilla
+// la utilitzarem en les plantillas per a generar URL
+$twig->addGlobal('router',new Router(new \App\Utils\DependencyInjector()));
+
+//incloem al contenidor de serveis
+$di->set('Twig',$twig);
+
+
 $request = new Request();
 
 
@@ -40,131 +63,4 @@ try{
 }
 
 $route = new Router($di);
-$route->route($request);
-//$page = $_GET['page']??"index";
-//$action = $_GET['action'] ?? "indexARR";
-/*
-switch ($action){
-
-    case 'index':
-    {
-
-    }
-    case 'login':
-    {
-
-    }
-
-    case 'dashboard':
-    {
-
-    case 'gestion':
-    {
-
-    }
-
-    case 'crear_producto':
-    {
-
-    }
-
-    case 'editar_producto':
-    {
-        // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
-            // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
-            if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
-                header('Location: ?page=error');
-            }else
-                $id = $_GET['id'];
-            try{
-                $productoSeleccionado = $productosConsulta->getById(intval($id));
-            }catch (ErrorException $errorException){
-                $page="error";
-            }
-
-            $resultado = false;
-            // Obtener datos del formulario
-            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                $errores=[];
-                $datos = $_POST;
-
-                // 1. Comprobar que estan todos los campos requeridos
-                foreach ($datos as $dato => $valor) {
-                    if (empty($valor) && $dato != 'urlfoto' && $dato != 'descatalogado') { // podria no tener foto... y descatalogado si es 0 lo considera como vacio
-                        $errores[] = "ERROR: Campo requerido vacio: " . $dato;
-                    }
-                }
-
-                if (empty($errores)) {
-                    // 1.Obtener datos saneandos
-                    $producto = $productosConsulta->getData();
-                    $producto->setIdProd($productoSeleccionado->getIdProd());
-                    $producto->setNumVentasProd($productoSeleccionado->getNumVentasProd());
-
-                    // 2.Validar datos
-                    $errores = $productosConsulta->validate($producto);
-
-                    // 3. Ejecutar insercion a la BBDD
-                    if (empty($errores)){
-                        $resultado = $productosConsulta->update($producto);     // subirlo a la ddbb
-                        if ($resultado === false)
-                            $errores[]="Error al modificar producto";
-                    }
-                }
-            }
-
-            require("views/$page.view.php");
-        } else{
-            $page ='login';     // si no es admin -> redirigir al login
-            require_once ("views/$page.view.php");
-        }
-        break;
-    }
-
-    case 'borrar':
-    {
-        // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
-        // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
-            $confirmacion = false;
-        if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('id',$_POST) && $confirmacion){
-            $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
-
-            // 2. Eliminar producto TODO: confirmacion del delete
-            $resultado = $productosConsulta->delete(intval($id));
-            if (!$resultado)
-                header('Location ?page=error');
-            else
-                header('Location ?page=gestion');
-        }
-        require_once ("views/$page.view.php");
-        } else{
-            $page ='login';     // si no es admin -> redirigir al login
-            require_once ("views/$page.view.php");
-        }
-        break;
-    }
-
-    case 'contactus':
-    {
-
-    }
-
-    case 'tienda':
-    {
-    }
-    case 'producto':
-    {
-
-        break;
-    }
-    case 'perfil':
-    {
-
-    }
-    default:
-    {
-
-    }
-}*/
+echo $route->route($request);

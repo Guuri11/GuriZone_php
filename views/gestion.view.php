@@ -80,7 +80,7 @@
                 <tbody>
                 <?php foreach ($paginacion->getProductos() as $producto){ ?>
                 <tr>
-                    <td><a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>; ?>"><?php echo $producto->getIdProd(); ?></a></td>
+                    <td><a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>"><?php echo $producto->getIdProd(); ?></a></td>
                     <td><?php echo $producto->getModeloProd(); ?></td>
                     <td><?php echo $producto->getMarcaProd(); ?></td>
                     <td><?php echo $producto->getCategoriaProd(); ?></td>
@@ -96,10 +96,10 @@
                     <td><?php echo $producto->getDescatalogado()==0 ? 'Activo':'Desactivado'; ?></td>
                     <td>
                         <div>
-                            <a href="?page=editar_producto&id=<?php echo $producto->getIdProd();?>"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
+                            <a href="<?php echo $route->generateURL('Producto','editarProducto',['id'=>$producto->getIdProd()]);?>"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
                         </div>
                         <div>
-                            <a href="?page=borrar&id=<?php echo $producto->getIdProd(); ?>"><input type="button" class="btn btn-danger" value="Eliminar"></a>
+                            <a href="<?php echo $route->generateURL('Producto','borrarProducto',['id'=>$producto->getIdProd()]);?>"><input type="button" class="btn btn-danger" value="Eliminar"></a>
                         </div>
                     </td>
                 </tr>

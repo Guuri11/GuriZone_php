@@ -7,9 +7,12 @@ use App\Entity\Paginacion;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
 use App\Entity\Producto;
+use ErrorException;
+use http\Exception;
 
 class ProductoController extends AbstractController
 {
+    private $atope = "atope";
     public function index()
     {
         global $cookieValue,$cookieName;
@@ -45,7 +48,10 @@ class ProductoController extends AbstractController
 
         $rutaFotoLogo = "../imgs/logo_black.png";
         $rutaFotoUltimoProducto = "..".$ultimoProducto->getFotoProd();
-        require("views/producto.view.php");
+        //require("views/producto.view.php");
+
+        return $this->render('producto.twig',[]);
+
     }
 
     public function catalogo(){
@@ -54,8 +60,8 @@ class ProductoController extends AbstractController
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
-        $rutaFotoLogo = "../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "..".$ultimoProducto->getFotoProd();
+        $rutaFotoLogo = "./imgs/logo_black.png";
+        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         /** CATALOGO */
 
@@ -164,31 +170,35 @@ class ProductoController extends AbstractController
             header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
         }
     }
-    public function editarProducto($id){
 
-        global $cookieValue,$cookieName,$user;
+    public function editarProducto($id)
+    {
+
+        global $cookieValue, $cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "../../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "../..".$ultimoProducto->getFotoProd();
+        $rutaFotoLogo = "../../../imgs/logo_black.png";
+        $rutaFotoUltimoProducto = "../../.." . $ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
+        if ($_COOKIE[$cookieName] === 'admin') {
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
-            if (!array_key_exists('id',$_GET) || $_GET['id']>$ultimoProducto->getIdProd() || $_GET['id']<1){
-                header('Location: ?page=error');
-            }else
-                $id = $_GET['id'];
-            try{
+            if ($id > $ultimoProducto->getIdProd() || $id < 1) {
+                global $route;
+                header('Location: ' . $route->generateURL('Producto', 'index'));
+            }
+            try {
                 $productoSeleccionado = $productosConsulta->getById(intval($id));
-            }catch (ErrorException $errorException){
-                $page="error";
+            } catch (Exception $exception) {
+                global $request;
+                $errorController = new ErrorController($this->di, $request);
+                return $errorController->notFound();
             }
 
             $resultado = false;
             // Obtener datos del formulario
-            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                $errores=[];
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $errores = [];
                 $datos = $_POST;
 
                 // 1. Comprobar que estan todos los campos requeridos
@@ -208,18 +218,56 @@ class ProductoController extends AbstractController
                     $errores = $productosConsulta->validate($producto);
 
                     // 3. Ejecutar insercion a la BBDD
-                    if (empty($errores)){
+                    if (empty($errores)) {
                         $resultado = $productosConsulta->update($producto);     // subirlo a la ddbb
                         if ($resultado === false)
-                            $errores[]="Error al modificar producto";
+                            $errores[] = "Error al modificar producto";
                     }
                 }
             }
             require("views/editar_producto.view.php");
+        } else {
+            global $route;
+            header("Location: " . $route->generateURL('Producto', 'index')); // redirigir al inicio
+        }
+        return "";
+    }
+
+    public function borrarProducto($id){
+
+        global $cookieValue, $cookieName;
+        $productosConsulta = new ProductoModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+        $rutaFotoLogo = "../../../imgs/logo_black.png";
+        $rutaFotoUltimoProducto = "../../.." . $ultimoProducto->getFotoProd();
+
+        // Capa de proteccion para acceder al dashboard
+        if ($cookieValue === 'admin'){
+            // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
+            if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('borrar',$_POST)){
+                $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);
+                if ($borrar === 'true'){
+                    $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+                    // 2. Eliminar producto
+                    $resultado = $productosConsulta->delete(intval($id));
+                    global $route;
+                    if (!$resultado){
+                        var_dump($resultado);
+                        global $request;
+                        $errorController = new ErrorController($this->di, $request);
+                        return $errorController->notFound();
+                    } else{
+                        var_dump($resultado);
+                        header('Location: '.$route->generateURL('Usuario','gestion'));
+
+                    }
+                }
+            }
+            require_once ("views/borrar.view.php");
         } else{
             global $route;
-            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            header("Location: " . $route->generateURL('Producto', 'index')); // redirigir al inicio
         }
+        return "";
     }
-    public function borrarProducto($id){}
 }

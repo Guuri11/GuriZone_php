@@ -357,9 +357,10 @@ class ProductoModel{
      * @return mixed
      */
     public function selectPedido(int $id_prod){
+        $id = $id_prod;
         try{
             $stmt = $this->db->prepare('SELECT * FROM Pedido WHERE id_prod = :id');
-            $stmt->bindParam(':id',intval($id_prod));
+            $stmt->bindParam(':id',$id);
             $stmt->execute();
 
             return $stmt->fetchAll();
@@ -372,18 +373,19 @@ class ProductoModel{
      * @param $id
      * @return bool
      */
-    public function delete($id):bool{
+    public function delete(int $id):bool{
+        $id_prod = $id;
         try{
-            $pedido = $this->selectPedido($id);
+            $pedido = $this->selectPedido($id_prod);
             $this->db->beginTransaction();
 
             if ($pedido>0){
                 $stmt = $this->db->prepare('DELETE FROM Pedido WHERE id_prod = :id');
-                $stmt->bindParam(':id',$id);
+                $stmt->bindParam(':id',$id_prod);
                 $stmt->execute();
             }
             $stmt = $this->db->prepare('DELETE FROM Producto WHERE id_prod=:id');
-            $stmt->bindParam(':id',intval($id));
+            $stmt->bindParam(':id',$id_prod);
             $stmt->execute();
             $this->db->commit();
             if ($stmt->rowCount())

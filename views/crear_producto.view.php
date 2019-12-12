@@ -41,7 +41,7 @@
 
             <!--FORMULARIO-->
             <div class="col-md-12 justify-content-center">
-                <form action="<?php echo $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']?>" method="post">
+                <form action="<?php echo $route->generateURL('Producto','crearProducto')?>" method="post">
                     <div class="p-3 p-lg-5">
                         <div class="form-group row">
                             <div class="col-md-12">

@@ -34,14 +34,14 @@
     "controller": "Producto",
     "method": "crearProducto"
   },
-  "GuriZone/dashboard/editar/:id": {
+  "GuriZone/dashboard/producto/editar/:id": {
     "controller": "Producto",
     "method": "editarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone/dashboard/borrar/:id": {
+  "GuriZone/dashboard/producto/borrar/:id": {
     "controller": "Producto",
     "method": "borrarProducto",
     "params": {
