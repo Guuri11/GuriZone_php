@@ -12,7 +12,6 @@ use http\Exception;
 
 class ProductoController extends AbstractController
 {
-    private $atope = "atope";
     public function index()
     {
         global $cookieValue,$cookieName;
@@ -50,7 +49,14 @@ class ProductoController extends AbstractController
         $rutaFotoUltimoProducto = "..".$ultimoProducto->getFotoProd();
         //require("views/producto.view.php");
 
-        return $this->render('producto.twig',[]);
+        return $this->render('producto.twig',[
+            'usuario'=>$cookieValue,
+            'ruta_logo'=>$rutaFotoLogo,
+            'ultimo_producto'=>$ultimoProducto,
+            'rutaFotoUltimoProducto'=>$rutaFotoUltimoProducto,
+            'producto'=>$productoSeleccionado
+
+        ]);
 
     }
 

@@ -1,4 +1,25 @@
 {% extends "base.twig" %}
 {% block body %}
-    <h1>Hola mundo</h1>
+        <div class="site-section">
+            <div class="justify-content-center gurizone-login p-lg-4 m-lg-5 p-md-4 m-md-3 p-sm-4 m-sm-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="..{{ producto.getFotoProd() }}" alt="Image" class="img-fluid w-75">
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="text-black h1">{{ producto.getModeloProd() }}</h2>
+                        <p class="text-black h4">{{ producto.getDescripcion() }}</p>
+                        <hr class="bg-dark">
+                        <p class="text-black h4">Fecha salida: {{ producto.getFechaSalida()|date('Y-m-d') }}</p>
+                        <p><strong class="text-primary h4">Precio: {{ producto.getPrecioUnidad() }}€</strong></p>
+                        <p><strong class="text-primary h4">Talla: {{ producto.getTalla() }}</strong></p>
+                        <p><strong class="text-primary h4">Stock: {{ producto.getStockProd() }}</strong></p>
+                        <p><a href="#" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+                        {% if usuario=='admin'  %}
+                        <p><a href="{{ router.generateURL('Producto','editarProducto',{id:producto.getIdProd()}) }}" class="buy-now btn btn-sm btn-primary">EDITAR</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
 {% endblock %}

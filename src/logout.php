@@ -13,7 +13,7 @@ function logout(){
         $usuario_modelo = new UsuarioModel($db->getConnection());
         $user = $usuario_modelo->getById(1);
     }catch (PDOException $exception){
-        die($exception->getMessage());
+        echo $exception->getMessage();
     }
     // 2. Cambiar valor de la cookie
     global $cookieName;

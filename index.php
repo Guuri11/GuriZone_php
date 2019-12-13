@@ -59,7 +59,7 @@ try{
     $cookieValue = $_COOKIE[$cookieName] ?? 'anonimo';
     $user = $usuario_modelo->getByName($cookieValue);
 }catch (PDOException $exception){
-    die($exception->getMessage());
+    echo $exception->getMessage();
 }
 
 $route = new Router($di);

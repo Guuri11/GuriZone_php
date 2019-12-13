@@ -29,7 +29,7 @@ function login():string{
             $usuario_modelo = new UsuarioModel($db->getConnection());
             $user = $usuario_modelo->getByRol($id);
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
 
         // Cambiar valor de la cookie

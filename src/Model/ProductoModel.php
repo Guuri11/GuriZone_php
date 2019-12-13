@@ -36,7 +36,7 @@ class ProductoModel{
 
             return $productos;
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -50,7 +50,7 @@ class ProductoModel{
 
             return $productos;
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -69,7 +69,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetch();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -88,7 +88,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -128,7 +128,7 @@ class ProductoModel{
             else
                 return false;
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -167,7 +167,7 @@ class ProductoModel{
             else
                 return false;
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -181,7 +181,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetch();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -246,7 +246,7 @@ class ProductoModel{
             }
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -260,7 +260,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -274,7 +274,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -312,7 +312,7 @@ class ProductoModel{
                 return $stmt->fetchAll();
             }
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
     //TODO
@@ -330,7 +330,7 @@ class ProductoModel{
 
             return $stmt->fetch();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -348,7 +348,7 @@ class ProductoModel{
             $stmt->execute();
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -365,7 +365,7 @@ class ProductoModel{
 
             return $stmt->fetchAll();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -393,7 +393,7 @@ class ProductoModel{
             else
                 return false;
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 

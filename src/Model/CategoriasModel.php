@@ -27,7 +27,7 @@ class CategoriasModel
             $stmt->execute();
             return $stmt->fetch();
         }catch (PDOException $exception){
-            die($exception->getMessage());
+            echo $exception->getMessage();
         }
     }
 
@@ -40,7 +40,7 @@ class CategoriasModel
                 $stmt->execute();
                 return $stmt->fetch();
             }catch (PDOException $exception){
-                die($exception->getMessage());
+                echo $exception->getMessage();
             }
         }else{
             $categoria = new Categorias();
