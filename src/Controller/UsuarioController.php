@@ -7,6 +7,7 @@ use App\Entity\Paginacion;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
 
+
 class UsuarioController extends AbstractController
 {
     public function login(){
@@ -21,8 +22,6 @@ class UsuarioController extends AbstractController
             $error = login();
         }
 
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         require("views/login.view.php");
     }
@@ -37,8 +36,6 @@ class UsuarioController extends AbstractController
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
         if ($cookieValue === 'admin' || $cookieValue=="usuario")
@@ -54,8 +51,6 @@ class UsuarioController extends AbstractController
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
@@ -70,8 +65,6 @@ class UsuarioController extends AbstractController
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         require ("views/contactus.view.php");
     }
@@ -81,8 +74,6 @@ class UsuarioController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "..".$ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
@@ -90,9 +81,10 @@ class UsuarioController extends AbstractController
             // Filtro por categoria
 
             // asignar valor a categoria en caso de que no se especifique
-            if (!array_key_exists('categoria',$_GET) || empty($_GET['categoria']))
-                $_GET['categoria']='todo';
-            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
+            if (!$this->request->getParams()->has('categoria') || empty($this->request->getParams()->get('categoria')))
+                $this->request->getParams()->set('categoria','todo');
+            $categoria = trim(filter_var($this->request->getParams()->get('categoria'),FILTER_SANITIZE_STRING));
+
 
             // Obtener todos los productos o los de la categoria especificada
             if ($categoria == 'todo')
@@ -103,10 +95,10 @@ class UsuarioController extends AbstractController
             }
 
             // Filtro por fecha
-            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && $this->request->getParams()->has('fecha_inicial') && $this->request->getParams()->has('fecha_final')) {
 
-                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
-                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
+                $fecha_inicial = filter_var($this->request->getParams()->get('fecha_inicial'),FILTER_SANITIZE_STRING);
+                $fecha_final = filter_var($this->request->getParams()->get('fecha_final'),FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
                 $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
@@ -114,10 +106,11 @@ class UsuarioController extends AbstractController
             }
 
             // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
-            if(!array_key_exists('page',$_GET) || $_GET['page']<=0)
-                $_GET['page']=1;
+            if(!$this->request->getParams()->has('page') || $this->request->getParams()->get('page')<=0)
+                $this->request->getParams()->set('page','1');
 
-            $pagina = filter_var($_GET['page'],FILTER_VALIDATE_INT);
+            $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
+
             $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
 
             require("views/gestion.view.php");

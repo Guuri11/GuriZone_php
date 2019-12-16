@@ -13,7 +13,7 @@
 
                 <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                     <div >
-                        <a href="<?php global $route; echo $route->generateURL('Producto','index')?>" class=""><img class="img-fluid gurilogo" src="<?php echo $rutaFotoLogo?>" width="45%"></a>
+                        <a href="<?php global $route; echo $route->generateURL('Producto','index')?>" class=""><img class="img-fluid gurilogo" src="/GuriZone/imgs/logo_black.png" width="45%"></a>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 order-3 order-md-3 text-right">

@@ -24,10 +24,8 @@ class ProductoController extends AbstractController
         $productosTT = $productosConsulta->getTT();
         $novedades = $productosConsulta->getNovedades();
 
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
         // Usuario hace logout
-        if (isset($_GET['logout'])){
+        if ($this->request->getParams()->has('logout')){
             require_once ('./src/logout.php');
             logout();
         }
@@ -45,17 +43,10 @@ class ProductoController extends AbstractController
             $id = filter_var($id,FILTER_VALIDATE_INT);
         $productoSeleccionado = $productosConsulta->getById(intval($id));
 
-        $rutaFotoLogo = "../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "..".$ultimoProducto->getFotoProd();
-        //require("views/producto.view.php");
-
         return $this->render('producto.twig',[
             'usuario'=>$cookieValue,
-            'ruta_logo'=>$rutaFotoLogo,
             'ultimo_producto'=>$ultimoProducto,
-            'rutaFotoUltimoProducto'=>$rutaFotoUltimoProducto,
             'producto'=>$productoSeleccionado
-
         ]);
 
     }
@@ -66,23 +57,21 @@ class ProductoController extends AbstractController
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
-        $rutaFotoLogo = "./imgs/logo_black.png";
-        $rutaFotoUltimoProducto = ".".$ultimoProducto->getFotoProd();
 
         /** CATALOGO */
 
-        if($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
+        if($this->request->getParams()->has('search')){
             // Sanear busqueda solicitada
-            $busqueda = filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $busqueda = filter_var($this->request->getParams()->get('search'),FILTER_SANITIZE_STRING, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
             // PRODUCTOS OBTENIDOS POR LA BUSQUEDA
             $resultados = $productosConsulta->getPorBuscador($busqueda);
             // Controlar el valor de la pagina solicitada
-            if(!array_key_exists('page',$_GET) || $_GET['page']<=0)
-                $_GET['page']=1;
+            if(!$this->request->getParams()->has('page') || $this->request->getParams()->get('page')<=0)
+                $this->request->getParams()->set('page','1');
 
             // Sanear pagina solicitada
-            $pagina = filter_var($_GET['page'],FILTER_VALIDATE_INT);
+            $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
 
             // Recoge datos de la paginacion y sus productos segun la pagina actual
             $paginacion = new Paginacion(count($resultados),12,$pagina,$productosConsulta,$busqueda,1);
@@ -91,9 +80,9 @@ class ProductoController extends AbstractController
 
             // Filtro por categoria:
             // asignar valor a categoria en caso de que no se especifique
-            if (!array_key_exists('categoria',$_GET) || empty($_GET['categoria']))
-                $_GET['categoria']='todo';
-            $categoria = trim(filter_var($_GET['categoria'],FILTER_SANITIZE_STRING));
+            if (!$this->request->getParams()->has('categoria') || empty($this->request->getParams()->get('categoria')))
+                $this->request->getParams()->set('categoria','todo');
+            $categoria = trim(filter_var($this->request->getParams()->get('categoria'),FILTER_SANITIZE_STRING));
 
             // Obtener todos los productos o los de la categoria especificada
             if ($categoria == 'todo')
@@ -104,10 +93,10 @@ class ProductoController extends AbstractController
             }
 
             // Filtro por fecha:
-            if ($_SERVER['REQUEST_METHOD'] === 'GET' && array_key_exists('fecha_inicial', $_GET) && array_key_exists('fecha_final', $_GET)) {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && $this->request->getParams()->has('fecha_inicial') && $this->request->getParams()->has('fecha_final')) {
 
-                $fecha_inicial = filter_input(INPUT_GET, 'fecha_inicial', FILTER_SANITIZE_STRING);
-                $fecha_final = filter_input(INPUT_GET, 'fecha_final', FILTER_SANITIZE_STRING);
+                $fecha_inicial = filter_var($this->request->getParams()->get('fecha_inicial'),FILTER_SANITIZE_STRING);
+                $fecha_final = filter_var($this->request->getParams()->get('fecha_final'),FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
                 $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
@@ -116,10 +105,11 @@ class ProductoController extends AbstractController
 
 
             // Controlar el valor de la pagina solicitada
-            if (!array_key_exists('page', $_GET) || $_GET['page'] <= 0)
-                $_GET['page'] = 1;
+            if(!$this->request->getParams()->has('page') || $this->request->getParams()->get('page')<=0)
+                $this->request->getParams()->set('page','1');
             // Sanear pagina solicitada
-            $pagina = filter_var($_GET['page'], FILTER_VALIDATE_INT);
+            $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
+
             $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $productosConsulta, "", 1);
         }
         // Obtener el numero de productos por categoria
@@ -136,8 +126,6 @@ class ProductoController extends AbstractController
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "../../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "../..".$ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
@@ -183,8 +171,6 @@ class ProductoController extends AbstractController
         global $cookieValue, $cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "../../../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "../../.." . $ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin') {
@@ -244,14 +230,13 @@ class ProductoController extends AbstractController
         global $cookieValue, $cookieName;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $rutaFotoLogo = "../../../imgs/logo_black.png";
-        $rutaFotoUltimoProducto = "../../.." . $ultimoProducto->getFotoProd();
 
         // Capa de proteccion para acceder al dashboard
         if ($cookieValue === 'admin'){
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
-            if($_SERVER['REQUEST_METHOD']=='POST' && array_key_exists('borrar',$_POST)){
+            if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
                 $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);
+                $borrar = filter_var($this->request->getParams()->get('borrar'),FILTER_SANITIZE_STRING);
                 if ($borrar === 'true'){
                     $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
                     // 2. Eliminar producto

@@ -29,4 +29,8 @@ class FilteredMap {
     public function get(string $name) {
         return $this->map[$name] ?? null;
     }
+
+    public function set(string $name, string $value){
+        $this->map[$name] = $value;
+    }
 }

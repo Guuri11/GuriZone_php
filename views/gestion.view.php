@@ -7,19 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
-    <link rel="stylesheet" href="../fonts/icomoon/style.css">
+    <link rel="stylesheet" href="/GuriZone/fonts/icomoon/style.css">
 
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/magnific-popup.css">
-    <link rel="stylesheet" href="../css/jquery-ui.css">
-    <link rel="stylesheet" href="../css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/GuriZone/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/GuriZone/css/magnific-popup.css">
+    <link rel="stylesheet" href="/GuriZone/css/jquery-ui.css">
+    <link rel="stylesheet" href="/GuriZone/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/GuriZone/css/owl.theme.default.min.css">
 
 
-    <link rel="stylesheet" href="../css/aos.css">
+    <link rel="stylesheet" href="/GuriZone/css/aos.css">
 
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/guriZone.css">
+    <link rel="stylesheet" href="/GuriZone/css/style.css">
+    <link rel="stylesheet" href="/GuriZone/css/guriZone.css">
 
 </head>
 <body>
@@ -114,7 +114,7 @@
                     <div class="site-block-27">
                     <?php if(array_key_exists('fecha_inicial',$_GET) && array_key_exists('fecha_final',$_GET)){?>
                         <ul>
-                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $_GET['pg']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                             <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
                                 <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                             <?php } ?>
@@ -138,13 +138,13 @@
     <?php  require_once ('./partials/footer.php');?>
 </div>
 
-<script src="../js/jquery-3.3.1.min.js"></script>
-<script src="../js/jquery-ui.js"></script>
-<script src="../js/popper.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/owl.carousel.min.js"></script>
-<script src="../js/jquery.magnific-popup.min.js"></script>
-<script src="../js/aos.js"></script>
-<script src="../js/main.js"></script>
+<script src="/GuriZone/js/jquery-3.3.1.min.js"></script>
+<script src="/GuriZone/js/jquery-ui.js"></script>
+<script src="/GuriZone/js/popper.min.js"></script>
+<script src="/GuriZone/js/bootstrap.min.js"></script>
+<script src="/GuriZone/js/owl.carousel.min.js"></script>
+<script src="/GuriZone/js/jquery.magnific-popup.min.js"></script>
+<script src="/GuriZone/js/aos.js"></script>
+<script src="/GuriZone/js/main.js"></script>
 </body>
 </html>

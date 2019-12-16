@@ -34,7 +34,7 @@
             <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <h3 class="footer-heading mb-4">Promo</h3>
                 <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$ultimoProducto->getIdProd()])?>" class="block-6">
-                    <img src="<?php echo $rutaFotoUltimoProducto?>" alt="Image placeholder" class="img-fluid rounded mb-4">
+                    <img src="/GuriZone/<?php echo $ultimoProducto->getFotoPRod()?>" alt="Image placeholder" class="img-fluid rounded mb-4">
                     <h3 class="font-weight-light  mb-0">Nuevos productos!</h3>
                     <p><?php echo $ultimoProducto->getModeloProd()?></p>
                 </a>
