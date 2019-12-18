@@ -58,6 +58,7 @@ class ProductoController extends AbstractController
 
         /** CATALOGO */
 
+        // FILTRO POR BUSQUEDA
         if($this->request->getParams()->has('search')){
             // Sanear busqueda solicitada
             $busqueda = filter_var($this->request->getParams()->get('search'),FILTER_SANITIZE_STRING, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -76,7 +77,7 @@ class ProductoController extends AbstractController
 
         }else {
 
-            // Filtro por categoria:
+            // FILTRO POR CATEGORIA
             // asignar valor a categoria en caso de que no se especifique
             if (!$this->request->getParams()->has('categoria') || empty($this->request->getParams()->get('categoria')))
                 $this->request->getParams()->set('categoria','todo');
@@ -90,7 +91,7 @@ class ProductoController extends AbstractController
                 $productos_tienda = $productosConsulta->getByCategory($categoria_tipo->getIdCat());
             }
 
-            // Filtro por fecha:
+            // FILTRO POR FECHA
             if ($_SERVER['REQUEST_METHOD'] === 'GET' && $this->request->getParams()->has('fecha_inicial') && $this->request->getParams()->has('fecha_final')) {
 
                 $fecha_inicial = filter_var($this->request->getParams()->get('fecha_inicial'),FILTER_SANITIZE_STRING);
