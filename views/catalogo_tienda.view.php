@@ -38,24 +38,30 @@
                     <div class="col-md-9 order-2">
                         <div class="row">
                             <div class="col-md-12 mb-5">
-                                <div class="float-md-left mb-4"><h2 class="text-black h5"><?php echo ucfirst($_GET['categoria']??'todo')?></h2></div>
+                                <?php global $request; if (isset($fecha_inicial) && isset($fecha_final)){?>
+                                <div class="float-md-left mb-4"><h2 class="text-black h5">Fecha filtrada entre <?php echo $fecha_inicial; ?> y <?php echo $fecha_final; ?></h2></div>
+                                <?php }elseif (isset($busqueda) ){?>
+                                <div class="float-md-left mb-4"><h2 class="text-black h5">Busqueda: <?php echo strtoupper($busqueda)?></h2></div>
+                                <?php }else{?>
+                                <div class="float-md-left mb-4"><h2 class="text-black h5"><?php echo ucfirst($categoria)?></h2></div>
+                                <?php }?>
                             </div>
                         </div>
                         <!--PRODUCTOS-->
                         <div class="row mb-5">
                             <?php foreach ($paginacion->getProductos() as $producto){ ?>
-                            <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-                                <div class="block-4 text-center border">
-                                    <figure class="block-4-image">
-                                        <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>"><img src=".<?php echo $producto->getFotoProd()?>" alt="Image placeholder" class="img-fluid"></a>
-                                    </figure>
-                                    <div class="block-4-text p-4">
-                                        <h3><a href="?page=producto&id=<?php echo $producto->getIdProd()?>"><?php echo $producto->getModeloProd()?></a></h3>
-                                        <p class="mb-0"><?php echo $producto->getMarcaProd()?></p>
-                                        <p class="text-primary font-weight-bold"><?php echo $producto->getPrecioUnidad()?>€</p>
+                                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                                    <div class="block-4 text-center border">
+                                        <figure class="block-4-image">
+                                            <a href="<?php echo $route->generateURL('Producto','mostrarProducto',['id'=>$producto->getIdProd()])?>"><img src=".<?php echo $producto->getFotoProd()?>" alt="Image placeholder" class="img-fluid"></a>
+                                        </figure>
+                                        <div class="block-4-text p-4">
+                                            <h3><a href="?page=producto&id=<?php echo $producto->getIdProd()?>"><?php echo $producto->getModeloProd()?></a></h3>
+                                            <p class="mb-0"><?php echo $producto->getMarcaProd()?></p>
+                                            <p class="text-primary font-weight-bold"><?php echo $producto->getPrecioUnidad()?>€</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             <?php } ?>
                         </div>
                         <!--FIN PRODUCTOS-->
@@ -65,36 +71,36 @@
                         <div class="row" data-aos="fade-up">
                             <div class="col-md-12 text-center">
                                 <div class="site-block-27">
-                                    <?php if (!array_key_exists('search',$_GET) && (!array_key_exists('fecha_inicial',$_GET) && !array_key_exists('fecha_final',$_GET))){?>
-                                    <ul>
-                                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
-                                        <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
-                                        <?php } ?>
-                                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
-                                    </ul>
-                                    <?php }elseif(array_key_exists('fecha_inicial',$_GET) && array_key_exists('fecha_final',$_GET)){?>
-                                    <ul>
-                                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
-                                        <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                            <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
-                                        <?php } ?>
-                                        <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
-                                    </ul>
+                                    <?php global $catalogo; if (!isset($busqueda) && (!isset($fecha_inicial) && !isset($fecha_final))){?>
+                                        <ul>
+                                            <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $catalogo?>&page=<?php echo $pagina<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                                            <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
+                                                <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $catalogo?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                            <?php } ?>
+                                            <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?categoria=<?php echo $catalogo?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                                        </ul>
+                                    <?php }elseif(isset($fecha_inicial) && isset($fecha_final)){?>
+                                        <ul>
+                                            <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $pagina<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                                            <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
+                                                <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                            <?php } ?>
+                                            <li><a href="<?php echo $route->generateURL('Producto','catalogo')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                                        </ul>
                                     <?php }else{ ?>
-                                    <ul>
-                                        <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
-                                        <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                            <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
-                                        <?php } ?>
-                                        <li><a href="?page=tienda&search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
-                                    </ul>
+                                        <ul>
+                                            <li><a href="?search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $pagina<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                                            <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
+                                                <li><a href="?search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                            <?php } ?>
+                                            <li><a href="?search=<?php echo $paginacion->getBusqueda(); ?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                                        </ul>
                                     <?php } ?>
                                 </div>
                             </div>
                         </div>
                         <!--FIN PAGINACION-->
-                    <!--FILTRO CATEGORIA/FECHA-->
+                        <!--FILTRO CATEGORIA/FECHA-->
                     </div>
                     <div class="col-md-3 order-1 mb-5 mb-md-0">
                         <div class="border p-4 rounded mb-4">

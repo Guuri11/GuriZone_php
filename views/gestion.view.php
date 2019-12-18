@@ -112,9 +112,9 @@
             <div class="row" data-aos="fade-up">
                 <div class="col-md-12 text-center">
                     <div class="site-block-27">
-                    <?php if(array_key_exists('fecha_inicial',$_GET) && array_key_exists('fecha_final',$_GET)){?>
+                    <?php global $categoria;if(isset($fecha_inicial) && isset($fecha_final)){?>
                         <ul>
-                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $pagina<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                             <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
                                 <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?fecha_inicial=<?php echo $paginacion->getFecha('fecha_inicial'); ?>&fecha_final=<?php echo $paginacion->getFecha('fecha_final'); ?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                             <?php } ?>
@@ -122,11 +122,11 @@
                         </ul>
                         <?php }else{ ?>
                         <ul>
-                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $_GET['page']<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $categoria?>&page=<?php echo $pagina<=0 ? $paginacion->getPagina()-1:'1';?>"><</a></li>
                             <?php for ($i = 1; $i<=$paginacion->getNumPaginas();$i++){?>
-                                <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
+                                <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $categoria?>&page=<?php echo $i?>"><span><?php echo $i ?></span></a></li>
                             <?php } ?>
-                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $_GET['categoria']?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
+                            <li><a href="<?php echo $route->generateURL('Usuario','gestion')?>?categoria=<?php echo $categoria?>&page=<?php echo $paginacion->getPagina()>=$paginacion->getNumPaginas() ? '1':$paginacion->getPagina()+1;?>">&gt;</a></li>
                         </ul>
                         <?php }?>
                     </div>

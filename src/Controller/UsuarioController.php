@@ -90,8 +90,8 @@ class UsuarioController extends AbstractController
             if ($categoria == 'todo')
                 $productos = $productosConsulta->getAll();
             else{
-                $categoria = $categoriaConsulta->getByTipoCat($categoria);
-                $productos = $productosConsulta->getByCategory($categoria->getIdCat());
+                $categoria_tipo = $categoriaConsulta->getByTipoCat($categoria);
+                $productos = $productosConsulta->getByCategory($categoria_tipo->getIdCat());
             }
 
             // Filtro por fecha
@@ -101,8 +101,8 @@ class UsuarioController extends AbstractController
                 $fecha_final = filter_var($this->request->getParams()->get('fecha_final'),FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
-                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
-                $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
+                $categoria_tipo = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria_tipo->getIdCat());
             }
 
             // Si la pagina introducida es menor de 1 o no existe poner la pagina 1

@@ -15,8 +15,6 @@ class ProductoController extends AbstractController
     public function index()
     {
         global $cookieValue,$cookieName;
-
-
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
@@ -88,8 +86,8 @@ class ProductoController extends AbstractController
             if ($categoria == 'todo')
                 $productos_tienda = $productosConsulta->getAllCatalogados();
             else{
-                $categoria = $categoriaConsulta->getByTipoCat($categoria);
-                $productos_tienda = $productosConsulta->getByCategory($categoria->getIdCat());
+                $categoria_tipo = $categoriaConsulta->getByTipoCat($categoria);
+                $productos_tienda = $productosConsulta->getByCategory($categoria_tipo->getIdCat());
             }
 
             // Filtro por fecha:
@@ -99,8 +97,8 @@ class ProductoController extends AbstractController
                 $fecha_final = filter_var($this->request->getParams()->get('fecha_final'),FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
-                $categoria = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
-                $productos_tienda = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria->getIdCat());
+                $categoria_tipo = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                $productos_tienda = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria_tipo->getIdCat());
             }
 
 
