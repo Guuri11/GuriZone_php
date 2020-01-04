@@ -14,6 +14,9 @@ class ErrorController extends AbstractController {
         $ultimoProducto = $productosConsulta->getLatestProduct();
         $rutaFotoLogo = "imgs/logo_black.png";
         $rutaFotoUltimoProducto = "".$ultimoProducto->getFotoProd();
-        return require_once('views/error.view.php');
+        return $this->render('templates/error.twig',[
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto
+        ]);
     }
 }

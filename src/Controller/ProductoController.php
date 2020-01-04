@@ -27,7 +27,12 @@ class ProductoController extends AbstractController
             require_once ('./src/logout.php');
             logout();
         }
-        require("views/index.view.php");
+        return $this->render('index.twig',[
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto,
+            'productosTT'=>$productosTT,
+            'novedades'=>$novedades
+        ]);
     }
 
     public function mostrarProducto($id){
@@ -54,7 +59,10 @@ class ProductoController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-
+        $fecha_inicial = NULL;
+        $fecha_final = NULL;
+        $busqueda = NULL;
+        $categoria = "todo";
 
         /** CATALOGO */
 
@@ -116,8 +124,21 @@ class ProductoController extends AbstractController
         $stockRopa = $productosConsulta->getTotalStockCategorias(2);
         $stockZapatillas = $productosConsulta->getTotalStockCategorias(3);
 
+        $parametros = [
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto,
+            'fecha_inicial'=>$fecha_inicial,
+            'fecha_final'=>$fecha_final,
+            'busqueda'=>$busqueda,
+            'categoria'=>$categoria,
+            'paginacion'=>$paginacion,
+            'pagina'=>$pagina,
+            'stock_accesorios'=>$stockAccesorios['stock'],
+            'stock_ropa'=>$stockRopa['stock'],
+            'stock_zapatillas'=>$stockZapatillas['stock']
+        ];
 
-        require("views/catalogo_tienda.view.php");
+        return $this->render('catalogo.twig',$parametros);
     }
 
     public function crearProducto(){
@@ -126,9 +147,13 @@ class ProductoController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
+        $datos_enviados = false;
+        $errores = "";
+
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $datos_enviados = true;
                 $errores=[];
                 $datos = $_POST;
                 // 1. Comprobar que estan todos los campos requeridos
@@ -157,7 +182,12 @@ class ProductoController extends AbstractController
                     }
                 }
             }
-            require("views/crear_producto.view.php");
+            return $this->render('crear_producto.twig',[
+               'usuario'=>$cookieValue,
+               'ultimo_producto'=>$ultimoProducto,
+               'datos_enviados'=>$datos_enviados,
+                'errores'=>$errores
+            ]);
         } else{
             global $route;
             header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
@@ -170,6 +200,8 @@ class ProductoController extends AbstractController
         global $cookieValue, $cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+        $errores = "";
+        $datos_enviados = false;
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin') {
@@ -191,6 +223,7 @@ class ProductoController extends AbstractController
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errores = [];
                 $datos = $_POST;
+                $datos_enviados = true;
 
                 // 1. Comprobar que estan todos los campos requeridos
                 foreach ($datos as $dato => $valor) {
@@ -216,7 +249,13 @@ class ProductoController extends AbstractController
                     }
                 }
             }
-            require("views/editar_producto.view.php");
+            return $this->render('editar_producto.twig',[
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto,
+                'producto'=>$productoSeleccionado,
+                'errores'=>$errores,
+                'datos_enviados'=>$datos_enviados
+            ]);
         } else {
             global $route;
             header("Location: " . $route->generateURL('Producto', 'index')); // redirigir al inicio
@@ -253,7 +292,11 @@ class ProductoController extends AbstractController
                     }
                 }
             }
-            require_once ("views/borrar.view.php");
+            return $this->render('borrar.twig',[
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto,
+                'id'=>$id
+            ]);
         } else{
             global $route;
             header("Location: " . $route->generateURL('Producto', 'index')); // redirigir al inicio

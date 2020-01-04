@@ -1,0 +1,34 @@
+{% extends "base.twig" %}
+{% block body %}
+    <div class="site-section">
+        <div class="justify-content-center gurizone-login p-lg-4 m-lg-5 p-md-4 m-md-3 p-sm-4 m-sm-5">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div>
+                        <img src="/GuriZone/imgs/default_profile.jpg" width="100px">
+                    </div>
+                    <div class="container mt-3">
+                        <form>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                <input type="button" value="Actualizar foto" class="btn btn-primary mt-3 mb-3">
+                            </div>
+                        </form>
+                    </div>
+                    <hr/>
+                </div>
+                <div class="col-12">
+                    <h3 class="text-black text-center">NOMBRE</h3>
+                    <div class="container">
+                        <p>Usuario: {{ user.nombre }}</p>
+                        <p>Email: {{ user.email }}</p>
+                    </div>
+                    <div class="container">
+                        <a href="#" class="btn btn-primary">Editar perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

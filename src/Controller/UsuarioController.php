@@ -14,16 +14,20 @@ class UsuarioController extends AbstractController
         global $cookieValue,$cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-
+        $error = "";
         // Si se ha recibido datos desde el login.view
         if ($_SERVER['REQUEST_METHOD']==='POST'){
             require_once ('./src/login.php');
+
             // Realizar login y recoger posibles errores
             $error = login();
         }
 
-
-        require("views/login.view.php");
+        return $this->render('login.twig',[
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto,
+            'error'=>$error
+        ]);
     }
 
     public function logout(){
@@ -38,15 +42,19 @@ class UsuarioController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if ($cookieValue === 'admin' || $cookieValue=="usuario")
-            require("views/perfil.view.php");
+        if ($cookieValue === 'admin' || $cookieValue=="usuario"){
+            return $this->render('perfil.twig',[
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto,
+                'user'=>$user
+            ]);
+        }
         else{
             global $route;
             header("Location: ".$route->generateURL('Usuario','login')); // redirigir al perfil
-
         }
-
     }
+
     public function dashboard(){
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
@@ -54,7 +62,10 @@ class UsuarioController extends AbstractController
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
-            require("views/dashboard.view.php");
+            return $this->render('dashboard.twig',[
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto
+            ]);
         } else{
             global $route;
             header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
@@ -66,7 +77,10 @@ class UsuarioController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
-        require ("views/contactus.view.php");
+        return $this->render('contactus.twig',[
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto,
+        ]);
     }
 
     public function gestion(){
@@ -74,6 +88,9 @@ class UsuarioController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+        $fecha_inicial = NULL;
+        $fecha_final = NULL;
+        $categoria = 'todo';
 
         // Capa de proteccion para acceder al dashboard
         if ($_COOKIE[$cookieName] === 'admin'){
@@ -113,7 +130,16 @@ class UsuarioController extends AbstractController
 
             $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
 
-            require("views/gestion.view.php");
+            $parametros = [
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto,
+                'fecha_inicial'=>$fecha_inicial,
+                'fecha_final'=>$fecha_final,
+                'paginacion'=>$paginacion,
+                'pagina'=>$pagina,
+                'categoria'=>$categoria
+            ];
+            return $this->render('gestion.twig',$parametros);
         } else{
             global $route;
             header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio

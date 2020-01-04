@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+{% block body %}
+    <div class="container">
+        <div class="justify-content-center gurizone-login p-lg-4 m-lg-3 p-md-4 m-md-3 p-sm-4 m-sm-5">
+            <h1 class="text-center text-black-50">DASHBOARD</h1>
+            <div class="row text-center">
+                <div class="col-12">
+                    <a href="{{ router.generateURL('Producto','crearProducto') }}"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">CREAR PRODUCTO</button></a>
+                </div>
+                <div class="col-12">
+                    <a href="{{ router.generateURL('Usuario','perfil') }}"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">PERFIL</button></a>
+                </div>
+                <div class="col-12">
+                    <a href="{{ router.generateURL('Usuario','gestion') }}?page=1"><button type="button" class="btn btn-dark w-75 mt-3 mb-3 p-2">GESTIONAR PRODUCTOS</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
