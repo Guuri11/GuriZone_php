@@ -2,7 +2,7 @@
 {% block body %}
     <div class="container">
         <div class="justify-content-center gurizone-login p-lg-4 m-lg-5 p-md-4 m-md-3 p-sm-4 m-sm-5">
-            <h1 class="text-center">Login</h1>
+            <h1 class="text-center">Iniciar sesión</h1>
             {% if error!="" %}
             <p class="" style="color: red">{{ error }}</p>
             {% endif %}
@@ -15,7 +15,16 @@
                     <label for="pwd" class="text-black">Contraseña:</label>
                     <input type="password" class="form-control" id="password" placeholder="" name="password">
                 </div>
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                </div>
+                <hr/>
+                <div>
+                    <p class="text-center">¿Eres nuevo en GuriZone?</p>
+                </div>
+                <div class="text-center">
+                    <a href="{{ router.generateURL('Usuario','registrarse') }}"><button type="button" class="btn btn-secondary">Crear tu cuenta en GuriZone</button></a>
+                </div>
             </form>
         </div>
     </div>

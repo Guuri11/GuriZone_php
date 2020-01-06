@@ -55,5 +55,9 @@
   "GuriZone/contacto": {
     "controller": "Usuario",
     "method": "contactanos"
+  },
+  "GuriZone/registrarse": {
+    "controller": "Usuario",
+    "method": "registrarse"
   }
 }

@@ -10,6 +10,17 @@ use App\Model\ProductoModel;
 
 class UsuarioController extends AbstractController
 {
+    public function registrarse(){
+        global $cookieValue,$cookieName, $user;
+        $productosConsulta = new ProductoModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+
+        return $this->render('registrarse.twig',[
+            'usuario'=>$cookieValue,
+            'ultimo_producto'=>$ultimoProducto
+        ]);
+    }
+
     public function login(){
         global $cookieValue,$cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
