@@ -8,6 +8,7 @@ use DateTime;
 class Producto{
 
     private $id_prod;
+    private $id_empleado;
     private $modelo_prod;
     private $marca_prod;
     private $categoria_prod;
@@ -26,6 +27,7 @@ class Producto{
     private $descatalogado;
 
     public function setAll($atributos){
+        $this->id_empleado = $atributos['id_empleado'];
         $this->modelo_prod = $atributos['modelo'];
         $this->marca_prod = $atributos['marca'];
         $this->categoria_prod = intval($atributos['categoria']);
@@ -49,6 +51,22 @@ class Producto{
     public function getIdProd(): int
     {
         return intval($this->id_prod);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdEmpleado()
+    {
+        return $this->id_empleado;
+    }
+
+    /**
+     * @param mixed $id_empleado
+     */
+    public function setIdEmpleado($id_empleado): void
+    {
+        $this->id_empleado = $id_empleado;
     }
 
     /**

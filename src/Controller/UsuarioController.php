@@ -94,7 +94,7 @@ class UsuarioController extends AbstractController
         ]);
     }
 
-    public function gestion(){
+    public function gestionProductos(){
         global $cookieValue,$cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
@@ -150,11 +150,25 @@ class UsuarioController extends AbstractController
                 'pagina'=>$pagina,
                 'categoria'=>$categoria
             ];
-            return $this->render('gestion.twig',$parametros);
+            return $this->render('gestion_productos.twig',$parametros);
         } else{
             global $route;
             header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
         }
+    }
+
+    public function gestionUsuarios(){
+        // TODO
+        global $cookieValue,$cookieName,$user;
+        $productosConsulta = new ProductoModel($this->db);
+        $categoriaConsulta = new CategoriasModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+
+            $parametros = [
+                'usuario'=>$cookieValue,
+                'ultimo_producto'=>$ultimoProducto
+            ];
+            return $this->render('gestion_usuarios.twig',$parametros);
     }
 
 

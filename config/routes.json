@@ -26,10 +26,15 @@
     "controller": "Usuario",
     "method": "dashboard"
   },
-  "GuriZone/dashboard/gestion": {
+  "GuriZone/dashboard/gestion/usuarios": {
     "controller": "Usuario",
-    "method": "gestion"
+    "method": "gestionUsuarios"
   },
+  "GuriZone/dashboard/gestion/productos": {
+    "controller": "Usuario",
+    "method": "gestionProductos"
+  },
+
   "GuriZone/dashboard/producto/crear": {
     "controller": "Producto",
     "method": "crearProducto"

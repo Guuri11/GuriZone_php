@@ -32,55 +32,57 @@
                 </div>
             </div>
             <!--FILTRO TABLA PRODUCTOS-->
-            <table class="table table-hover table-sm table-responsive-sm table-responsive-md">
-                <thead class="thead-dark sticky-top">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">MODELO</th>
-                    <th scope="col">MARCA</th>
-                    <th scope="col">CATEGORIA</th>
-                    <th scope="col">SUBCATEGORIA</th>
-                    <th scope="col">COLOR</th>
-                    <th scope="col">TALLA</th>
-                    <th scope="col">STOCK</th>
-                    <th scope="col">VENTAS</th>
-                    <th scope="col">FECHA</th>
-                    <th scope="col">PRECIO</th>
-                    <th scope="col">URL FOTO</th>
-                    <th scope="col">DESCRIPCION</th>
-                    <th scope="col">ESTADO</th>
-                    <th scope="col">ACCIONES</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for producto in paginacion.getProductos %}
-                <tr>
-                    <td><a href="{{ router.generateURL('Producto','mostrarProducto',{id:producto.getIdProd}) }}">{{ producto.getIdProd }}</a></td>
-                    <td>{{ producto.getModeloProd }}</td>
-                    <td>{{ producto.getMarcaProd }}</td>
-                    <td>{{ producto.getCategoriaProd }}</td>
-                    <td>{{ producto.getSubcategoriaProd }}</td>
-                    <td>{{ producto.getColor }}({{ producto.getColorDisp }})</td>
-                    <td>{{ producto.getTalla }}({{ producto.getTallaDisp }})</td>
-                    <td>{{ producto.getStockProd }}</td>
-                    <td>{{ producto.getNumVentas }}</td>
-                    <td>{{ producto.getFechaSalida()|date('Y-m-d') }}</td>
-                    <td>{{ producto.getPrecioUnidad }}</td>
-                    <td>{{ producto.getFotoProd }}</td>
-                    <td class="cut">{{ producto.getDescripcion }}</td>
-                    <td>{{ producto.getDescatalogado == 0 ? 'Activo':'Desactivado' }}</td>
-                    <td>
-                        <div>
-                            <a href="{{ router.generateURL('Producto','editarProducto',{id:producto.getIdProd}) }}"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
-                        </div>
-                        <div>
-                            <a href="{{ router.generateURL('Producto','borrarProducto',{id:producto.getIdProd}) }}"><input type="button" class="btn btn-danger" value="Eliminar"></a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm table-responsive-sm table-responsive-md">
+                    <thead class="thead-dark sticky-top">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">MODELO</th>
+                        <th scope="col">MARCA</th>
+                        <th scope="col">CATEGORIA</th>
+                        <th scope="col">SUBCATEGORIA</th>
+                        <th scope="col">COLOR</th>
+                        <th scope="col">TALLA</th>
+                        <th scope="col">STOCK</th>
+                        <th scope="col">VENTAS</th>
+                        <th scope="col">FECHA</th>
+                        <th scope="col">PRECIO</th>
+                        <th scope="col">URL FOTO</th>
+                        <th scope="col">DESCRIPCION</th>
+                        <th scope="col">ESTADO</th>
+                        <th scope="col">ACCIONES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for producto in paginacion.getProductos %}
+                        <tr>
+                            <td><a href="{{ router.generateURL('Producto','mostrarProducto',{id:producto.getIdProd}) }}">{{ producto.getIdProd }}</a></td>
+                            <td>{{ producto.getModeloProd }}</td>
+                            <td>{{ producto.getMarcaProd }}</td>
+                            <td>{{ producto.getCategoriaProd }}</td>
+                            <td>{{ producto.getSubcategoriaProd }}</td>
+                            <td>{{ producto.getColor }}({{ producto.getColorDisp }})</td>
+                            <td>{{ producto.getTalla }}({{ producto.getTallaDisp }})</td>
+                            <td>{{ producto.getStockProd }}</td>
+                            <td>{{ producto.getNumVentas }}</td>
+                            <td>{{ producto.getFechaSalida()|date('Y-m-d') }}</td>
+                            <td>{{ producto.getPrecioUnidad }}</td>
+                            <td>{{ producto.getFotoProd }}</td>
+                            <td class="cut">{{ producto.getDescripcion }}</td>
+                            <td>{{ producto.getDescatalogado == 0 ? 'Activo':'Desactivado' }}</td>
+                            <td>
+                                <div>
+                                    <a href="{{ router.generateURL('Producto','editarProducto',{id:producto.getIdProd}) }}"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
+                                </div>
+                                <div>
+                                    <a href="{{ router.generateURL('Producto','borrarProducto',{id:producto.getIdProd}) }}"><input type="button" class="btn btn-danger" value="Eliminar"></a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <!--FIN FILTRO TABLA PRODUCTOS-->
 
             <!--PAGINACION: segun el filtro solicitado mostrara una paginacion u otra-->
