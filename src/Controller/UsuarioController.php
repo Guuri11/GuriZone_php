@@ -34,10 +34,9 @@ class UsuarioController extends AbstractController
             if (!filter_var($datos['email'],FILTER_VALIDATE_EMAIL)){
                 $errores[] = "ERROR: Formato de email no valido";
             }
-            if (!$usuariosConsulta->getByEmail($datos['email'])){
+            if ($usuariosConsulta->getByEmail($datos['email']) !== false){
                 $errores[] = "ERROR: Este email ya esta registrado";
             }
-
             //Comprobar que la contraseña sea valida
             if (strlen($datos['password'])<6)
                 $errores[] = "ERROR: Contraseña demasiado corta";
@@ -48,6 +47,7 @@ class UsuarioController extends AbstractController
             if (empty($errores)){
                 // 1. Instanciar usuario
                 $usuario = new Usuario();
+
                 // 2. Obtener datos saneados
                 $usuario = $usuariosConsulta->getData();
                 // 3. Validar usuario
@@ -56,8 +56,13 @@ class UsuarioController extends AbstractController
                 // 4. Ejecutar insercion a la BBDD
                 if (empty($errores)){
                     $resultado = $usuariosConsulta->insert($usuario);
+                    // Si ha habido un error en la insercion se notifica, sino se redirige al perfil del usuario
                     if (!$resultado)
                         $errores[]="Error al crear usuario";
+                    else{
+                        return $this->render('perfil.twig',[]);
+                    }
+
                 }
             }
         }
