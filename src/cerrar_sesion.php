@@ -5,7 +5,7 @@ use App\Model\UsuarioModel;
 /**
  * Cerrar sesion del usuario
  */
-function logout(){
+function cerrar_sesion(){
     global $user;
     global $db;
     try{

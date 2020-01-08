@@ -24,7 +24,7 @@ class ProductoController extends AbstractController
 
         // Usuario hace logout
         if ($this->request->getParams()->has('logout')){
-            require_once ('./src/logout.php');
+            require_once('./src/cerrar_sesion.php');
             logout();
         }
         return $this->render('index.twig',[

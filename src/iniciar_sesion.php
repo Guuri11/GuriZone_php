@@ -8,7 +8,7 @@ use App\Model\UsuarioModel;
 /**
  * @return string
  */
-function login():string{
+function iniciar_sesion():string{
     global $db;
     // Obtener email y contraseña saneadas
     $email = htmlspecialchars($_POST['email']);

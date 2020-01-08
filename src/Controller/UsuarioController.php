@@ -4,8 +4,10 @@
 namespace App\Controller;
 
 use App\Entity\Paginacion;
+use App\Entity\Usuario;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
+use App\Model\UsuarioModel;
 
 
 class UsuarioController extends AbstractController
@@ -13,11 +15,57 @@ class UsuarioController extends AbstractController
     public function registrarse(){
         global $cookieValue,$cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
+        $usuariosConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+        $errores = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            //Recogemos los datos
+            $datos = $_POST;
+
+            // Comprobar que todos los campos han sido rellenados
+            foreach ($datos as $dato => $valor) {
+                if (empty($valor)) {
+                    $errores[] = "ERROR: Campo requerido vacio: " . $dato;
+                }
+            }
+
+            //Comprobar que el email es valido
+            if (!filter_var($datos['email'],FILTER_VALIDATE_EMAIL)){
+                $errores[] = "ERROR: Formato de email no valido";
+            }
+            if (!$usuariosConsulta->getByEmail($datos['email'])){
+                $errores[] = "ERROR: Este email ya esta registrado";
+            }
+
+            //Comprobar que la contraseña sea valida
+            if (strlen($datos['password'])<6)
+                $errores[] = "ERROR: Contraseña demasiado corta";
+            if ($datos['password']!==$datos['password_repeat'])
+                $errores[] = "ERROR: Las contraseñas no coinciden";
+
+            // Insertar usuario
+            if (empty($errores)){
+                // 1. Instanciar usuario
+                $usuario = new Usuario();
+                // 2. Obtener datos saneados
+                $usuario = $usuariosConsulta->getData();
+                // 3. Validar usuario
+                $errores = $usuariosConsulta->validate($usuario);
+
+                // 4. Ejecutar insercion a la BBDD
+                if (empty($errores)){
+                    $resultado = $usuariosConsulta->insert($usuario);
+                    if (!$resultado)
+                        $errores[]="Error al crear usuario";
+                }
+            }
+        }
 
         return $this->render('registrarse.twig',[
             'usuario'=>$cookieValue,
-            'ultimo_producto'=>$ultimoProducto
+            'ultimo_producto'=>$ultimoProducto,
+            'errores'=>$errores
         ]);
     }
 
@@ -28,10 +76,10 @@ class UsuarioController extends AbstractController
         $error = "";
         // Si se ha recibido datos desde el login.view
         if ($_SERVER['REQUEST_METHOD']==='POST'){
-            require_once ('./src/login.php');
+            require_once ('./src/iniciar_sesion.php');
 
             // Realizar login y recoger posibles errores
-            $error = login();
+            $error = iniciar_sesion();
         }
 
         return $this->render('login.twig',[
@@ -42,8 +90,8 @@ class UsuarioController extends AbstractController
     }
 
     public function logout(){
-        require_once ('src/logout.php');
-        logout();
+        require_once('src/cerrar_sesion.php');
+        cerrar_sesion();
     }
 
     public function perfil(){
