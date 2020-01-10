@@ -6,8 +6,7 @@ namespace App\Model;
 use App\Entity\Producto;
 use PDO;
 use App\Entity\Usuario;
-
-
+use PDOException;
 
 
 /**
@@ -123,11 +122,56 @@ class UsuarioModel{
 
     }
 
-    public function validate_login(){
-        // Comprobar email
+    public function getIdByEmailPass($email,$password):int{
+        try{
+            //consulta del ID que solicita el usuario
+            $idConsulta = $this->db->prepare('SELECT id_cli FROM Usuario where email=:email AND password=:password');
+            $idConsulta->execute(array(
+                ':email'=>$email,
+                ':password'=>$password
+            ));
+            $idResult = $idConsulta->fetch();
+            $id = intval($idResult['id_cli']);
+            return $id;
+        }catch (PDOException $e){
+            echo $e->getMessage();
+        }
+    }
 
-        // Comprobar login
+    public function validate_login(string $email,string $password):array {
+        $errores = [];
+        // Comprobar que se han rellenado los campos de login
+        if (empty($email))
+            $errores['requerido_email'] = "Por favor, indique su email para iniciar sesion";
+        elseif (empty($password))
+            $errores['requerido_pass'] = "Por favor, indique su contraseña para iniciar sesion";
 
+
+        if (filter_var($email,FILTER_VALIDATE_EMAIL)){      // si tiene un formato de email correcto...
+            try{
+                //Comprobar email
+                $checkEmail = $this->db->prepare('SELECT email FROM Usuario where email=:email'); // obtener email solicitado
+                $checkEmail->execute(array(':email'=>$email));
+                $emailResult = $checkEmail->fetch();
+                if ($emailResult['email'] !== $email)     // si coincide aprobar validacion, sino no...
+                    $errores['email_no_valido'] = "No hay ningun usuario registrado con ese email!";
+
+                // Comprobar contraseña
+                $checkPasswd = $this->db->prepare('SELECT password FROM Usuario where email=:email AND password=:password');
+                $checkPasswd->execute(array(
+                    ':email'=>$email,
+                    ':password'=>$password
+                ));
+                $passwdResult = $checkPasswd->fetch();
+                if ($password !== $passwdResult['password'])
+                    $errores['pass_no_valido'] = "No coincide la contraseña con el email indicado!";
+            }catch (PDOException $e){
+                echo $e->getMessage();
+            }
+        }else
+            $errores['formato_email'] = "Ha habido un error, por favor compruebe el correo que ha escrito";
+
+        return $errores;
     }
 
 }

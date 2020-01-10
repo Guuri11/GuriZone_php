@@ -8,6 +8,7 @@ use App\Entity\Usuario;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
 use App\Model\UsuarioModel;
+use PDOException;
 
 
 class UsuarioController extends AbstractController
@@ -79,34 +80,47 @@ class UsuarioController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $usuarioConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
-        $error = "";
+        $errores = [];
+
         // Si se ha recibido datos desde el login.view
         if ($_SERVER['REQUEST_METHOD']==='POST'){
-            require_once ('../src/iniciar_sesion.php');
 
-            // Realizar login y recoger posibles errores
-            $error = iniciar_sesion();
-            /**
-             **/
             // Obtener email y contraseña saneadas
-            $email = htmlspecialchars($_POST['email']);
-            $password = htmlspecialchars($_POST['password']);
+            $email = htmlspecialchars(trim($_POST['email']));
+            $email = filter_var($email,FILTER_SANITIZE_EMAIL);
+            $password = htmlspecialchars(trim($_POST['password']));
 
             // Validar datos
-            if ($usuarioConsulta->validate_login()){
-                echo "jeje";
+            $errores = $usuarioConsulta->validate_login($email,$password);
+
+            if (count($errores)===0){
+                $id = $usuarioConsulta->getIdByEmailPass($email,$password); // Obtener ID del usuario
+                try{
+                    // Cambiar rol de usuario
+                    $user = $usuarioConsulta->getByRol($id);
+                }catch (PDOException $exception){
+                    echo $exception->getMessage();
+                }
+
+                // Cambiar valor de la cookie
+                $cookieValue = $user->getTipoRol();
+                setcookie($cookieName,$cookieValue, time()+(86400*30),"/");
+                $_COOKIE[$cookieName] = $cookieValue;
+                global $route;
+                header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
             }
+
         }
 
         return $this->render('login.twig',[
             'usuario'=>$cookieValue,
             'ultimo_producto'=>$ultimoProducto,
-            'error'=>$error
+            'errores'=>$errores
         ]);
     }
 
     public function logout(){
-        require_once('src/cerrar_sesion.php');
+        require_once('../ src/cerrar_sesion.php');
         cerrar_sesion();
     }
 
