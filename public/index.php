@@ -7,7 +7,7 @@ use App\Core\Request;
 use App\Core\Router;
 
 
-require __DIR__ . '/config/bootstrap.php';
+require __DIR__ . '/../config/bootstrap.php';
 
 $di = new \App\Utils\DependencyInjector();
 
@@ -46,6 +46,7 @@ $twig->addGlobal('router',new Router(new \App\Utils\DependencyInjector()));
 
 //incloem al contenidor de serveis
 $di->set('Twig',$twig);
+
 
 $request = new Request();
 

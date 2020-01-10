@@ -81,7 +81,7 @@ class UsuarioController extends AbstractController
         $error = "";
         // Si se ha recibido datos desde el login.view
         if ($_SERVER['REQUEST_METHOD']==='POST'){
-            require_once ('./src/iniciar_sesion.php');
+            require_once ('../src/iniciar_sesion.php');
 
             // Realizar login y recoger posibles errores
             $error = iniciar_sesion();

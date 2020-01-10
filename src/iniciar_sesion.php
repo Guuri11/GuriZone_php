@@ -8,6 +8,7 @@ use App\Model\UsuarioModel;
 /**
  * @return string
  */
+// TODO: BBDD subida xd
 function iniciar_sesion():string{
     global $db;
     // Obtener email y contraseña saneadas

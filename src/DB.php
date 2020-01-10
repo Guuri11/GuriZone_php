@@ -13,7 +13,7 @@ class DB {
     private $connection;
 
     public function __construct(){
-        $datosJSON = file_get_contents('./config/app.json');
+        $datosJSON = file_get_contents('../config/app.json');
         $datos = json_decode($datosJSON,true);
         $this->dsn = $datos['database']['dsn'];
         $this->user = $datos['database']['user'];

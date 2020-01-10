@@ -1,67 +1,67 @@
 {
-  "GuriZone/": {
+  "": {
     "controller": "Producto",
     "method": "index"
   },
-  "GuriZone/catalogo": {
+  "catalogo": {
     "controller": "Producto",
     "method": "catalogo"
   },
-  "GuriZone/producto/:id": {
+  "producto/:id": {
     "controller": "Producto",
     "method": "mostrarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone/login": {
+  "login": {
     "controller": "Usuario",
     "method": "login"
   },
-  "GuriZone/logout": {
+  "logout": {
     "controller": "Usuario",
     "method": "logout"
   },
-  "GuriZone/dashboard": {
+  "dashboard": {
     "controller": "Usuario",
     "method": "dashboard"
   },
-  "GuriZone/dashboard/gestion/usuarios": {
+  "dashboard/gestion/usuarios": {
     "controller": "Usuario",
     "method": "gestionUsuarios"
   },
-  "GuriZone/dashboard/gestion/productos": {
+  "dashboard/gestion/productos": {
     "controller": "Usuario",
     "method": "gestionProductos"
   },
 
-  "GuriZone/dashboard/producto/crear": {
+  "dashboard/producto/crear": {
     "controller": "Producto",
     "method": "crearProducto"
   },
-  "GuriZone/dashboard/producto/editar/:id": {
+  "dashboard/producto/editar/:id": {
     "controller": "Producto",
     "method": "editarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone/dashboard/producto/borrar/:id": {
+  "dashboard/producto/borrar/:id": {
     "controller": "Producto",
     "method": "borrarProducto",
     "params": {
       "id": "number"
     }
   },
-  "GuriZone/mi_perfil": {
+  "mi_perfil": {
     "controller": "Usuario",
     "method": "perfil"
   },
-  "GuriZone/contacto": {
+  "contacto": {
     "controller": "Usuario",
     "method": "contactanos"
   },
-  "GuriZone/registrarse": {
+  "registrarse": {
     "controller": "Usuario",
     "method": "registrarse"
   }
