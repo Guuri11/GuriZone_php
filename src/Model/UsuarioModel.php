@@ -123,4 +123,11 @@ class UsuarioModel{
 
     }
 
+    public function validate_login(){
+        // Comprobar email
+
+        // Comprobar login
+
+    }
+
 }

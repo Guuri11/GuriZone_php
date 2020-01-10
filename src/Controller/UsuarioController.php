@@ -77,6 +77,7 @@ class UsuarioController extends AbstractController
     public function login(){
         global $cookieValue,$cookieName, $user;
         $productosConsulta = new ProductoModel($this->db);
+        $usuarioConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
         $error = "";
         // Si se ha recibido datos desde el login.view
@@ -85,6 +86,16 @@ class UsuarioController extends AbstractController
 
             // Realizar login y recoger posibles errores
             $error = iniciar_sesion();
+            /**
+             **/
+            // Obtener email y contraseña saneadas
+            $email = htmlspecialchars($_POST['email']);
+            $password = htmlspecialchars($_POST['password']);
+
+            // Validar datos
+            if ($usuarioConsulta->validate_login()){
+                echo "jeje";
+            }
         }
 
         return $this->render('login.twig',[
