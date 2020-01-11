@@ -1,3 +1,13 @@
+
+Ir al contenido
+Uso de Gmail con lectores de pantalla
+Conversaciones
+1,84 GB (12%) ocupados de 15 GB
+Gestionar
+Condiciones · Privacidad · Política del programa
+Última actividad de la cuenta: hace 9 horas
+Detalles
+
 -- phpMyAdmin SQL Dump
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
@@ -345,3 +355,6 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+GuriZone(4).sql
+Mostrando GuriZone(4).sql.

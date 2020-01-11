@@ -14,7 +14,7 @@ class ProductoController extends AbstractController
 {
     public function index()
     {
-        global $cookieValue,$cookieName;
+        global $rol_usuario;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
@@ -22,13 +22,8 @@ class ProductoController extends AbstractController
         $productosTT = $productosConsulta->getTT();
         $novedades = $productosConsulta->getNovedades();
 
-        // Usuario hace logout
-        if ($this->request->getParams()->has('logout')){
-            require_once('./src/cerrar_sesion.php');
-            logout();
-        }
         return $this->render('index.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
             'productosTT'=>$productosTT,
             'novedades'=>$novedades
@@ -36,7 +31,7 @@ class ProductoController extends AbstractController
     }
 
     public function mostrarProducto($id){
-        global $cookieValue,$cookieName;
+        global $rol_usuario;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
         // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
@@ -47,7 +42,7 @@ class ProductoController extends AbstractController
         $productoSeleccionado = $productosConsulta->getById(intval($id));
 
         return $this->render('producto.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
             'producto'=>$productoSeleccionado
         ]);
@@ -55,7 +50,7 @@ class ProductoController extends AbstractController
     }
 
     public function catalogo(){
-        global $cookieValue,$cookieName;
+        global $rol_usuario;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
@@ -125,7 +120,7 @@ class ProductoController extends AbstractController
         $stockZapatillas = $productosConsulta->getTotalStockCategorias(3);
 
         $parametros = [
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
             'fecha_inicial'=>$fecha_inicial,
             'fecha_final'=>$fecha_final,
@@ -143,7 +138,7 @@ class ProductoController extends AbstractController
 
     public function crearProducto(){
 
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
@@ -151,7 +146,7 @@ class ProductoController extends AbstractController
         $errores = "";
 
         // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
+        if ($rol_usuario === 'admin'){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $datos_enviados = true;
                 $errores=[];
@@ -183,7 +178,7 @@ class ProductoController extends AbstractController
                 }
             }
             return $this->render('crear_producto.twig',[
-               'usuario'=>$cookieValue,
+               'usuario'=>$rol_usuario,
                'ultimo_producto'=>$ultimoProducto,
                'datos_enviados'=>$datos_enviados,
                 'errores'=>$errores
@@ -197,14 +192,14 @@ class ProductoController extends AbstractController
     public function editarProducto($id)
     {
 
-        global $cookieValue, $cookieName, $user;
+        global $rol_usuario,  $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
         $errores = "";
         $datos_enviados = false;
 
         // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin') {
+        if ($rol_usuario === 'admin') {
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if ($id > $ultimoProducto->getIdProd() || $id < 1) {
                 global $route;
@@ -250,7 +245,7 @@ class ProductoController extends AbstractController
                 }
             }
             return $this->render('editar_producto.twig',[
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'producto'=>$productoSeleccionado,
                 'errores'=>$errores,
@@ -265,12 +260,12 @@ class ProductoController extends AbstractController
 
     public function borrarProducto($id){
 
-        global $cookieValue, $cookieName;
+        global $rol_usuario, $cookieName;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Capa de proteccion para acceder al dashboard
-        if ($cookieValue === 'admin'){
+        if ($rol_usuario === 'admin'){
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
                 $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);
@@ -281,19 +276,17 @@ class ProductoController extends AbstractController
                     $resultado = $productosConsulta->delete(intval($id));
                     global $route;
                     if (!$resultado){
-                        var_dump($resultado);
                         global $request;
                         $errorController = new ErrorController($this->di, $request);
                         return $errorController->notFound();
                     } else{
-                        var_dump($resultado);
                         header('Location: '.$route->generateURL('Usuario','gestion'));
 
                     }
                 }
             }
             return $this->render('borrar.twig',[
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'id'=>$id
             ]);

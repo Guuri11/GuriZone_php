@@ -14,7 +14,7 @@ use PDOException;
 class UsuarioController extends AbstractController
 {
     public function registrarse(){
-        global $cookieValue,$cookieName, $user;
+        global $rol_usuario, $user;
         $productosConsulta = new ProductoModel($this->db);
         $usuariosConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
@@ -69,14 +69,14 @@ class UsuarioController extends AbstractController
         }
 
         return $this->render('registrarse.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
             'errores'=>$errores
         ]);
     }
 
     public function login(){
-        global $cookieValue,$cookieName, $user;
+        global $rol_usuario, $user;
         $productosConsulta = new ProductoModel($this->db);
         $usuarioConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
@@ -103,37 +103,51 @@ class UsuarioController extends AbstractController
                 }
 
                 // Cambiar valor de la cookie
-                $cookieValue = $user->getTipoRol();
-                setcookie($cookieName,$cookieValue, time()+(86400*30),"/");
-                $_COOKIE[$cookieName] = $cookieValue;
+                $rol_usuario = $user->getTipoRol();
+                //setcookie($rol_usuario, time()+(86400*30),"/");
+                //$rol_usuario = $rol_usuario;
+                session_start();
+                $_SESSION['rol'] = $rol_usuario;
                 global $route;
                 header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
             }
 
         }
-
         return $this->render('login.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
             'errores'=>$errores
         ]);
     }
 
     public function logout(){
-        require_once('../ src/cerrar_sesion.php');
-        cerrar_sesion();
+        global $rol_usuario, $user;
+        try{
+            // 1. Transformar usuario a anonimo
+            $usuario_modelo = new UsuarioModel($this->db);
+            $user = $usuario_modelo->getById(1);
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+        // 2. Cambiar valor de la cookie
+        session_start();
+        session_unset();
+        session_destroy();
+        global $route;
+        header("Location: ".$route->generateURL('Producto','index')); // redirigir al perfil
+
     }
 
     public function perfil(){
 
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if ($cookieValue === 'admin' || $cookieValue=="usuario"){
+        if ($rol_usuario === 'admin' || $rol_usuario=="usuario"){
             return $this->render('perfil.twig',[
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'user'=>$user
             ]);
@@ -145,14 +159,14 @@ class UsuarioController extends AbstractController
     }
 
     public function dashboard(){
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
+        if ($rol_usuario === 'admin'){
             return $this->render('dashboard.twig',[
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto
             ]);
         } else{
@@ -162,18 +176,18 @@ class UsuarioController extends AbstractController
     }
 
     public function contactanos(){
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         return $this->render('contactus.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
         ]);
     }
 
     public function gestionProductos(){
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
@@ -182,7 +196,7 @@ class UsuarioController extends AbstractController
         $categoria = 'todo';
 
         // Capa de proteccion para acceder al dashboard
-        if ($_COOKIE[$cookieName] === 'admin'){
+        if ($rol_usuario === 'admin'){
 
             // Filtro por categoria
 
@@ -220,7 +234,7 @@ class UsuarioController extends AbstractController
             $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
 
             $parametros = [
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'fecha_inicial'=>$fecha_inicial,
                 'fecha_final'=>$fecha_final,
@@ -237,13 +251,13 @@ class UsuarioController extends AbstractController
 
     public function gestionUsuarios(){
         // TODO
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
             $parametros = [
-                'usuario'=>$cookieValue,
+                'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto
             ];
             return $this->render('gestion_usuarios.twig',$parametros);

@@ -9,13 +9,13 @@ class ErrorController extends AbstractController {
         $properties = ['errorMessage' => 'Page not found!'];
         //return $this->render('error.twig', $properties);
 
-        global $cookieValue,$cookieName,$user;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
         $rutaFotoLogo = "imgs/logo_black.png";
         $rutaFotoUltimoProducto = "".$ultimoProducto->getFotoProd();
         return $this->render('error.twig',[
-            'usuario'=>$cookieValue,
+            'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto
         ]);
     }

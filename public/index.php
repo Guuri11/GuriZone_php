@@ -12,11 +12,11 @@ require __DIR__ . '/../config/bootstrap.php';
 $di = new \App\Utils\DependencyInjector();
 
 // Gestion usuario
-$cookieName = "usuario";
-// Si la cookie no existe la crea
-if(!array_key_exists($cookieName,$_COOKIE)){
-$cookieValue = "anonimo";     // establecer sesión de anonimo
-    setcookie($cookieName,$cookieValue, time()+(86400*30),"/"); // Usuario conectado
+// Si la session no existe la crea
+session_start();
+if (!array_key_exists('rol',$_SESSION)){
+    $rol_usuario = 'anonimo';
+    $_SESSION['rol']=$rol_usuario;
 }
 
 
@@ -52,12 +52,12 @@ $request = new Request();
 
 
 
-// Instanciar usuario con el valor de la cookie, si no encuentra el valor de la cookie iniciarla como anonimo
+// Instanciar usuario con el valor de la sesion, si no encuentra el valor de la sesion iniciarla como anonimo
 try{
     $usuario_modelo = new UsuarioModel($db->getConnection());
-    // Si no encuentra la cookie asignar usuario como anonimo
-    $cookieValue = $_COOKIE[$cookieName] ?? 'anonimo';
-    $user = $usuario_modelo->getByName($cookieValue);
+    // Si no encuentra la sesion asignar usuario como anonimo
+    $rol_usuario = $_SESSION['rol'] ?? 'anonimo';
+    $user = $usuario_modelo->getByName($rol_usuario);
 }catch (PDOException $exception){
     echo $exception->getMessage();
 }
