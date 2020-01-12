@@ -48,7 +48,7 @@
                                 {% if usuario == 'anonimo' %} {# SI EL USER ES ANONIMO: OPCION REGISTRARSE #}
                                 <li><a href="{{ router.generateURL('Usuario','registrarse') }}"><span class="icon icon-person_add "></span> REGISTRARSE</a>
                                 <li><a href="{{ router.generateURL('Usuario','login') }}"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
-                                {% elseif usuario == 'usuario' %} {# SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT #}
+                                {% elseif usuario == 'usuario' or usuario == 'empleado' %} {# SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT #}
                                 <li><a href="{{ router.generateURL('Usuario','logout') }}"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
                                 <li><a href="{{ router.generateURL('Usuario','perfil') }}"><span class="icon icon-home"></span> MI PERFIL</a></li>
                                 {% elseif usuario == 'admin' %} {# SI EL USUARIO ES ADMIN: OPCION DASHBOARD Y LOGOUT #}

@@ -122,17 +122,15 @@ class UsuarioModel{
 
     }
 
-    public function getIdByEmailPass($email,$password):int{
+    public function getByEmailPass($email,$password):Usuario{
         try{
             //consulta del ID que solicita el usuario
-            $idConsulta = $this->db->prepare('SELECT id_cli FROM Usuario where email=:email AND password=:password');
-            $idConsulta->execute(array(
-                ':email'=>$email,
-                ':password'=>$password
-            ));
-            $idResult = $idConsulta->fetch();
-            $id = intval($idResult['id_cli']);
-            return $id;
+            $stmt = $this->db->prepare('SELECT * FROM Usuario where email=:email AND password=:password');
+            $stmt->bindParam(':email',$email,PDO::PARAM_STR);
+            $stmt->bindParam(':password',$password,PDO::PARAM_STR);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+            $stmt->execute();
+            return $stmt->fetch();
         }catch (PDOException $e){
             echo $e->getMessage();
         }

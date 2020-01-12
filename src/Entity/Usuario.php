@@ -47,6 +47,9 @@ class Usuario
             case 3:
                 return "usuario";
                 break;
+            case 4:
+                return "empleado";
+                break;
             default:
                 return "anonimo";
         }

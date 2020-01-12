@@ -11,14 +11,15 @@ require __DIR__ . '/../config/bootstrap.php';
 
 $di = new \App\Utils\DependencyInjector();
 
-// Gestion usuario
-// Si la session no existe la crea
+/* @Gestion_usuario */
+// Si la session no existe la crea con el usuario anonimo
 session_start();
 if (!array_key_exists('rol',$_SESSION)){
     $rol_usuario = 'anonimo';
-    $_SESSION['rol']=$rol_usuario;
+    $id_usuario = '1';
+    $_SESSION['rol'] = $rol_usuario;
+    $_SESSION['id'] = $id_usuario;
 }
-
 
 $db = new DB();
 $di->set('PDO', $db->getConnection());
@@ -51,13 +52,14 @@ $di->set('Twig',$twig);
 $request = new Request();
 
 
-
+/** @Gestion_sesion_usuario */
 // Instanciar usuario con el valor de la sesion, si no encuentra el valor de la sesion iniciarla como anonimo
 try{
     $usuario_modelo = new UsuarioModel($db->getConnection());
     // Si no encuentra la sesion asignar usuario como anonimo
     $rol_usuario = $_SESSION['rol'] ?? 'anonimo';
-    $user = $usuario_modelo->getByName($rol_usuario);
+    $id_usuario = $_SESSION['id_user'] ?? '1';
+    $user = $usuario_modelo->getById(intval($id_usuario));
 }catch (PDOException $exception){
     echo $exception->getMessage();
 }

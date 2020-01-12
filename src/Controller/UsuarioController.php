@@ -94,20 +94,19 @@ class UsuarioController extends AbstractController
             $errores = $usuarioConsulta->validate_login($email,$password);
 
             if (count($errores)===0){
-                $id = $usuarioConsulta->getIdByEmailPass($email,$password); // Obtener ID del usuario
                 try{
                     // Cambiar rol de usuario
-                    $user = $usuarioConsulta->getByRol($id);
+                    $user = $usuarioConsulta->getByEmailPass($email,$password); // Obtener ID del usuario
                 }catch (PDOException $exception){
                     echo $exception->getMessage();
                 }
 
                 // Cambiar valor de la cookie
                 $rol_usuario = $user->getTipoRol();
-                //setcookie($rol_usuario, time()+(86400*30),"/");
-                //$rol_usuario = $rol_usuario;
+                $id_usuario = $user->getIdCli();
                 session_start();
                 $_SESSION['rol'] = $rol_usuario;
+                $_SESSION['id_user'] = $id_usuario;
                 global $route;
                 header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
             }
@@ -145,16 +144,16 @@ class UsuarioController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
-        if ($rol_usuario === 'admin' || $rol_usuario=="usuario"){
+        if ($rol_usuario === 'anonimo'){
+            global $route;
+            header("Location: ".$route->generateURL('Usuario','login')); // redirigir al perfil
+        }
+        else{
             return $this->render('perfil.twig',[
                 'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'user'=>$user
             ]);
-        }
-        else{
-            global $route;
-            header("Location: ".$route->generateURL('Usuario','login')); // redirigir al perfil
         }
     }
 
@@ -164,7 +163,7 @@ class UsuarioController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Capa de proteccion para acceder al dashboard
-        if ($rol_usuario === 'admin'){
+        if ( $rol_usuario === 'admin'){
             return $this->render('dashboard.twig',[
                 'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto
@@ -196,7 +195,8 @@ class UsuarioController extends AbstractController
         $categoria = 'todo';
 
         // Capa de proteccion para acceder al dashboard
-        if ($rol_usuario === 'admin'){
+        if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
+            //TODO: el empleado solo puede gestionar los productos que el ha creado
 
             // Filtro por categoria
 

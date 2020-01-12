@@ -146,7 +146,7 @@ class ProductoController extends AbstractController
         $errores = "";
 
         // Capa de proteccion para acceder al dashboard
-        if ($rol_usuario === 'admin'){
+        if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $datos_enviados = true;
                 $errores=[];
@@ -189,9 +189,7 @@ class ProductoController extends AbstractController
         }
     }
 
-    public function editarProducto($id)
-    {
-
+    public function editarProducto($id){
         global $rol_usuario,  $user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
@@ -199,7 +197,9 @@ class ProductoController extends AbstractController
         $datos_enviados = false;
 
         // Capa de proteccion para acceder al dashboard
-        if ($rol_usuario === 'admin') {
+        if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado') {
+
+            // TODO: si entra el empleado puede editar solo los productos que el ha creado
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if ($id > $ultimoProducto->getIdProd() || $id < 1) {
                 global $route;
@@ -265,7 +265,9 @@ class ProductoController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Capa de proteccion para acceder al dashboard
-        if ($rol_usuario === 'admin'){
+        if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
+            //TODO: controlar que el empleado solo pueda borrar los productos que el ha creado
+
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
                 $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);

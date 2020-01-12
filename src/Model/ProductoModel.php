@@ -315,7 +315,6 @@ class ProductoModel{
             echo $exception->getMessage();
         }
     }
-    //TODO
 
     /**
      * @param $categoria
