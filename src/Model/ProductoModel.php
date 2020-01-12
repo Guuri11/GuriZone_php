@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Entity\Usuario;
 use PDO;
 use PDOException;
 use DateTime;
@@ -19,7 +20,13 @@ use App\Entity\Producto;
  */
 class ProductoModel{
 
+    /**
+     * @var PDO
+     */
     private $db;
+    /**
+     * @var string
+     */
     protected $className = 'App\Entity\Producto';
 
     /**
@@ -29,6 +36,9 @@ class ProductoModel{
         $this->db = $db;
     }
 
+    /**
+     * @return array
+     */
     public  function getAll(): array {
         try{
             $stmt = $this->db->query('SELECT * FROM Producto');
@@ -74,6 +84,22 @@ class ProductoModel{
     }
 
     /**
+     * @param Usuario $usuario
+     * @return array
+     */
+    public function getByEmpleado(Usuario $usuario):array {
+        try{
+            $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_empleado = :id_empleado');
+            $stmt->bindParam(':id_empleado', $usuario->getIdCli(), PDO::PARAM_INT);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+            $stmt->execute();
+            return $stmt->fetch();
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+
+    /**
      * @param int $category
      * @return array
      */
@@ -98,13 +124,14 @@ class ProductoModel{
      */
     public function insert(Producto $producto):bool {
         try{
-            $stmt = $this->db->prepare('INSERT INTO Producto(modelo_prod,marca_prod,categoria_prod,subcategoria_prod,
+            $stmt = $this->db->prepare('INSERT INTO Producto(id_empleado,modelo_prod,marca_prod,categoria_prod,subcategoria_prod,
                                     color,color_disp,talla,talla_disp,stock_prod,num_ventas_prod,fecha_salida,precio_unidad,
                                     foto_prod,descripcion,descatalogado) 
-                                    VALUES(:modelo_prod,:marca_prod,:categoria_prod,:subcategoria_prod,:color,
+                                    VALUES(:id_empleado, :modelo_prod,:marca_prod,:categoria_prod,:subcategoria_prod,:color,
                                     :color_disp,:talla,:talla_disp,:stock_prod,:num_ventas_prod,:fecha_salida,:precio_unidad,
                                     :foto_prod,:descripcion,:descatalogado)');
             $datos = array(
+                ':id_empleado'=>$producto->getIdEmpleado(),
                 ':modelo_prod'=>$producto->getModeloProd(),
                 ':marca_prod'=>$producto->getMarcaProd(),
                 ':categoria_prod'=>$producto->getCategoriaProd(),
@@ -470,10 +497,12 @@ class ProductoModel{
      */
     public function getData():Producto{
         $producto = new Producto();
+        global $user;
         /** @FUNCION: ASIGNAR ATRIBUTO QUITANDO CHARS HTML, ESPACIOS CON TRIM Y SANEANDOLOS **/
         $producto->setModeloProd(htmlspecialchars(trim(filter_input(INPUT_POST,'modelo',FILTER_SANITIZE_STRING))));
         // Los separo el primero para visualizar mejor su contenido ya que todos tienen lo mismo excepto el tipo de saneo
 
+        $producto->setIdEmpleado($user->getIdCli());
         $producto->setMarcaProd(htmlspecialchars(trim(filter_input(INPUT_POST,'marca',FILTER_SANITIZE_STRING))));
         $producto->setCategoriaProd((int)htmlspecialchars(trim(filter_input(INPUT_POST, 'categoria', FILTER_SANITIZE_NUMBER_INT))));
         $producto->setSubcategoriaProd((int)htmlspecialchars(trim(filter_input(INPUT_POST, 'subcategoria', FILTER_SANITIZE_NUMBER_INT))));

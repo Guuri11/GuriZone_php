@@ -159,12 +159,12 @@ class ProductoController extends AbstractController
                 }
                 if (empty($errores)) {
                     $producto = new Producto();
-                    // indicar foto por defecto si no existe dicha imagen
-                    if (empty($producto->getFotoProd()))
-                        $producto->setFotoProd('/imgs/productos/default_product_image.png');
 
                     // 2.Obtener datos saneandos
                     $producto = $productosConsulta->getData();
+                    // indicar foto por defecto si no existe dicha imagen
+                    if (empty($producto->getFotoProd()))
+                        $producto->setFotoProd('../imgs/productos/default_product_image.png');
 
                     // 3.Validar datos
                     $errores = $productosConsulta->validateCrearProducto($producto);

@@ -20,7 +20,6 @@ if (!array_key_exists('rol',$_SESSION)){
     $_SESSION['rol'] = $rol_usuario;
     $_SESSION['id'] = $id_usuario;
 }
-
 $db = new DB();
 $di->set('PDO', $db->getConnection());
 
