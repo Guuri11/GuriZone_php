@@ -35,7 +35,16 @@
                     {% for usuario in paginacion.getUsuarios %}
                         <tr>
                             <td><a href="#">{{ usuario.getIdCli }}</a></td>
-                            <td>{{ usuario.getTipoRol }}</td>
+                            <td>
+                                <form action="{{ router.generateURL('Usuario','gestionUsuarios') }}" method="post">
+                                    <select class="form-control">
+                                        <option>{{ usuario.getTipoRol }}</option>
+                                        <option>{{ usuario.getTipoRol }}</option>
+                                        <option>{{ usuario.getTipoRol }}</option>
+                                        <option>{{ usuario.getTipoRol }}</option>
+                                    </select>
+                                </form>
+                            </td>
                             <td>{{ usuario.getNombre }}</td>
                             <td>{{ usuario.getApellidos }}</td>
                             <td>{{ usuario.getEmail }}</td>
