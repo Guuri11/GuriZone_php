@@ -20,16 +20,41 @@ class Paginacion_usuarios
     private $usuarios;
     private $rol;
 
-    public function __construct(int $num_usuarios, int $usuarios_pagina,int $pagina,UsuarioModel $usuarioConsulta, int $rol)
+    public function __construct(int $num_usuarios, int $usuarios_pagina,int $pagina,UsuarioModel $usuarioConsulta)
     {
         $this->num_usuarios = $num_usuarios;
         $this->usuarios_pagina = $usuarios_pagina;
         $this->num_paginas = ceil($this->num_usuarios/$this->usuarios_pagina);
         $this->pagina = $pagina;
         $this->usuario_inicial = intval(($this->pagina-1)*$this->usuarios_pagina);
-        $this->usuario_final= intval($this->usuario_inicial+$this->usuario_pagina);
-        $this->rol = $rol
+        $this->usuario_final= intval($this->usuario_inicial+$this->usuarios_pagina);
+        $this->rol = $this->rolSolicitado();
         $this->usuarios = $usuarioConsulta->getUsuariosGestion($this->usuario_inicial,$this->usuarios_pagina,$this->rol);
+    }
+
+    /**
+     * @return int
+     */
+    public function rolSolicitado():int{
+        if(!array_key_exists('rol',$_GET)){
+            $rol = 'todo';
+        }else
+            $rol = $_GET['rol'];
+        strtolower($rol);
+        switch ($rol){
+            case 'todo':
+                $rol = 0;
+                break;
+            case 'clientes':
+                $rol = 3;
+                break;
+            case 'empleados':
+                $rol = 4;
+                break;
+            default:
+                $rol = 0;
+        }
+        return $rol;
     }
 
     /**

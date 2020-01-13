@@ -3,10 +3,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Paginacion;
+use App\Entity\Paginacion_productos;
+use App\Entity\Paginacion_usuarios;
 use App\Entity\Usuario;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
+use App\Model\RolesModel;
 use App\Model\UsuarioModel;
 use PDOException;
 
@@ -231,7 +233,8 @@ class UsuarioController extends AbstractController
 
             $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
 
-            $paginacion = new Paginacion(count($productos),10,$pagina,$productosConsulta,"",0);
+            $paginacion = new Paginacion_productos(count($productos),10,$pagina,$productosConsulta,"",0);
+
 
             $parametros = [
                 'usuario'=>$rol_usuario,
@@ -251,18 +254,45 @@ class UsuarioController extends AbstractController
 
     public function gestionUsuarios(){
 
-        // TODO
         global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
+        $usuarioConsulta = new UsuarioModel($this->db);
+        $rolConsulta = new RolesModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         if ( $rol_usuario === 'admin'){
 
+            // Filtro por rol
+
+            // asignar valor a rol en caso de que no se especifique
+            if (!$this->request->getParams()->has('rol') || empty($this->request->getParams()->get('rol')))
+                $this->request->getParams()->set('rol','todo');
+            $rol = trim(filter_var($this->request->getParams()->get('rol'),FILTER_SANITIZE_STRING));
+
+            // Obtener todos los productos o los de la categoria especificada
+            if ($rol == 'todo')
+                $usuarios = $usuarioConsulta->getAll();
+            else{
+                $obj_rol = $rolConsulta->getByTipoRol($rol);
+                $usuarios = $usuarioConsulta->getByRol($obj_rol->getIdRol());
+            }
+
+            // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
+            if(!$this->request->getParams()->has('page') || $this->request->getParams()->get('page')<=0)
+                $this->request->getParams()->set('page','1');
+
+            $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
+
+            $paginacion = new Paginacion_usuarios(count($usuarios),5,intval($pagina),$usuarioConsulta);
+
 
             $parametros = [
                 'usuario'=>$rol_usuario,
-                'ultimo_producto'=>$ultimoProducto
+                'ultimo_producto'=>$ultimoProducto,
+                'paginacion'=>$paginacion,
+                'pagina'=>$pagina,
+                'rol'=>$rol
             ];
             return $this->render('gestion_usuarios.twig',$parametros);
         }else{

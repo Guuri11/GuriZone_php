@@ -33,6 +33,16 @@ class UsuarioModel{
             echo $exception->getMessage();
         }
     }
+    public function getAll():array{
+        try{
+            $stmt = $this->db->query('SELECT * FROM Usuario');
+            $usuarios = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+
+            return $usuarios;
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
     public function getByName(string $name):Usuario {
         try {
             $stmt = $this->db->prepare('SELECT * FROM Usuario WHERE nombre = :nombre');
@@ -56,13 +66,13 @@ class UsuarioModel{
         }
     }
 
-    public function getByRol(int $rol):Usuario {
+    public function getByRol(int $rol):array {
         try {
             $stmt = $this->db->prepare('SELECT * FROM Usuario WHERE rol=:rol');
             $stmt->bindParam(':rol',$rol,PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
-            return $stmt->fetch();
+            return $stmt->fetchAll();
         }catch (\PDOException $exception){
             echo $exception->getMessage();
         }
@@ -170,6 +180,29 @@ class UsuarioModel{
             $errores['formato_email'] = "Ha habido un error, por favor compruebe el correo que ha escrito";
 
         return $errores;
+    }
+
+    public function getUsuariosGestion(int $usuario_inicial, int $usuarios_pagina, int $rol):array{
+        try {
+            if ($rol === 0){
+                $stmt = $this->db->prepare('SELECT * FROM Usuario LIMIT :usuario_inicial, :usuarios_pagina');
+                $stmt->bindParam(':usuario_inicial',$usuario_inicial,PDO::PARAM_INT);
+                $stmt->bindParam(':usuarios_pagina',$usuarios_pagina,PDO::PARAM_INT);
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                $stmt->execute();
+                return $stmt->fetchAll();
+            }else{
+                $stmt = $this->db->prepare('SELECT * FROM Usuario WHERE rol = :rol LIMIT :usuario_inicial, :usuarios_pagina');
+                $stmt->bindParam(':rol',$rol);
+                $stmt->bindParam(':usuario_inicial',$usuario_inicial,PDO::PARAM_INT);
+                $stmt->bindParam(':usuarios_pagina',$usuarios_pagina,PDO::PARAM_INT);
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                $stmt->execute();
+                return $stmt->fetchAll();
+            }
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
     }
 
 }

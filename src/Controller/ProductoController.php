@@ -3,7 +3,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Paginacion;
+use App\Entity\Paginacion_productos;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
 use App\Entity\Producto;
@@ -76,7 +76,7 @@ class ProductoController extends AbstractController
             $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
 
             // Recoge datos de la paginacion y sus productos segun la pagina actual
-            $paginacion = new Paginacion(count($resultados),12,$pagina,$productosConsulta,$busqueda,1);
+            $paginacion = new Paginacion_productos(count($resultados),12,$pagina,$productosConsulta,$busqueda,1);
 
         }else {
 
@@ -112,7 +112,7 @@ class ProductoController extends AbstractController
             // Sanear pagina solicitada
             $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
 
-            $paginacion = new Paginacion(count($productos_tienda), 12, $pagina, $productosConsulta, "", 1);
+            $paginacion = new Paginacion_productos(count($productos_tienda), 12, $pagina, $productosConsulta, "", 1);
         }
         // Obtener el numero de productos por categoria
         $stockAccesorios = $productosConsulta->getTotalStockCategorias(1);

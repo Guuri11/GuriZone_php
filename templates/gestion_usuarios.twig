@@ -3,32 +3,17 @@
     <div class="">
         <div class="justify-content-center gurizone-login p-lg-3 m-lg-2 p-md-4 m-md-3 p-sm-4 m-sm-5 table-bordered">
             <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12 border p-4 rounded mb-4 ml-3">
-                    <!--FILTRO CATEGORIA-->
+                <div class="col-lg-12 col-md-12 col-sm-12 p-4 mb-4 ml-3">
+                    <!--FILTRO ROL-->
                     <div class="btn-group mr-1 ml-md-auto float-right">
                         <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Filtrar por Categoria</button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestion') }}?categoria=todo&page=1">Todo</a>
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestion') }}?categoria=accesorios&page=1">Accesorios</a>
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestion') }}?categoria=ropa&page=1">Ropa</a>
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestion') }}?categoria=zapatillas&page=1">Zapatillas</a>
+                        <div class="dropdown-menu fixed-top" aria-labelledby="dropdownMenuReference">
+                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=todo&page=1">Todo</a>
+                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=clientes&page=1">Clientes</a>
+                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=empleados&page=1">Empleados</a>
                         </div>
                     </div>
-                    <!--FIN FILTRO CATEGORIA-->
-                    <!--FILTRO FECHA-->
-                    <div>
-                        <div class="mt-4">
-                            <h3 class="mb-3 h6 text-uppercase text-black d-block">Filtrar por fecha</h3>
-                            <form action="{{ router.generateURL('Usuario','gestion') }}" method="get">
-                                <label for="fecha_inicial" class="d-flex text-black">Fecha Inicial</label>
-                                <input type="date" id="fecha_inicial" name="fecha_inicial" class="mr-2 mt-1 form-control">
-                                <label for="fecha_final" class="d-flex text-black">Fecha Final</label>
-                                <input type="date" id="fecha_final" class="mr-2 mt-1 form-control" name="fecha_final">
-                                <input type="submit" value="Filtrar" class="btn btn-primary mt-3">
-                            </form>
-                        </div>
-                    </div>
-                    <!--FIN FILTRO FECHA-->
+                    <!--FIN FILTRO ROL-->
                 </div>
             </div>
             <!--FILTRO TABLA PRODUCTOS-->
@@ -43,26 +28,25 @@
                         <th scope="col">EMAIL</th>
                         <th scope="col">CONTRASEÑA</th>
                         <th scope="col">FOTO PERFIL</th>
-                        <th scope="col">ESTADO</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for i in paginacion.getProductos %}
+                    {% for usuario in paginacion.getUsuarios %}
                         <tr>
-                            <td><a href="#">1</a></td>
-                            <td>Lorem ipsum</td>
-                            <td>Lorem ipsum</td>
-                            <td>Lorem ipsum</td>
-                            <td>Lorem ipsum</td>
-                            <td class="cut">Lorem ipsum</td>
-                            <td>Activo</td>
+                            <td><a href="#">{{ usuario.getIdCli }}</a></td>
+                            <td>{{ usuario.getRol }}</td>
+                            <td>{{ usuario.getNombre }}</td>
+                            <td>{{ usuario.getApellidos }}</td>
+                            <td>{{ usuario.getEmail }}</td>
+                            <td>{{ usuario.getPassword }}</td>
+                            <td>{{ usuario.getFotoPerfil }}</td>
                             <td>
                                 <div>
-                                    <a href="{{ router.generateURL('Producto','editarProducto',{id:producto.getIdProd}) }}"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
+                                    <a href="#"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
                                 </div>
                                 <div>
-                                    <a href="{{ router.generateURL('Producto','borrarProducto',{id:producto.getIdProd}) }}"><input type="button" class="btn btn-danger" value="Eliminar"></a>
+                                    <a href="#"><input type="button" class="btn btn-danger" value="Eliminar"></a>
                                 </div>
                             </td>
                         </tr>
@@ -76,23 +60,13 @@
             <div class="row" data-aos="fade-up">
                 <div class="col-md-12 text-center">
                     <div class="site-block-27">
-                        {% if fecha_inicial is not null and fecha_final is not null %}
-                            <ul>
-                                <li><a href="{{ router.generateURL('Usuario','gestion') }}?fecha_inicial={{ fecha_inicial }}&fecha_final={{ fecha_final }}?>&page={{ pagina<=0 ? paginacion.getPagina-1:'1' }}"><</a></li>
-                                {% for i in 1..paginacion.getNumPaginas %}
-                                    <li><a href="{{ router.generateURL('Usuario','gestion') }}?fecha_inicial={{ fecha_inicial }}&fecha_final={{ fecha_final }}&page={{ i }}"><span>{{ i }}</span></a></li>
-                                {% endfor %}
-                                <li><a href="{{ router.generateURL('Usuario','gestion') }}?fecha_inicial={{ fecha_inicial }}&fecha_final={{ fecha_final }}&page={{ paginacion.getPagina>=paginacion.getNumPaginas ? '1':paginacion.getPagina+1 }}">&gt;</a></li>
-                            </ul>
-                        {% else %}
-                            <ul>
-                                <li><a href="{{ router.generateURL('Usuario','gestion') }}?categoria={{ categoria }}&page={{ pagina<=0 ? paginacion.getPagina-1:'1' }}"><</a></li>
-                                {% for i in 1..paginacion.getNumPaginas %}
-                                    <li><a href="{{ router.generateURL('Usuario','gestion') }}?categoria={{ categoria }}&page={{ i }}"><span>{{ i }}</span></a></li>
-                                {% endfor %}
-                                <li><a href="{{ router.generateURL('Usuario','gestion') }}?categoria={{ categoria }}&page={{ paginacion.getPagina>=paginacion.getNimPaginas ?'1':paginacion.getPagina+1 }}">&gt;</a></li>
-                            </ul>
-                        {% endif %}
+                        <ul>
+                            <li><a href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol={{ rol }}&page={{ pagina<=0 ? paginacion.getPagina-1:'1' }}"><</a></li>
+                            {% for i in 1..paginacion.getNumPaginas %}
+                                <li><a href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol={{ rol }}&page={{ i }}"><span>{{ i }}</span></a></li>
+                            {% endfor %}
+                            <li><a href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol={{ rol }}&page={{ paginacion.getPagina>=paginacion.getNumPaginas ?'1':paginacion.getPagina+1 }}">&gt;</a></li>
+                        </ul>
                     </div>
                 </div>
                 <!--FIN PAGINACION-->
