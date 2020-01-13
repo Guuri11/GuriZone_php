@@ -8,21 +8,44 @@
             {% endif %}
             <form action="{{ router.generateURL('Usuario','registrarse') }}" method="post">
                 <div class="form-group">
+                    {% if errores.nombre is defined%}
+                    <p class="text-danger">{{ errores.nombre }}</p>
+                    {% endif %}
                     <label for="nombre" class="text-black">Nombre:</label>
                     <input type="text" class="form-control" id="nombre" placeholder="" name="nombre">
                 </div>
                 <div class="form-group">
+                    {% if errores.apellido is defined%}
+                        <p class="text-danger">{{ errores.apellido }}</p>
+                    {% endif %}
                     <label for="apellidos" class="text-black">Apellidos:</label>
-                    <input type="text" class="form-control" id="apellidos" placeholder="" name="apellidos">
+                    <input type="text" class="form-control" id="apellidos" placeholder="" name="apellido">
                 </div>
                 <div class="form-group">
+                    {% if errores.email is defined%}
+                        <p class="text-danger">{{ errores.email }}</p>
+                    {% elseif errores.email_no_valido is defined %}
+                        <p class="text-danger">{{ errores.email_no_valido }}</p>
+                    {% elseif errores.email_registrado is defined %}
+                        <p class="text-danger">{{ errores.email_registrado }}</p>
+                    {% endif %}
                     <label for="email" class="text-black">Email:</label>
                     <input type="email" class="form-control" id="email" placeholder="" name="email">
                 </div>
                 <div class="form-group">
+                    {% if errores.password is defined%}
+                        <p class="text-danger">Por favor, introduzca una contraseña</p>
+                    {% elseif errores.pass_corta is defined %}
+                        <p class="text-danger">{{ errores.pass_corta }}</p>
+                    {% elseif errores.pass_no_igual is defined %}
+                        <p class="text-danger">{{ errores.pass_no_igual }}</p>
+                    {% endif %}
                     <label for="pwd" class="text-black">Contraseña:</label>
                     <input type="password" class="form-control" id="password" placeholder="Al menos 6 caracteres" name="password">
                 </div>
+                {% if errores.password is defined%}
+                    <p class="text-danger">Por favor, repita su contraseña</p>
+                {% endif %}
                 <div class="form-group">
                     <label for="pwd" class="text-black">Confirma tu contraseña:</label>
                     <input type="password" class="form-control" id="password_repeat" placeholder="" name="password_repeat">

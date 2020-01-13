@@ -87,7 +87,7 @@ class UsuarioModel{
                 ':nombre'=>$usuario->getNombre(),
                 ':apellidos'=>$usuario->getApellidos(),
                 ':email'=>$usuario->getEmail(),
-                ':password'=>$usuario->getPassword(),
+                ':password'=>password_hash($usuario->getPassword(),PASSWORD_DEFAULT),
                 ':foto_perfil'=>$usuario->getFotoPerfil()
             );
             $stmt->execute($datos);
@@ -123,7 +123,7 @@ class UsuarioModel{
 
         $usuario->setRol(3);
         $usuario->setNombre((htmlspecialchars(trim(filter_input(INPUT_POST,'nombre',FILTER_SANITIZE_STRING)))));
-        $usuario->setApellidos((htmlspecialchars(trim(filter_input(INPUT_POST,'apellidos',FILTER_SANITIZE_STRING)))));
+        $usuario->setApellidos((htmlspecialchars(trim(filter_input(INPUT_POST,'apellido',FILTER_SANITIZE_STRING)))));
         $usuario->setEmail((htmlspecialchars(trim(filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL)))));
         $usuario->setPassword((htmlspecialchars(trim(filter_input(INPUT_POST,'password',FILTER_SANITIZE_STRING)))));
         $usuario->setFotoPerfil('imgs/default_profile.jpg');
@@ -132,15 +132,16 @@ class UsuarioModel{
 
     }
 
-    public function getByEmailPass($email,$password):Usuario{
+    public function getUserLoggued(string $email,bool $login):Usuario{
         try{
-            //consulta del ID que solicita el usuario
-            $stmt = $this->db->prepare('SELECT * FROM Usuario where email=:email AND password=:password');
-            $stmt->bindParam(':email',$email,PDO::PARAM_STR);
-            $stmt->bindParam(':password',$password,PDO::PARAM_STR);
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-            $stmt->execute();
-            return $stmt->fetch();
+            if ($login){
+                //consulta del ID que solicita el usuario
+                $stmt = $this->db->prepare('SELECT * FROM Usuario where email=:email');
+                $stmt->bindParam(':email',$email,PDO::PARAM_STR);
+                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                $stmt->execute();
+                return $stmt->fetch();
+            }
         }catch (PDOException $e){
             echo $e->getMessage();
         }
@@ -165,13 +166,13 @@ class UsuarioModel{
                     $errores['email_no_valido'] = "No hay ningun usuario registrado con ese email!";
 
                 // Comprobar contraseña
-                $checkPasswd = $this->db->prepare('SELECT password FROM Usuario where email=:email AND password=:password');
+                $checkPasswd = $this->db->prepare('SELECT password FROM Usuario where email=:email');
                 $checkPasswd->execute(array(
                     ':email'=>$email,
                     ':password'=>$password
                 ));
                 $passwdResult = $checkPasswd->fetch();
-                if ($password !== $passwdResult['password'])
+                if (!password_verify($password,$passwdResult['password']))
                     $errores['pass_no_valido'] = "No coincide la contraseña con el email indicado!";
             }catch (PDOException $e){
                 echo $e->getMessage();

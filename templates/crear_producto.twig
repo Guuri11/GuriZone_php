@@ -9,7 +9,7 @@
                 {% for error in errores %}
                 <h5 class="text-danger text-center">{{ error }}</h5>
                 {% endfor %}
-            {% elseif datos_enviados == true and errores == "" %}
+            {% elseif datos_enviados == true and errores is empty %}
             <h3 class="text-success text-center">Inserción del producto realizada!</h3>
             {% endif %}
             <!--FIN RESOLUCION DEL UPDATE-->

@@ -29,22 +29,22 @@ class UsuarioController extends AbstractController
             // Comprobar que todos los campos han sido rellenados
             foreach ($datos as $dato => $valor) {
                 if (empty($valor)) {
-                    $errores[] = "ERROR: Campo requerido vacio: " . $dato;
+                    $errores[$dato] = "Por favor, introduzca su ".$dato;
                 }
             }
 
             //Comprobar que el email es valido
             if (!filter_var($datos['email'],FILTER_VALIDATE_EMAIL)){
-                $errores[] = "ERROR: Formato de email no valido";
+                $errores['email_no_valido'] = "Ha habido un error, por favor compruebe el correo que ha escrito.";
             }
             if ($usuariosConsulta->getByEmail($datos['email']) !== false){
-                $errores[] = "ERROR: Este email ya esta registrado";
+                $errores['email_registrado'] = "Ya existe un usuario registrado con este email.";
             }
             //Comprobar que la contraseña sea valida
             if (strlen($datos['password'])<6)
-                $errores[] = "ERROR: Contraseña demasiado corta";
+                $errores['pass_corta'] = "Contraseña demasiado corta! Necesita 6 carácteres como mínimo.";
             if ($datos['password']!==$datos['password_repeat'])
-                $errores[] = "ERROR: Las contraseñas no coinciden";
+                $errores['pass_no_igual'] = "Las contraseñas no coinciden!";
 
             // Insertar usuario
             if (empty($errores)){
@@ -63,7 +63,24 @@ class UsuarioController extends AbstractController
                     if (!$resultado)
                         $errores[]="Error al crear usuario";
                     else{
-                        return $this->render('perfil.twig',[]);
+                        $login = true;
+                        try{
+                            // Cambiar rol de usuario
+                            $user = $usuariosConsulta->getUserLoggued($usuario->getEmail(),$login); // Obtener ID del usuario
+                        }catch (PDOException $exception){
+                            echo $exception->getMessage();
+                        }
+
+                        // Cambiar valor de la sesions
+                        $rol_usuario = $user->getTipoRol();
+                        $id_usuario = $user->getIdCli();
+                        $_SESSION['rol'] = $rol_usuario;
+                        $_SESSION['id_user'] = $id_usuario;
+                        $_SESSION['loggued'] = true;
+                        $_SESSION['time'] = time();
+
+                        global $route;
+                        header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
                     }
 
                 }
@@ -83,6 +100,7 @@ class UsuarioController extends AbstractController
         $usuarioConsulta = new UsuarioModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
         $errores = [];
+        $login = false;
 
         // Si se ha recibido datos desde el login.view
         if ($_SERVER['REQUEST_METHOD']==='POST'){
@@ -96,19 +114,22 @@ class UsuarioController extends AbstractController
             $errores = $usuarioConsulta->validate_login($email,$password);
 
             if (count($errores)===0){
+                $login = true;
                 try{
                     // Cambiar rol de usuario
-                    $user = $usuarioConsulta->getByEmailPass($email,$password); // Obtener ID del usuario
+                    $user = $usuarioConsulta->getUserLoggued($email,$login); // Obtener ID del usuario
                 }catch (PDOException $exception){
                     echo $exception->getMessage();
                 }
 
-                // Cambiar valor de la cookie
+                // Cambiar valor de la sesions
                 $rol_usuario = $user->getTipoRol();
                 $id_usuario = $user->getIdCli();
                 session_start();
                 $_SESSION['rol'] = $rol_usuario;
                 $_SESSION['id_user'] = $id_usuario;
+                $_SESSION['loggued'] = true;
+                $_SESSION['time'] = time();
                 global $route;
                 header("Location: ".$route->generateURL('Usuario','perfil')); // redirigir al perfil
             }

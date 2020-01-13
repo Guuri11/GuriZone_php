@@ -8,16 +8,19 @@ use App\Core\Router;
 
 
 require __DIR__ . '/../config/bootstrap.php';
-require __DIR__.'/../config/config.php';
 $di = new \App\Utils\DependencyInjector();
+
 /* @Gestion_usuario */
+require __DIR__.'/../config/config.php';
 // Si la session no existe la crea con el usuario anonimo
 if (!array_key_exists('rol',$_SESSION)){
     $rol_usuario = 'anonimo';
     $id_usuario = '1';
     $_SESSION['rol'] = $rol_usuario;
     $_SESSION['id'] = $id_usuario;
+    $_SESSION['loggued'] = false;
 }
+
 $db = new DB();
 $di->set('PDO', $db->getConnection());
 
