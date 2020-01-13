@@ -31,7 +31,7 @@ class Paginacion_usuarios
         $this->rol = $rol
         $this->usuarios = $usuarioConsulta->getUsuariosGestion($this->usuario_inicial,$this->usuarios_pagina,$this->rol);
     }
-    
+
     /**
      * @return int
      */

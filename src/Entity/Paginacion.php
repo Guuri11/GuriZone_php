@@ -7,7 +7,34 @@ use App\Model\ProductoModel;
 /**
  * Class Paginacion
  */
-class Paginacion
+class Paginacion/**
+     * @return int
+     */
+    public function categoriaSolicitada():int{
+        if(!array_key_exists('categoria',$_GET)){
+            $categoria = 'todo';
+        }else
+            $categoria = $_GET['categoria'];
+        strtolower($categoria);
+        switch ($categoria){
+            case 'todo':
+                $categoria = 0;
+                break;
+            case 'accesorios':
+                $categoria = 1;
+                break;
+            case 'ropa':
+                $categoria = 2;
+                break;
+            case 'zapatillas':
+                $categoria = 3;
+                break;
+            default:
+                $categoria = 0;
+        }
+        return $categoria;
+    }
+
 {
     private $num_productos;
     private $productos_pagina;
