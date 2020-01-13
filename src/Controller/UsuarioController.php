@@ -134,6 +134,7 @@ class UsuarioController extends AbstractController
         session_start();
         session_unset();
         session_destroy();
+        setcookie(session_name(),"",time()-3600);
         global $route;
         header("Location: ".$route->generateURL('Producto','index')); // redirigir al perfil
 

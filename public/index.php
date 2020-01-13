@@ -8,12 +8,10 @@ use App\Core\Router;
 
 
 require __DIR__ . '/../config/bootstrap.php';
-
+require __DIR__.'/../config/config.php';
 $di = new \App\Utils\DependencyInjector();
-
 /* @Gestion_usuario */
 // Si la session no existe la crea con el usuario anonimo
-session_start();
 if (!array_key_exists('rol',$_SESSION)){
     $rol_usuario = 'anonimo';
     $id_usuario = '1';

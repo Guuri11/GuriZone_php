@@ -33,7 +33,6 @@ class RolesModel
     }
     public function getByTipoRol(string $tipo_rol):Roles {
         try {
-            var_dump($tipo_rol);
             $stmt = $this->db->prepare('SELECT * FROM Roles WHERE tipo_rol=:tipo_rol');
             $stmt->bindParam(':tipo_rol',$tipo_rol,PDO::PARAM_STR);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
