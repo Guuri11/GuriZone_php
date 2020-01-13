@@ -184,8 +184,9 @@ class ProductoController extends AbstractController
                 'errores'=>$errores
             ]);
         } else{
-            global $route;
-            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            global $request;
+            $errorController = new ErrorController($this->di, $request);
+            return $errorController->notFound();
         }
     }
 

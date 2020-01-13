@@ -171,8 +171,9 @@ class UsuarioController extends AbstractController
                 'ultimo_producto'=>$ultimoProducto
             ]);
         } else{
-            global $route;
-            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            global $request;
+            $errorController = new ErrorController($this->di, $request);
+            return $errorController->notFound();
         }
     }
 
@@ -247,8 +248,9 @@ class UsuarioController extends AbstractController
             ];
             return $this->render('gestion_productos.twig',$parametros);
         } else{
-            global $route;
-            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            global $request;
+            $errorController = new ErrorController($this->di, $request);
+            return $errorController->notFound();
         }
     }
 
@@ -264,7 +266,6 @@ class UsuarioController extends AbstractController
         if ( $rol_usuario === 'admin'){
 
             // Filtro por rol
-
             // asignar valor a rol en caso de que no se especifique
             if (!$this->request->getParams()->has('rol') || empty($this->request->getParams()->get('rol')))
                 $this->request->getParams()->set('rol','todo');
@@ -296,8 +297,11 @@ class UsuarioController extends AbstractController
             ];
             return $this->render('gestion_usuarios.twig',$parametros);
         }else{
-            global $route;
-            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            //global $route;
+            //header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+            global $request;
+            $errorController = new ErrorController($this->di, $request);
+            return $errorController->notFound();
         }
 
 
