@@ -250,17 +250,27 @@ class UsuarioController extends AbstractController
     }
 
     public function gestionUsuarios(){
+
         // TODO
         global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $categoriaConsulta = new CategoriasModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
+        if ( $rol_usuario === 'admin'){
+
+
             $parametros = [
                 'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto
             ];
             return $this->render('gestion_usuarios.twig',$parametros);
+        }else{
+            global $route;
+            header("Location: ".$route->generateURL('Producto','index')); // redirigir al inicio
+        }
+
+
     }
 
 
