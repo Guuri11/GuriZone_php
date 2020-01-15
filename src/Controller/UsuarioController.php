@@ -298,8 +298,9 @@ class UsuarioController extends AbstractController
                 if ($rol_seleccionado[1] === '1' || $rol_seleccionado[1] === '2' || $rol_seleccionado[1] === '3' ||
                     $rol_seleccionado[1] === '4'){
                     $resultado = $usuarioConsulta->updateRol(intval($rol_seleccionado[1]),intval($rol_seleccionado[0]));
-                    if ($resultado)
-                        echo "JEJE :)";
+                    if ($resultado){
+                        $confirmacion = "Se ha actualizado el usuario con exito";
+                    }
                 }
 
             }
@@ -332,7 +333,8 @@ class UsuarioController extends AbstractController
                 'ultimo_producto'=>$ultimoProducto,
                 'paginacion'=>$paginacion,
                 'pagina'=>$pagina,
-                'rol'=>$rol
+                'rol'=>$rol,
+                'confirmacion'=>$confirmacion
             ];
             return $this->render('gestion_usuarios.twig',$parametros);
         }else{

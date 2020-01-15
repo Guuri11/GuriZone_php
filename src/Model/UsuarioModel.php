@@ -207,11 +207,13 @@ class UsuarioModel{
     }
 
     public function updateRol(int $rol,int $id):bool{
+        var_dump($rol);
+        var_dump($id);
         try{
-            $stmt = $this->db->prepare('UPDATE Usuario SET rol=:rol WHERE id_cli = :id_cli');
+            $stmt = $this->db->prepare('UPDATE Usuario SET rol=:rol WHERE id_cli=:id_cli');
             $datos = array(
-                ':id_cli'=>$rol,
-                ':rol'=>$id,
+                ':id_cli'=>$id,
+                ':rol'=>$rol,
             );
             $stmt->execute($datos);
             if ($stmt->rowCount()){
