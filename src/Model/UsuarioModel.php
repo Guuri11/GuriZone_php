@@ -206,4 +206,75 @@ class UsuarioModel{
         }
     }
 
+    public function updateRol(int $rol,int $id):bool{
+        try{
+            $stmt = $this->db->prepare('UPDATE Usuario SET rol=:rol WHERE id_cli = :id_cli');
+            $datos = array(
+                ':id_cli'=>$rol,
+                ':rol'=>$id,
+            );
+            $stmt->execute($datos);
+            if ($stmt->rowCount()){
+                return true;
+            }
+            else
+                return false;
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+
+    public function selectPedidos(int $id){
+        try{
+            $stmt = $this->db->prepare('SELECT * FROM Pedidos WHERE cliente = :id');
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+    public function selectProductos(int $id){
+        try{
+            $stmt = $this->db->prepare('SELECT * FROM Productos WHERE id_empleado = :id');
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+
+    public function delete(int $id):bool{
+        try{
+            $pedidos = $this->selectPedidos($id);
+            $productos = $this->selectProductos($id);
+            $this->db->beginTransaction();
+
+
+            if ($pedidos>0){
+                $stmt = $this->db->prepare('DELETE FROM Pedidos WHERE cliente = :id');
+                $stmt->bindParam(':id',$id);
+                $stmt->execute();
+            }
+            if ($productos>0){
+                $stmt = $this->db->prepare('DELETE FROM Productos WHERE id_empleado = :id');
+                $stmt->bindParam(':id',$id);
+                $stmt->execute();
+            }
+
+            $stmt = $this->db->prepare('DELETE FROM Usuario WHERE id_cli=:id');
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+            $this->db->commit();
+            if ($stmt->rowCount())
+                return true;
+            else
+                return false;
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
 }

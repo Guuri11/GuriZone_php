@@ -30,23 +30,30 @@
     "controller": "Usuario",
     "method": "gestionUsuarios"
   },
+  "dashboard/gestion/usuarios/borrar/:id": {
+    "controller": "Usuario",
+    "method": "borrarUsuario",
+    "params": {
+      "id": "number"
+    }
+  },
   "dashboard/gestion/productos": {
     "controller": "Usuario",
     "method": "gestionProductos"
   },
 
-  "dashboard/producto/crear": {
+  "dashboard/gestion/productos/crear": {
     "controller": "Producto",
     "method": "crearProducto"
   },
-  "dashboard/producto/editar/:id": {
+  "dashboard/gestion/productos/editar/:id": {
     "controller": "Producto",
     "method": "editarProducto",
     "params": {
       "id": "number"
     }
   },
-  "dashboard/producto/borrar/:id": {
+  "dashboard/gestion/productos/borrar/:id": {
     "controller": "Producto",
     "method": "borrarProducto",
     "params": {

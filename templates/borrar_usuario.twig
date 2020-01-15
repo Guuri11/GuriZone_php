@@ -2,12 +2,12 @@
 {% block body %}
     <div class="site-section">
         <div class="justify-content-center gurizone-login p-lg-4 m-lg-5 p-md-4 m-md-3 p-sm-4 m-sm-5">
-            <h3 class="text-center">¿ESTAS SEGURO DE QUE QUIERES BORRAR EL PRODUCTO?</h3>
-            <form action="{{ router.generateURL('Producto','borrarProducto',{id:id}) }}" method="post">
+            <h3 class="text-center">¿ESTAS SEGURO DE QUE QUIERES BORRAR EL USUARIO?</h3>
+            <form action="{{ router.generateURL('Usuario','borrarUsuario',{id:id}) }}" method="post">
                 <div class="mt-5 ml-5">
                     <input type="hidden" name="borrar" value="true">
                     <input type="submit" value="Si" class="btn btn-primary w-25">
-                    <a href="{{ router.generateURL('Usuario','gestion') }}"><button type="button" class="btn btn-danger w-25 float-right mr-5">No</button></a>
+                    <a href="{{ router.generateURL('Usuario','gestionUsuarios') }}"><button type="button" class="btn btn-danger w-25 float-right mr-5">No</button></a>
                 </div>
             </form>
         </div>

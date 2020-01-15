@@ -20,7 +20,7 @@
             <div class="table-responsive">
                 <table class="table table-hover table-sm table-responsive-sm table-responsive-md">
                     <thead class="thead-dark sticky-top">
-                    <tr>
+                    <tr class="text-center">
                         <th scope="col">#</th>
                         <th scope="col">ROL</th>
                         <th scope="col">NOMBRE</th>
@@ -34,14 +34,14 @@
                     <tbody>
                     {% for usuario in paginacion.getUsuarios %}
                         <tr>
-                            <td><a href="#">{{ usuario.getIdCli }}</a></td>
+                            <td class="text-center"><a href="#">{{ usuario.getIdCli }}</a></td>
                             <td>
                                 <form action="{{ router.generateURL('Usuario','gestionUsuarios') }}" method="post">
-                                    <select class="form-control">
-                                        <option>{{ usuario.getTipoRol }}</option>
-                                        <option>{{ usuario.getTipoRol }}</option>
-                                        <option>{{ usuario.getTipoRol }}</option>
-                                        <option>{{ usuario.getTipoRol }}</option>
+                                    <select class="form-control" form="formUsuario_{{ usuario.getIdCLi }}" name="rol_seleccionado_{{ usuario.getIdCLi }}">
+                                        <option value="{{ usuario.getIdCli }}-1" {{ usuario.getRol ==1 ? 'selected':'' }}>Anonimo</option>
+                                        <option value="{{ usuario.getIdCli }}-2" {{ usuario.getRol ==2 ? 'selected':'' }}>Administrador</option>
+                                        <option value="{{ usuario.getIdCli }}-3" {{ usuario.getRol ==3 ? 'selected':'' }}>Usuario normal</option>
+                                        <option value="{{ usuario.getIdCli }}-4" {{ usuario.getRol ==4 ? 'selected':'' }}>Empleado</option>
                                     </select>
                                 </form>
                             </td>
@@ -52,10 +52,12 @@
                             <td>{{ usuario.getFotoPerfil }}</td>
                             <td>
                                 <div>
-                                    <a href="#"><button type="button" class="btn btn-primary mb-3">Editar</button></a>
+                                    <form action="{{ router.generateURL('Usuario','gestionUsuarios') }}" method="post" id="formUsuario_{{ usuario.getIdCli }}">
+                                        <input type="submit" class="btn btn-primary" value="Actualizar">
+                                    </form>
                                 </div>
                                 <div>
-                                    <a href="#"><input type="button" class="btn btn-danger" value="Eliminar"></a>
+                                    <a href="{{ router.generateURL('Usuario','borrarUsuario',{id:usuario.getIdCli}) }}"><input type="button" class="btn btn-danger" value="Eliminar"></a>
                                 </div>
                             </td>
                         </tr>

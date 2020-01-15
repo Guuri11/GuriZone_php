@@ -125,7 +125,6 @@ class UsuarioController extends AbstractController
                 // Cambiar valor de la sesions
                 $rol_usuario = $user->getTipoRol();
                 $id_usuario = $user->getIdCli();
-                session_start();
                 $_SESSION['rol'] = $rol_usuario;
                 $_SESSION['id_user'] = $id_usuario;
                 $_SESSION['loggued'] = true;
@@ -152,10 +151,9 @@ class UsuarioController extends AbstractController
             echo $exception->getMessage();
         }
         // 2. Cambiar valor de la cookie
-        session_start();
         session_unset();
-        session_destroy();
         setcookie(session_name(),"",time()-3600);
+        session_destroy();
         global $route;
         header("Location: ".$route->generateURL('Producto','index')); // redirigir al perfil
 
@@ -287,6 +285,25 @@ class UsuarioController extends AbstractController
 
         if ( $rol_usuario === 'admin'){
 
+            // Si se ha solicitado cambiar el rol de los usuarios, comprobar y actualizar:
+            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+                // Obtener datos y sanearlos
+                $key = array_keys($_POST);
+                $rol_seleccionado = filter_input(INPUT_POST,$key[0],FILTER_SANITIZE_FULL_SPECIAL_CHARS,FILTER_SANITIZE_STRING);
+
+                // Separar el dato obtenido-> id_usuario - rol seleccionado
+                $rol_seleccionado = explode('-',$rol_seleccionado);
+
+                // Comprobar que el rol es valido, si lo es: realizazamos cambios
+                if ($rol_seleccionado[1] === '1' || $rol_seleccionado[1] === '2' || $rol_seleccionado[1] === '3' ||
+                    $rol_seleccionado[1] === '4'){
+                    $resultado = $usuarioConsulta->updateRol(intval($rol_seleccionado[1]),intval($rol_seleccionado[0]));
+                    if ($resultado)
+                        echo "JEJE :)";
+                }
+
+            }
+
             // Filtro por rol
             // asignar valor a rol en caso de que no se especifique
             if (!$this->request->getParams()->has('rol') || empty($this->request->getParams()->get('rol')))
@@ -329,6 +346,44 @@ class UsuarioController extends AbstractController
 
     }
 
+    public function borrarUsuario(int $id){
+        global $rol_usuario,$user;
+        $productosConsulta = new ProductoModel($this->db);
+        $categoriaConsulta = new CategoriasModel($this->db);
+        $usuarioConsulta = new UsuarioModel($this->db);
+        $rolConsulta = new RolesModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+
+        // Capa de proteccion para acceder al dashboard
+        if ( $rol_usuario === 'admin'){
+            // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
+            if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
+                $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);
+                $borrar = filter_var($this->request->getParams()->get('borrar'),FILTER_SANITIZE_STRING);
+                if ($borrar === 'true'){
+                    $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+                    // 2. Eliminar usuario
+                    $resultado = $usuarioConsulta->delete($id);
+                    global $route;
+                    if (!$resultado){
+                        global $request;
+                        $errorController = new ErrorController($this->di, $request);
+                        return $errorController->notFound();
+                    } else{
+                        header('Location: '.$route->generateURL('Usuario','gestionUsuarios'));
+                    }
+                }
+            }
+            return $this->render('borrar_usuario.twig',[
+                'usuario'=>$rol_usuario,
+                'ultimo_producto'=>$ultimoProducto,
+                'id'=>$id
+            ]);
+        }else{
+            global $route;
+            header("Location: " . $route->generateURL('Producto', 'index')); // redirigir al inicio
+        }
+    }
 
 
 

@@ -288,7 +288,7 @@ class ProductoController extends AbstractController
                     }
                 }
             }
-            return $this->render('borrar.twig',[
+            return $this->render('borrar_producto.twig',[
                 'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
                 'id'=>$id
