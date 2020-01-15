@@ -9,13 +9,22 @@
                         <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Filtrar por Categoria</button>
                         <div class="dropdown-menu fixed-top" aria-labelledby="dropdownMenuReference">
                             <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=todo&page=1">Todo</a>
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=clientes&page=1">Clientes</a>
-                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=empleados&page=1">Empleados</a>
+                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=usuario&page=1">Clientes</a>
+                            <a class="dropdown-item" href="{{ router.generateURL('Usuario','gestionUsuarios') }}?rol=empleado&page=1">Empleados</a>
                         </div>
                     </div>
                     <!--FIN FILTRO ROL-->
                 </div>
             </div>
+            {% if confirmacion != "" %}
+                <div>
+                    <h3 class="text-success text-center">{{ confirmacion }}</h3>
+                </div>
+            {% elseif error != "" %}
+                <div>
+                    <h3 class="text-danger text-center">{{ error }}</h3>
+                </div>
+            {% endif %}
             <!--FILTRO TABLA PRODUCTOS-->
             <div class="table-responsive">
                 <table class="table table-hover table-sm table-responsive-sm table-responsive-md">

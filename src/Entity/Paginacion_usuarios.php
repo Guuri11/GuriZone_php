@@ -45,10 +45,10 @@ class Paginacion_usuarios
             case 'todo':
                 $rol = 0;
                 break;
-            case 'clientes':
+            case 'usuario':
                 $rol = 3;
                 break;
-            case 'empleados':
+            case 'empleado':
                 $rol = 4;
                 break;
             default:

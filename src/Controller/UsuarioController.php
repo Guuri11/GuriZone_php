@@ -282,6 +282,8 @@ class UsuarioController extends AbstractController
         $usuarioConsulta = new UsuarioModel($this->db);
         $rolConsulta = new RolesModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+        $confirmacion = "";
+        $error = "";
 
         if ( $rol_usuario === 'admin'){
 
@@ -301,7 +303,8 @@ class UsuarioController extends AbstractController
                     if ($resultado){
                         $confirmacion = "Se ha actualizado el usuario con exito";
                     }
-                }
+                }else
+                    $error = "Rol seleccionado no existente";
 
             }
 
@@ -324,9 +327,7 @@ class UsuarioController extends AbstractController
                 $this->request->getParams()->set('page','1');
 
             $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
-
             $paginacion = new Paginacion_usuarios(count($usuarios),5,intval($pagina),$usuarioConsulta);
-
 
             $parametros = [
                 'usuario'=>$rol_usuario,
@@ -334,7 +335,8 @@ class UsuarioController extends AbstractController
                 'paginacion'=>$paginacion,
                 'pagina'=>$pagina,
                 'rol'=>$rol,
-                'confirmacion'=>$confirmacion
+                'confirmacion'=>$confirmacion,
+                'error'=>$error
             ];
             return $this->render('gestion_usuarios.twig',$parametros);
         }else{
