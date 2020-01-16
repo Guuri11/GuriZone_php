@@ -219,8 +219,6 @@ class UsuarioController extends AbstractController
 
         // Capa de proteccion para acceder al dashboard
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
-            //TODO: el empleado solo puede gestionar los productos que el ha creado
-
             // Filtro por categoria
 
             // asignar valor a categoria en caso de que no se especifique
