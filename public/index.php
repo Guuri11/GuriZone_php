@@ -6,7 +6,17 @@ use App\DB;
 use App\Core\Request;
 use App\Core\Router;
 
+// Twitter API Prueba
+$consumer_key = '';
+$consumer_secret='';
+$access_token='';
+$access_token_secret='';
 
+require_once __DIR__ . '/../src/twitterapi/twitteroauth/autoload.php';
+
+//Conectar a la api
+$connection_tw = new \Abraham\TwitterOAuth\TwitterOAuth($consumer_key,$consumer_secret,$access_token,$access_token_secret);
+$tweet = $connection_tw->post('statuses/update',['status'=>'Hello Gurizone']);
 require __DIR__ . '/../config/bootstrap.php';
 $di = new \App\Utils\DependencyInjector();
 
