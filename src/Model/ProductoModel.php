@@ -43,7 +43,6 @@ class ProductoModel{
         try{
             $stmt = $this->db->query('SELECT * FROM Producto');
             $productos = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-
             return $productos;
         }catch (PDOException $exception){
             echo $exception->getMessage();
@@ -87,13 +86,16 @@ class ProductoModel{
      * @param Usuario $usuario
      * @return array
      */
-    public function getByEmpleado(Usuario $usuario):array {
+    public function getByEmpleado(int $id_empleado):array {
         try{
             $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_empleado = :id_empleado');
-            $stmt->bindParam(':id_empleado', $usuario->getIdCli(), PDO::PARAM_INT);
+            $stmt->bindParam(':id_empleado', $id_empleado, PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
-            return $stmt->fetch();
+            if ($stmt->rowCount()>0)
+                return $stmt->fetchAll();
+            else
+                return [0];
         }catch (PDOException $exception){
             echo $exception->getMessage();
         }
@@ -103,16 +105,24 @@ class ProductoModel{
      * @param int $category
      * @return array
      */
-    public function getByCategory(int $categoria,int $descatalogado=0):array {
+    public function getByCategory(int $categoria,int $descatalogado=0, int $id_empleado=0):array {
         try{
-            if ($descatalogado == 0)
+            if ($descatalogado == 0 && $id_empleado===0){
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod');
+
+            } elseif ($id_empleado !==0){
+                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod AND id_empleado=:id_empleado');
+                $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+            }
             else
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria_prod AND descatalogado=0');
             $stmt->bindParam('categoria_prod', $categoria, PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
-            return $stmt->fetchAll();
+            if ($stmt->rowCount()>0)
+                return $stmt->fetchAll();
+            else
+                return [0];
         }catch (PDOException $exception){
             echo $exception->getMessage();
         }
@@ -223,55 +233,90 @@ class ProductoModel{
      *
      * Podria haberlo hecho alguna especie switch teniendo en cuenta dos el valor de 2 variables?
      */
-    public function getProdsTienda(int $inicio, int  $final, string $busqueda, int $categoria = 0, array $fechas=[], int $descatalogado=0):array {
+    public function getProdsTienda(int $inicio, int  $final, string $busqueda, int $categoria = 0, array $fechas=[], int $descatalogado=0,int $id_empleado=0):array {
         try{
-            /**@CASO_1: Buscar por categoria solo **/
-            if($categoria !=0 && empty($fechas)){
-                if ($descatalogado==0)
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria LIMIT :inicio , :final');
-                else
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND categoria_prod = :categoria LIMIT :inicio , :final');
-                $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
-                $stmt->bindParam(':final',$final,PDO::PARAM_INT);
-                $stmt->bindParam(':categoria',$categoria,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
+            /** @CONTROL_USUARIO **/
+            if ($id_empleado===0){
+                /**@CASO_1: Buscar por categoria solo **/
+                if($categoria !=0 && empty($fechas)){
+                    if ($descatalogado==0)
+                        $stmt = $this->db->prepare('SELECT * FROM Producto WHERE categoria_prod = :categoria LIMIT :inicio , :final');
+                    else
+                        $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND categoria_prod = :categoria LIMIT :inicio , :final');
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->bindParam(':categoria',$categoria,PDO::PARAM_INT);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
 
-                /**@CASO_2: Buscar por fecha **/
-            }elseif ($categoria == 0 && !empty($fechas)){
-                if($descatalogado==0)
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE fecha_salida BETWEEN :fecha_inicial AND :fecha_final LIMIT :inicio , :final');
-                else
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final LIMIT :inicio , :final');
-                $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
-                $stmt->bindParam(':final',$final,PDO::PARAM_INT);
-                $stmt->bindParam(':fecha_inicial', $fechas['fecha_inicial']);
-                $stmt->bindParam(':fecha_final', $fechas['fecha_final']);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
+                    /**@CASO_2: Buscar por fecha **/
+                }elseif ($categoria == 0 && !empty($fechas)){
+                    if($descatalogado==0)
+                        $stmt = $this->db->prepare('SELECT * FROM Producto WHERE fecha_salida BETWEEN :fecha_inicial AND :fecha_final LIMIT :inicio , :final');
+                    else
+                        $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final LIMIT :inicio , :final');
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_inicial', $fechas['fecha_inicial']);
+                    $stmt->bindParam(':fecha_final', $fechas['fecha_final']);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
 
-                /**@CASO_3: Buscar por la barra de busqueda **/
-            }elseif ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
-                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda2 LIMIT :inicio , :final');
-                $stmt->bindValue(":busqueda","%$busqueda%",PDO::PARAM_STR);
-                $stmt->bindValue(":busqueda2","%$busqueda%",PDO::PARAM_STR);
-                $stmt->bindValue(":inicio",$inicio,PDO::PARAM_INT);
-                $stmt->bindValue(":final",$final,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
+                    /**@CASO_3: Buscar por la barra de busqueda **/
+                }elseif ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('search',$_GET)){
+                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 AND modelo_prod LIKE :busqueda OR marca_prod LIKE :busqueda2 LIMIT :inicio , :final');
+                    $stmt->bindValue(":busqueda","%$busqueda%",PDO::PARAM_STR);
+                    $stmt->bindValue(":busqueda2","%$busqueda%",PDO::PARAM_STR);
+                    $stmt->bindValue(":inicio",$inicio,PDO::PARAM_INT);
+                    $stmt->bindValue(":final",$final,PDO::PARAM_INT);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                }else{
+                    /**@CASO_4: Sacar todos los productos **/
+                    if ($descatalogado==0)
+                        $stmt = $this->db->prepare('SELECT * FROM Producto LIMIT :inicio , :final');
+                    else
+                        $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 LIMIT :inicio , :final');
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+
+                }
+                return $stmt->fetchAll();
             }else{
-                /**@CASO_4: Sacar todos los productos **/
-                if ($descatalogado==0)
-                    $stmt = $this->db->prepare('SELECT * FROM Producto LIMIT :inicio , :final');
-                else
-                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE descatalogado=0 LIMIT :inicio , :final');
-                $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
-                $stmt->bindParam(':final',$final,PDO::PARAM_INT);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
+                /**@CASO_1: Buscar por categoria solo **/
+                if($categoria !=0 && empty($fechas)){
+                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_empleado=:id_empleado AND categoria_prod = :categoria LIMIT :inicio , :final');
+                    $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->bindParam(':categoria',$categoria,PDO::PARAM_INT);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
 
+                    /**@CASO_2: Buscar por fecha **/
+                }elseif ($categoria == 0 && !empty($fechas)){
+                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_empleado=:id_empleado AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final LIMIT :inicio , :final');
+                    $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_inicial', $fechas['fecha_inicial']);
+                    $stmt->bindParam(':fecha_final', $fechas['fecha_final']);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                }else{
+                    /**@CASO_4: Sacar todos los productos **/
+                    $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_empleado=:id_empleado LIMIT :inicio , :final');
+                    $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+                    $stmt->bindParam(':inicio',$inicio,PDO::PARAM_INT);
+                    $stmt->bindParam(':final',$final,PDO::PARAM_INT);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+
+                }
+                return $stmt->fetchAll();
             }
-            return $stmt->fetchAll();
         }catch (PDOException $exception){
             echo $exception->getMessage();
         }
@@ -312,31 +357,61 @@ class ProductoModel{
      * @param int $descatalogado
      * @return array
      */
-    public function getPorDosFechas(string $fecha_inicial,string $fecha_final,int $categoria=0,int $descatalogado=0):array {
+    public function getPorDosFechas(string $fecha_inicial,string $fecha_final,int $categoria=0,int $descatalogado=0,$id_empleado=0):array {
         try{
-            // EN EL CASO DE QUE NO SE ESPECIFIQUE LA CATEGORIA NI SE FILTRE POR FECHA
-            if ($categoria == 0 && empty($fechas)){
-                if ($descatalogado == 0)
-                    $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
-                else
-                    $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
-                $stmt->bindParam(':fecha_inicial', $fecha_inicial);
-                $stmt->bindParam(':fecha_final', $fecha_final);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
-                return $stmt->fetchAll();
+            // Control del rol del usuario
+            if ($id_empleado ===0){
+                // EN EL CASO DE QUE NO SE ESPECIFIQUE LA CATEGORIA NI SE FILTRE POR FECHA
+                if ($categoria == 0 && empty($fechas)){
+                    if ($descatalogado == 0)
+                        $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
+                    else
+                        $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
+                    $stmt->bindParam(':fecha_inicial', $fecha_inicial);
+                    $stmt->bindParam(':fecha_final', $fecha_final);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                    return $stmt->fetchAll();
+                }else{
+                    // SI SE ESPECIFICA LA CATEGORIA, FILTRAR PRODUCTOS DE LOS PRODUCTOS DE DICHA CATEGORIA ENTRE LAS FECHAS INDICADAS
+                    if ($descatalogado==0)
+                        $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
+                    else
+                        $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE descatalogado=0 categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
+                    $stmt->bindParam(':categoria_prod',$categoria,PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_inicial', $fecha_inicial,PDO::PARAM_STR);
+                    $stmt->bindParam(':fecha_final', $fecha_final,PDO::PARAM_STR);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                    return $stmt->fetchAll();
+                }
             }else{
-                // SI SE ESPECIFICA LA CATEGORIA, FILTRAR PRODUCTOS DE LOS PRODUCTOS DE DICHA CATEGORIA ENTRE LAS FECHAS INDICADAS
-                if ($descatalogado==0)
-                    $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
-                else
-                    $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE descatalogado=0 categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
-                $stmt->bindParam(':categoria_prod',$categoria,PDO::PARAM_INT);
-                $stmt->bindParam(':fecha_inicial', $fecha_inicial,PDO::PARAM_STR);
-                $stmt->bindParam(':fecha_final', $fecha_final,PDO::PARAM_STR);
-                $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
-                $stmt->execute();
-                return $stmt->fetchAll();
+                // EN EL CASO DE QUE NO SE ESPECIFIQUE LA CATEGORIA NI SE FILTRE POR FECHA
+                if ($categoria == 0 && empty($fechas)){
+                    if ($descatalogado == 0)
+                        $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE id_empleado=:id_empleado AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
+                    else
+                        $stmt = $this->db->prepare("SELECT * FROM `Producto` WHERE id_empleado=:id_empleado AND descatalogado=0 AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final");
+                    $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_inicial', $fecha_inicial);
+                    $stmt->bindParam(':fecha_final', $fecha_final);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                    return $stmt->fetchAll();
+                }else{
+                    // SI SE ESPECIFICA LA CATEGORIA, FILTRAR PRODUCTOS DE LOS PRODUCTOS DE DICHA CATEGORIA ENTRE LAS FECHAS INDICADAS
+                    if ($descatalogado==0)
+                        $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE id_empleado=:id_empleado AND categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
+                    else
+                        $stmt = $this->db->prepare('SELECT * FROM `Producto` WHERE id_empleado=:id_empleado AND  descatalogado=0 categoria_prod = :categoria_prod AND fecha_salida BETWEEN :fecha_inicial AND :fecha_final');
+                    $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+                    $stmt->bindParam(':categoria_prod',$categoria,PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_inicial', $fecha_inicial,PDO::PARAM_STR);
+                    $stmt->bindParam(':fecha_final', $fecha_final,PDO::PARAM_STR);
+                    $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+                    $stmt->execute();
+                    return $stmt->fetchAll();
+                }
             }
         }catch (PDOException $exception){
             echo $exception->getMessage();

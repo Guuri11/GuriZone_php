@@ -27,6 +27,14 @@
                     <div class="container">
                         <a href="#" class="btn btn-primary">Editar perfil</a>
                     </div>
+                    {% if usuario == 'empleado' %}
+                    <div class="container mt-3">
+                        <a href="{{ router.generateURL('Producto','crearProducto') }}" class="btn btn-primary">Crear producto</a>
+                    </div>
+                    <div class="container mt-3">
+                        <a href="{{ router.generateURL('Usuario','gestionProductos') }}" class="btn btn-primary">Gestionar productos</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

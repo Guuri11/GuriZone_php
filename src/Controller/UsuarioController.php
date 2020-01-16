@@ -229,12 +229,17 @@ class UsuarioController extends AbstractController
             $categoria = trim(filter_var($this->request->getParams()->get('categoria'),FILTER_SANITIZE_STRING));
 
 
-            // Obtener todos los productos o los de la categoria especificada
-            if ($categoria == 'todo')
+            // Obtener todos los productos o los de la categoria especificada (control del usuario que entra)
+            if ($categoria === 'todo' && $rol_usuario === 'admin')
                 $productos = $productosConsulta->getAll();
-            else{
+            elseif ($categoria === 'todo' && $rol_usuario === 'empleado'){
+                $productos = $productosConsulta->getByEmpleado($user->getIdCli());
+            } elseif ($categoria !=='todo' && $rol_usuario==='admin'){
                 $categoria_tipo = $categoriaConsulta->getByTipoCat($categoria);
                 $productos = $productosConsulta->getByCategory($categoria_tipo->getIdCat());
+            }else{
+                $categoria_tipo = $categoriaConsulta->getByTipoCat($categoria);
+                $productos = $productosConsulta->getByCategory($categoria_tipo->getIdCat(),0,$user->getIdCli());
             }
 
             // Filtro por fecha
@@ -244,8 +249,13 @@ class UsuarioController extends AbstractController
                 $fecha_final = filter_var($this->request->getParams()->get('fecha_final'),FILTER_SANITIZE_STRING);
 
                 // Obtener productos segun la categoria en las fechas marcadas
-                $categoria_tipo = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
-                $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria_tipo->getIdCat());
+                if ($rol_usuario==='admin'){
+                    $categoria_tipo = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                    $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria_tipo->getIdCat());
+                }else{
+                    $categoria_tipo = $categoriaConsulta->getByTipoCat(ucfirst($categoria));
+                    $productos = $productosConsulta->getPorDosFechas($fecha_inicial, $fecha_final, $categoria_tipo->getIdCat(),$user->getIdCli());
+                }
             }
 
             // Si la pagina introducida es menor de 1 o no existe poner la pagina 1
@@ -254,8 +264,10 @@ class UsuarioController extends AbstractController
 
             $pagina = filter_var($this->request->getParams()->get('page'),FILTER_VALIDATE_INT);
 
-            $paginacion = new Paginacion_productos(count($productos),10,$pagina,$productosConsulta,"",0);
-
+            if ($rol_usuario==='admin')
+                $paginacion = new Paginacion_productos(count($productos),10,$pagina,$productosConsulta,"",0);
+            else
+                $paginacion = new Paginacion_productos(count($productos),10,$pagina,$productosConsulta,"",0,$user->getIdCli());
 
             $parametros = [
                 'usuario'=>$rol_usuario,
