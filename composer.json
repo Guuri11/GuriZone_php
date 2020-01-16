@@ -1,8 +1,9 @@
 {
     "require": {
         "monolog/monolog": "^2.0",
-        "twig/twig": "^3.0",
       "ext-pdo": "*",
+        "twig/twig": "^2.0.0",
+        "twig/extensions": "^1.5",
       "ext-http": "*"
     },
     "autoload":{

@@ -31,20 +31,27 @@ class ProductoController extends AbstractController
     }
 
     public function mostrarProducto($id){
-        global $rol_usuario;
+        global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+
+        // variable que indica si el empleado ha creado el producto seleccionado, para mostrar o no el boton de editarlo
+        $producto_de_empleado = false;
+
         // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
         if ($id>$ultimoProducto->getIdProd() || $id<1){
             header('Location: /GuriZone/');
         }else
             $id = filter_var($id,FILTER_VALIDATE_INT);
         $productoSeleccionado = $productosConsulta->getById(intval($id));
+        if ($productoSeleccionado->getIdEmpleado()===$user->getIdCli())
+            $producto_de_empleado = true;
 
         return $this->render('producto.twig',[
             'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
-            'producto'=>$productoSeleccionado
+            'producto'=>$productoSeleccionado,
+            'producto_de_empleado'=>$producto_de_empleado
         ]);
 
     }
@@ -199,15 +206,24 @@ class ProductoController extends AbstractController
 
         // Capa de proteccion para acceder al dashboard
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado') {
-
-            // TODO: si entra el empleado puede editar solo los productos que el ha creado
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if ($id > $ultimoProducto->getIdProd() || $id < 1) {
                 global $route;
                 header('Location: ' . $route->generateURL('Producto', 'index'));
             }
             try {
-                $productoSeleccionado = $productosConsulta->getById(intval($id));
+                // Si el empleado es quien solicita editar un producto
+                if ($rol_usuario === 'empleado'){
+                    // Obtiene el producto comprobando de que sea el creador de dicho producto, en caso de que no
+                    // se lanzara un error en el producto solicitado, por no tener permiso de editar dicho producto
+                    $productoSeleccionado = $productosConsulta->getById(intval($id),0,$user->getIdCli());
+                    if (!$productoSeleccionado){
+                        global $request;
+                        $errorController = new ErrorController($this->di, $request);
+                        return $errorController->notFound();
+                    }
+                }else
+                    $productoSeleccionado = $productosConsulta->getById(intval($id));
             } catch (Exception $exception) {
                 global $request;
                 $errorController = new ErrorController($this->di, $request);
@@ -261,14 +277,12 @@ class ProductoController extends AbstractController
 
     public function borrarProducto($id){
 
-        global $rol_usuario, $cookieName;
+        global $rol_usuario, $cookieName,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         // Capa de proteccion para acceder al dashboard
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
-            //TODO: controlar que el empleado solo pueda borrar los productos que el ha creado
-
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
                 $borrar = filter_input(INPUT_POST,'borrar',FILTER_SANITIZE_STRING);
@@ -276,7 +290,18 @@ class ProductoController extends AbstractController
                 if ($borrar === 'true'){
                     $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
                     // 2. Eliminar producto
-                    $resultado = $productosConsulta->delete(intval($id));
+                    // si el empleado solicita borrar un producto hace la consulta a la base de datos
+                    // en caso de no haber creado el producto la funcion devolvera False y recibira un error
+                    // en la solicitud del recurso
+                    if ($rol_usuario === 'empleado'){
+                        $resultado = $productosConsulta->delete(intval($id),$user->getIdCli());
+                        if (!$resultado){
+                            global $request;
+                            $errorController = new ErrorController($this->di, $request);
+                            return $errorController->notFound();
+                        }
+                    }else
+                        $resultado = $productosConsulta->delete(intval($id));
                     global $route;
                     if (!$resultado){
                         global $request;

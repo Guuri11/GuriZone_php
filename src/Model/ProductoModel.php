@@ -65,18 +65,25 @@ class ProductoModel{
 
     /**
      * @param int $id
-     * @return Producto
+     * @return bool
      */
-    public function getById(int $id,int $descatalogado=0):Producto {
+    public function getById(int $id,int $descatalogado=0,$id_empleado=0) {
         try{
-            if ($descatalogado==0)
+            if ($descatalogado==0 && $id_empleado === 0)
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_prod = :id');
+            elseif ($descatalogado==0 && $id_empleado!==0){
+                $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_prod = :id AND id_empleado = :id_empleado');
+                $stmt->bindParam(':id_empleado', $id_empleado, PDO::PARAM_INT);
+            }
             else
                 $stmt = $this->db->prepare('SELECT * FROM Producto WHERE id_prod = :id AND descatalogado = 0');
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
             $stmt->execute();
-            return $stmt->fetch();
+            if ($stmt->rowCount()>0)
+                return $stmt->fetch();
+            else
+                return false;
         }catch (PDOException $exception){
             echo $exception->getMessage();
         }
@@ -474,7 +481,7 @@ class ProductoModel{
      * @param $id
      * @return bool
      */
-    public function delete(int $id):bool{
+    public function delete(int $id,int $id_empleado=0):bool{
         $id_prod = $id;
         try{
             $pedido = $this->selectPedido($id_prod);
@@ -485,8 +492,14 @@ class ProductoModel{
                 $stmt->bindParam(':id',$id_prod);
                 $stmt->execute();
             }
-            $stmt = $this->db->prepare('DELETE FROM Producto WHERE id_prod=:id');
-            $stmt->bindParam(':id',$id_prod);
+            if ($id_empleado === 0){
+                $stmt = $this->db->prepare('DELETE FROM Producto WHERE id_prod=:id');
+                $stmt->bindParam(':id',$id_prod);
+            }else{
+                $stmt = $this->db->prepare('DELETE FROM Producto WHERE id_prod=:id AND id_empleado=:id_empleado');
+                $stmt->bindParam(':id',$id_prod,PDO::PARAM_INT);
+                $stmt->bindParam('id_empleado', $id_empleado, PDO::PARAM_INT);
+            }
             $stmt->execute();
             $this->db->commit();
             if ($stmt->rowCount())
