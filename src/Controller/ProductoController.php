@@ -181,6 +181,26 @@ class ProductoController extends AbstractController
                         $resultado = $productosConsulta->insert($producto);
                         if (!$resultado)
                             $errores[]="Error al crear producto";
+                        else{
+                            // Conectar app con la cuenta de tw y publicar el producto subido
+                            global $consumer_key,$consumer_secret,$access_token,$access_token_secret;
+
+                            // Instanciar objeto Twitter
+                            $connection_tw = new \Abraham\TwitterOAuth\TwitterOAuth($consumer_key,$consumer_secret,$access_token,$access_token_secret);
+                            // Preparar para twittear foto del producto
+                            $tweet_foto = $connection_tw->upload('media/upload',['media'=>'.'.$producto->getFotoProd()]);
+                            // Texto del tweet
+                            $texto_tweet = 'Ojo! Nuevo producto en venta, os traemos las ';
+                            $texto_tweet .= $producto->getModeloProd().'. Entra a nuestra web y échales un vistazo:';
+                            $texto_tweet .= 'http://gurizone.local';
+
+                            $parametros_tweet = [
+                                'status'=>$texto_tweet,
+                                'media_ids'=>[$tweet_foto->media_id_string]
+                            ];
+                            // Subir Tweet
+                            $tweet = $connection_tw->post('statuses/update',$parametros_tweet);
+                        }
                     }
                 }
             }
