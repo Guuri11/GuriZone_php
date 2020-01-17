@@ -7,17 +7,18 @@ use App\Core\Request;
 use App\Core\Router;
 
 // Twitter API Prueba
-$consumer_key = '';
-$consumer_secret='';
-$access_token='';
-$access_token_secret='';
+//$consumer_key = '';
+//$consumer_secret='';
+//$access_token='';
+//$access_token_secret='';
 
-require_once __DIR__ . '/../src/twitterapi/twitteroauth/autoload.php';
+//require_once __DIR__ . '/../src/twitterapi/twitteroauth/autoload.php';
 
 //Conectar a la api
-$connection_tw = new \Abraham\TwitterOAuth\TwitterOAuth($consumer_key,$consumer_secret,$access_token,$access_token_secret);
-$tweet = $connection_tw->post('statuses/update',['status'=>'Hello Gurizone']);
+//$connection_tw = new \Abraham\TwitterOAuth\TwitterOAuth($consumer_key,$consumer_secret,$access_token,$access_token_secret);
+//$tweet = $connection_tw->post('statuses/update',['status'=>'Hello Gurizone']);
 require __DIR__ . '/../config/bootstrap.php';
+
 $di = new \App\Utils\DependencyInjector();
 
 /* @Gestion_usuario */
@@ -54,6 +55,8 @@ $twig = new \Twig\Environment($loader);
 //Afegim una instancia de router a la plantilla
 // la utilitzarem en les plantillas per a generar URL
 $twig->addGlobal('router',new Router(new \App\Utils\DependencyInjector()));
+$twig->addExtension(new Twig_Extensions_Extension_I18n());
+
 
 //incloem al contenidor de serveis
 $di->set('Twig',$twig);
@@ -73,6 +76,26 @@ try{
 }catch (PDOException $exception){
     echo $exception->getMessage();
 }
+
+$lang="en_GB";
+// here we define the global system locale given the found language
+putenv("LANGUAGE=$lang");
+
+// this might be useful for date functions (LC_TIME) or money formatting (LC_MONETARY), for instance
+setlocale(LC_ALL, $lang);
+
+// this will make Gettext look for ../locales/<lang>/LC_MESSAGES/main.mo
+bindtextdomain('main', __DIR__ . '/../src/locales');
+
+// indicates in what encoding the file should be read
+bind_textdomain_codeset('main', 'UTF-8');
+
+// here we indicate the default domain the gettext() calls will respond to
+textdomain('main');
+
+// this would look for the string in forum.mo instead of main.mo
+// echo dgettext('forum', 'Welcome back!');
+
 
 $route = new Router($di);
 echo $route->route($request);

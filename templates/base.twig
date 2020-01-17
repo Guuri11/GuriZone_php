@@ -33,7 +33,7 @@
                     <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
                         <form action="{{ router.generateURL('Producto','catalogo') }}" method="get" class="site-block-top-search">
                             <button type="submit" class="icon icon-search mr-5 bg-white"></button>
-                            <input type="text" class="form-control border-0" name="search" placeholder="Search">
+                            <input type="text" class="form-control border-0" name="search" placeholder="{% trans "BUSCAR" %}">
                         </form>
                     </div>
 
@@ -46,18 +46,18 @@
                         <div class="site-top-icons">
                             <ul>
                                 {% if usuario == 'anonimo' %} {# SI EL USER ES ANONIMO: OPCION REGISTRARSE #}
-                                <li><a href="{{ router.generateURL('Usuario','registrarse') }}"><span class="icon icon-person_add "></span> REGISTRARSE</a>
-                                <li><a href="{{ router.generateURL('Usuario','login') }}"><span class="icon icon-sign-in"></span> INICIAR SESIÓN</a></li>
+                                <li><a href="{{ router.generateURL('Usuario','registrarse') }}"><span class="icon icon-person_add "></span> {% trans "REGISTRARSE" %}</a>
+                                <li><a href="{{ router.generateURL('Usuario','login') }}"><span class="icon icon-sign-in"></span> {% trans "INICIAR SESIÓN" %}</a></li>
                                 {% elseif usuario == 'usuario' or usuario == 'empleado' %} {# SI EL USUARIO ES NORMAL: OPCION PERFIL Y LOGOUT #}
-                                <li><a href="{{ router.generateURL('Usuario','logout') }}"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
-                                <li><a href="{{ router.generateURL('Usuario','perfil') }}"><span class="icon icon-home"></span> MI PERFIL</a></li>
+                                <li><a href="{{ router.generateURL('Usuario','logout') }}"><span class="icon icon-sign-out"></span> {% trans "CERRAR SESIÓN" %}</a></li>
+                                <li><a href="{{ router.generateURL('Usuario','perfil') }}"><span class="icon icon-home"></span> {% trans "MI PERFIL" %}</a></li>
                                 {% elseif usuario == 'admin' %} {# SI EL USUARIO ES ADMIN: OPCION DASHBOARD Y LOGOUT #}
-                                <li><a href="{{ router.generateURL('Usuario','logout') }}"><span class="icon icon-sign-out"></span> CERRAR SESIÓN</a></li>
-                                <li><a href="{{ router.generateURL('Usuario','dashboard') }}"><span class="icon icon-dashboard"></span> ADMIN</a></li>
+                                <li><a href="{{ router.generateURL('Usuario','logout') }}"><span class="icon icon-sign-out"></span> {% trans "CERRAR SESIÓN" %}</a></li>
+                                <li><a href="{{ router.generateURL('Usuario','dashboard') }}"><span class="icon icon-dashboard"></span> {% trans "ADMIN" %}</a></li>
                                 {% endif %}
                                 <li>
                                     <a href="#" class="site-cart">
-                                        <span class="icon icon-shopping_cart"></span> CARRITO
+                                        <span class="icon icon-shopping_cart"></span> {% trans "CARRITO" %}
                                     </a>
                                 </li>
                                 <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -71,17 +71,17 @@
         <nav class="site-navigation text-right text-md-center" role="navigation">
             <div class="container">
                 <ul class="site-menu js-clone-nav d-none d-md-block">
-                    <li><a href="{{ router.generateURL('Producto','index') }}">Inicio</a></li>
+                    <li><a href="{{ router.generateURL('Producto','index') }}">{% trans "INICIO" %}</a></li>
                     <li class="has-children">
-                        <a href="{{ router.generateURL('Producto','catalogo') }}">Tienda</a>
+                        <a href="{{ router.generateURL('Producto','catalogo') }}">{% trans "TIENDA" %}</a>
                         <ul class="dropdown">
-                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=accesorios&page=1">Accesorios</a></li>
-                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=ropa&page=1">Ropa</a></li>
-                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=zapatillas&page=1">Zapatillas</a></li>
+                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=accesorios&page=1">{% trans "ACCESORIOS" %}</a></li>
+                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=ropa&page=1">{% trans "ROPA" %}</a></li>
+                            <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=zapatillas&page=1">{% trans "ZAPATILLAS" %}</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Sobre Nosotros</a></li>
-                    <li><a href="{{ router.generateURL('Usuario','contacto') }}">Contáctanos</a></li>
+                    <li><a href="{{ router.generateURL('Usuario','contacto') }}">{% trans "CONTACTANOS" %}</a></li>
                 </ul>
             </div>
         </nav>
@@ -97,26 +97,25 @@
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="row">
                         <div class="col-md-12">
-                            <h3 class="footer-heading mb-4">Navigations</h3>
+                            <h3 class="footer-heading mb-4">{% trans "Navegacion" %}</h3>
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <ul class="list-unstyled">
-                                <li><a href="#">Sell online</a></li>
-                                <li><a href="#">Features</a></li>
-                                <li><a href="#">Shopping cart</a></li>
-                                <li><a href="#">Store builder</a></li>
+                                <li><a href="#">{% trans "Ventas online" %}</a></li>
+                                <li><a href="#">{% trans "Caracteristicas" %}</a></li>
+                                <li><a href="#">{% trans "Carrito" %}</a></li>
                             </ul>
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <ul class="list-unstyled">
-                                <li><a href="#">Mobile commerce</a></li>
-                                <li><a href="#">Dropshipping</a></li>
-                                <li><a href="#">Website development</a></li>
+                                <li><a href="#">{% trans "Comercio movil" %}</a></li>
+                                <li><a href="#">{% trans "Envios" %}</a></li>
+                                <li><a href="#">{% trans "Desarrollo Web" %}</a></li>
                             </ul>
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <ul class="list-unstyled">
-                                <li><a href="#">Point of sale</a></li>
+                                <li><a href="#">{% trans "Punto de venta" %}</a></li>
                                 <li><a href="#">Hardware</a></li>
                                 <li><a href="#">Software</a></li>
                             </ul>
@@ -127,26 +126,26 @@
                     <h3 class="footer-heading mb-4">Promo</h3>
                     <a href="{{ router.generateURL('Producto','mostrarProducto',{id:ultimo_producto.getIdProd()}) }}" class="block-6">
                         <img src="/../{{ ultimo_producto.getFotoProd() }}" alt="Image placeholder" class="img-fluid rounded mb-4">
-                        <h3 class="font-weight-light  mb-0">Nuevos productos!</h3>
+                        <h3 class="font-weight-light  mb-0">{% trans "Nuevo producto!" %}</h3>
                         <p>{{ ultimo_producto.getModeloProd() }}</p>
                     </a>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="block-5 mb-5">
-                        <h3 class="footer-heading mb-4">Contact Info</h3>
+                        <h3 class="footer-heading mb-4">{% trans "Informacion de contacto" %}</h3>
                         <ul class="list-unstyled">
                             <li class="address">C/Falsa 123, Ondara, Alicante, España</li>
                             <li class="phone"><a href="tel://34902202122">+34 902 20 21 22</a></li>
-                            <li class="email">contact@...com</li>
+                            <li class="email">contact@gurizone.com</li>
                         </ul>
                     </div>
 
                     <div class="block-7">
                         <form action="#" method="post">
-                            <label for="email_subscribe" class="footer-heading">Subscribe</label>
+                            <label for="email_subscribe" class="footer-heading">{% trans "Subscribete" %}</label>
                             <div class="form-group">
                                 <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
-                                <input type="submit" class="btn btn-sm btn-primary" value="Send">
+                                <input type="submit" class="btn btn-sm btn-primary" value="{% trans "Enviar" %}">
                             </div>
                         </form>
                     </div>
