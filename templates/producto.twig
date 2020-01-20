@@ -18,6 +18,7 @@
                         {% if usuario=='admin' and producto_de_empleado == true %}
                         <p><a href="{{ router.generateURL('Producto','editarProducto',{id:producto.getIdProd()}) }}" class="buy-now btn btn-sm btn-primary">EDITAR</a></p>
                         {% endif %}
+                        <p><a href="?pdf={{ producto.getIdProd }}" class="buy-now btn btn-sm btn-primary">VER EN PDF</a></p>
                     </div>
                 </div>
             </div>

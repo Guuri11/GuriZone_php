@@ -6,6 +6,7 @@ use App\DB;
 use App\Core\Request;
 use App\Core\Router;
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Dompdf\Dompdf;
 
 require __DIR__ . '/../config/bootstrap.php';
 

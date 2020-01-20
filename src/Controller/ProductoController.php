@@ -7,6 +7,8 @@ use App\Entity\Paginacion_productos;
 use App\Model\CategoriasModel;
 use App\Model\ProductoModel;
 use App\Entity\Producto;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use ErrorException;
 use http\Exception;
 
@@ -46,6 +48,25 @@ class ProductoController extends AbstractController
         $productoSeleccionado = $productosConsulta->getById(intval($id));
         if ($productoSeleccionado->getIdEmpleado()===$user->getIdCli())
             $producto_de_empleado = true;
+
+        if ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('pdf',$_GET)){
+            $valor_pdf = filter_input(INPUT_GET,'pdf',FILTER_SANITIZE_FULL_SPECIAL_CHARS,FILTER_SANITIZE_STRING);
+            $valor_pdf = intval($valor_pdf);
+            if ($valor_pdf === $productoSeleccionado->getIdProd()){
+                $options = new Options();
+                $options->setIsRemoteEnabled(true);
+                $options->setIsHtml5ParserEnabled(true);
+                $pdf = new Dompdf($options);
+
+                $pdf->loadHtml($this->render('producto_pdf.twig',['producto'=>$productoSeleccionado]));
+                $pdf->setPaper('A4',"portrait");
+                $pdf->render();
+
+                $nombre_pdf = strtolower($productoSeleccionado->getModeloProd()).'_gurizone.pdf';
+                $nombre_pdf = str_replace(' ','_',$nombre_pdf);
+                return $pdf->stream($nombre_pdf);
+            }
+        }
 
         return $this->render('producto.twig',[
             'usuario'=>$rol_usuario,

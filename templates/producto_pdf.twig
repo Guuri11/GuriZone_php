@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ producto.getModeloProd }} | PDF</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        body{
+            font-family: "Liberation Sans", serif;
+        }
+        h1{
+            text-align: center;
+        }
+        .container {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 1140px;
+        }
+        @media (min-width: 576px) {
+            .container {
+                max-width: 540px; } }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px; } }
+        @media (min-width: 992px) {
+            .container {
+                max-width: 960px; } }
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1140px; } }
+        .w-25{
+            width: 25%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+    </style>
+</head>
+<body>
+<h1 class="text-center">{{ producto.getModeloProd }}</h1>
+
+<div class="container">
+    <div>
+        <img src="/opt/lampp/htdocs/GuriZone/public{{ producto.getFotoProd }}" alt="Image" class="w-25">
+    </div>
+    <div>{{ producto.getDescripcion }}</div>
+    <hr/>
+    <p>Precio: {{ producto.getPrecioUnidad }}</p>
+    <p>Fecha salida: {{ producto.getFechaSalida|date('Y-m-d') }}</p>
+</div>
+
+</body>
+</html>
