@@ -30,5 +30,26 @@ footer.guriFooter, header.guriHeader{
     cursor: pointer;
 }
 
+.container-header{
+    width:100%;
+    padding-right:15px;
+    padding-left:15px;
+    margin-right:auto;
+    margin-left:auto
+}
+@media (min-width:576px) {
+    .container-header{max-width:540px
+    }
+}@media (min-width:768px) {
+    .container-header{max-width:720px
+    }
+}@media (min-width:992px){
+    .container-header{max-width:960px}
+}@media (min-width:1200px){
+    .container-header{max-width:1425px}
+}
 
+.dropdown, .has-children, .dropdown-toggle{
+    outline: none;
+}
 

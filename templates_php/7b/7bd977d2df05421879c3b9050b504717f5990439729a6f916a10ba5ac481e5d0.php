@@ -64,10 +64,10 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
     <!--NAVBAR-->
     <header class=\"site-navbar\" role=\"banner\">
         <div class=\"site-navbar-top\">
-            <div class=\"container\">
+            <div class=\"container-header\">
                 <div class=\"row align-items-center\">
 
-                    <div class=\"col-6 col-md-4 order-2 order-md-1 site-search-icon text-left\">
+                    <div class=\"col-4 col-md-4 order-2 order-md-1 site-search-icon text-left\">
                         <form action=\"";
         // line 34
         echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 34), "html", null, true);
@@ -80,7 +80,7 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                         </form>
                     </div>
 
-                    <div class=\"col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center\">
+                    <div class=\"col-4 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center\">
                         <div >
                             <a href=\"";
         // line 42
@@ -88,9 +88,9 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
         echo "\" class=\"\"><img class=\"img-fluid gurilogo\" src=\"/../imgs/logo_black.png\" width=\"45%\"></a>
                         </div>
                     </div>
-                    <div class=\"col-6 col-md-4 order-3 order-md-3 text-right\">
+                    <div class=\"col-4 col-md-4 order-3 order-md-3 text-right\">
                         <div class=\"site-top-icons\">
-                            <ul>
+                            <ul class=\"site-menu\">
                                 ";
         // line 48
         if ((($context["usuario"] ?? null) == "anonimo")) {
@@ -150,11 +150,33 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
         // line 61
         echo "                                    </a>
                                 </li>
-                                <li class=\"d-inline-block d-md-none ml-md-0\"><a href=\"#\" class=\"site-menu-toggle js-menu-toggle\"><span class=\"icon-menu\"></span></a></li>
+                                <li>
+                                    <div class=\"dropdown\">
+                                        <a href=\"#\" class=\"site-cart dropdown-toggle\" data-toggle=\"dropdown\">
+                                            <span class=\"icon icon-language\"></span> ";
+        // line 66
+        echo gettext("IDIOMA");
+        // line 67
+        echo "                                        </a>
+                                        <div class=\"dropdown-menu\">
+                                            <a class=\"dropdown-item-text\" href=\"#\">";
+        // line 69
+        echo gettext("Castellano");
+        echo "</a>
+                                            <a class=\"dropdown-item-text\" href=\"#\">";
+        // line 70
+        echo gettext("Valenciano");
+        echo "</a>
+                                            <a class=\"dropdown-item-text\" href=\"#\">";
+        // line 71
+        echo gettext("Inglés");
+        echo "</a>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -162,56 +184,58 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
             <div class=\"container\">
                 <ul class=\"site-menu js-clone-nav d-none d-md-block\">
                     <li><a href=\"";
-        // line 74
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "index"], "method", false, false, false, 74), "html", null, true);
+        // line 84
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "index"], "method", false, false, false, 84), "html", null, true);
         echo "\">";
         echo gettext("INICIO");
         echo "</a></li>
                     <li class=\"has-children\">
                         <a href=\"";
-        // line 76
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 76), "html", null, true);
+        // line 86
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 86), "html", null, true);
         echo "\">";
         echo gettext("TIENDA");
         echo "</a>
                         <ul class=\"dropdown\">
                             <li><a href=\"";
-        // line 78
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 78), "html", null, true);
+        // line 88
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 88), "html", null, true);
         echo "?categoria=accesorios&page=1\">";
         echo gettext("ACCESORIOS");
         echo "</a></li>
                             <li><a href=\"";
-        // line 79
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 79), "html", null, true);
+        // line 89
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 89), "html", null, true);
         echo "?categoria=ropa&page=1\">";
         echo gettext("ROPA");
         echo "</a></li>
                             <li><a href=\"";
-        // line 80
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 80), "html", null, true);
+        // line 90
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "catalogo"], "method", false, false, false, 90), "html", null, true);
         echo "?categoria=zapatillas&page=1\">";
         echo gettext("ZAPATILLAS");
         echo "</a></li>
                         </ul>
                     </li>
-                    <li><a href=\"#\">Sobre Nosotros</a></li>
+                    <li><a href=\"#\">";
+        // line 93
+        echo gettext("SOBRE NOSOTROS");
+        echo "</a></li>
                     <li><a href=\"";
-        // line 84
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Usuario", 1 => "contacto"], "method", false, false, false, 84), "html", null, true);
+        // line 94
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Usuario", 1 => "contacto"], "method", false, false, false, 94), "html", null, true);
         echo "\">";
         echo gettext("CONTACTANOS");
         echo "</a></li>
                 </ul>
             </div>
         </nav>
-        </nav>
     </header>
     <!--FIN NAVBAR-->
         ";
-        // line 91
+        // line 100
         $this->displayBlock('body', $context, $blocks);
-        // line 93
+        // line 102
         echo "    <!--FOOTER-->
     <footer class=\"site-footer border-top guriFooter\">
         <div class=\"container\">
@@ -220,22 +244,22 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                     <div class=\"row\">
                         <div class=\"col-md-12\">
                             <h3 class=\"footer-heading mb-4\">";
-        // line 100
+        // line 109
         echo gettext("Navegacion");
         echo "</h3>
                         </div>
                         <div class=\"col-md-6 col-lg-4\">
                             <ul class=\"list-unstyled\">
                                 <li><a href=\"#\">";
-        // line 104
+        // line 113
         echo gettext("Ventas online");
         echo "</a></li>
                                 <li><a href=\"#\">";
-        // line 105
+        // line 114
         echo gettext("Caracteristicas");
         echo "</a></li>
                                 <li><a href=\"#\">";
-        // line 106
+        // line 115
         echo gettext("Carrito");
         echo "</a></li>
                             </ul>
@@ -243,15 +267,15 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                         <div class=\"col-md-6 col-lg-4\">
                             <ul class=\"list-unstyled\">
                                 <li><a href=\"#\">";
-        // line 111
+        // line 120
         echo gettext("Comercio movil");
         echo "</a></li>
                                 <li><a href=\"#\">";
-        // line 112
+        // line 121
         echo gettext("Envios");
         echo "</a></li>
                                 <li><a href=\"#\">";
-        // line 113
+        // line 122
         echo gettext("Desarrollo Web");
         echo "</a></li>
                             </ul>
@@ -259,7 +283,7 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                         <div class=\"col-md-6 col-lg-4\">
                             <ul class=\"list-unstyled\">
                                 <li><a href=\"#\">";
-        // line 118
+        // line 127
         echo gettext("Punto de venta");
         echo "</a></li>
                                 <li><a href=\"#\">Hardware</a></li>
@@ -271,27 +295,27 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                 <div class=\"col-md-6 col-lg-3 mb-4 mb-lg-0\">
                     <h3 class=\"footer-heading mb-4\">Promo</h3>
                     <a href=\"";
-        // line 127
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "mostrarProducto", 2 => ["id" => twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getIdProd", [], "method", false, false, false, 127)]], "method", false, false, false, 127), "html", null, true);
+        // line 136
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["router"] ?? null), "generateURL", [0 => "Producto", 1 => "mostrarProducto", 2 => ["id" => twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getIdProd", [], "method", false, false, false, 136)]], "method", false, false, false, 136), "html", null, true);
         echo "\" class=\"block-6\">
                         <img src=\"/../";
-        // line 128
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getFotoProd", [], "method", false, false, false, 128), "html", null, true);
+        // line 137
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getFotoProd", [], "method", false, false, false, 137), "html", null, true);
         echo "\" alt=\"Image placeholder\" class=\"img-fluid rounded mb-4\">
                         <h3 class=\"font-weight-light  mb-0\">";
-        // line 129
+        // line 138
         echo gettext("Nuevo producto!");
         echo "</h3>
                         <p>";
-        // line 130
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getModeloProd", [], "method", false, false, false, 130), "html", null, true);
+        // line 139
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["ultimo_producto"] ?? null), "getModeloProd", [], "method", false, false, false, 139), "html", null, true);
         echo "</p>
                     </a>
                 </div>
                 <div class=\"col-md-6 col-lg-3\">
                     <div class=\"block-5 mb-5\">
                         <h3 class=\"footer-heading mb-4\">";
-        // line 135
+        // line 144
         echo gettext("Informacion de contacto");
         echo "</h3>
                         <ul class=\"list-unstyled\">
@@ -304,13 +328,13 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
                     <div class=\"block-7\">
                         <form action=\"#\" method=\"post\">
                             <label for=\"email_subscribe\" class=\"footer-heading\">";
-        // line 145
+        // line 154
         echo gettext("Subscribete");
         echo "</label>
                             <div class=\"form-group\">
                                 <input type=\"text\" class=\"form-control py-4\" id=\"email_subscribe\" placeholder=\"Email\">
                                 <input type=\"submit\" class=\"btn btn-sm btn-primary\" value=\"";
-        // line 148
+        // line 157
         echo gettext("Enviar");
         echo "\">
                             </div>
@@ -345,11 +369,11 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
 </html>";
     }
 
-    // line 91
+    // line 100
     public function block_body($context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 92
+        // line 101
         echo "        ";
     }
 
@@ -365,7 +389,7 @@ class __TwigTemplate_45210f30168f8caae52ae80f319c8a61a21862a0b36362f3679a5097cc9
 
     public function getDebugInfo()
     {
-        return array (  353 => 92,  349 => 91,  314 => 148,  308 => 145,  295 => 135,  287 => 130,  283 => 129,  279 => 128,  275 => 127,  263 => 118,  255 => 113,  251 => 112,  247 => 111,  239 => 106,  235 => 105,  231 => 104,  224 => 100,  215 => 93,  213 => 91,  201 => 84,  192 => 80,  186 => 79,  180 => 78,  173 => 76,  166 => 74,  151 => 61,  149 => 60,  145 => 58,  138 => 56,  131 => 55,  128 => 54,  122 => 53,  115 => 52,  112 => 51,  106 => 50,  99 => 49,  96 => 48,  87 => 42,  78 => 36,  73 => 34,  38 => 1,);
+        return array (  377 => 101,  373 => 100,  338 => 157,  332 => 154,  319 => 144,  311 => 139,  307 => 138,  303 => 137,  299 => 136,  287 => 127,  279 => 122,  275 => 121,  271 => 120,  263 => 115,  259 => 114,  255 => 113,  248 => 109,  239 => 102,  237 => 100,  226 => 94,  222 => 93,  214 => 90,  208 => 89,  202 => 88,  195 => 86,  188 => 84,  172 => 71,  168 => 70,  164 => 69,  160 => 67,  158 => 66,  151 => 61,  149 => 60,  145 => 58,  138 => 56,  131 => 55,  128 => 54,  122 => 53,  115 => 52,  112 => 51,  106 => 50,  99 => 49,  96 => 48,  87 => 42,  78 => 36,  73 => 34,  38 => 1,);
     }
 
     public function getSourceContext()

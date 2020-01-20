@@ -40,7 +40,7 @@ class ProductoController extends AbstractController
 
         // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
         if ($id>$ultimoProducto->getIdProd() || $id<1){
-            header('Location: /GuriZone/');
+            header('Location: http://gurizone.local/');
         }else
             $id = filter_var($id,FILTER_VALIDATE_INT);
         $productoSeleccionado = $productosConsulta->getById(intval($id));

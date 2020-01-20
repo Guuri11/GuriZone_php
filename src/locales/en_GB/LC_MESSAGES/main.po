@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-01-17 12:44+0100\n"
-"PO-Revision-Date: 2020-01-17 12:50+0100\n"
+"POT-Creation-Date: 2020-01-19 13:39+0100\n"
+"PO-Revision-Date: 2020-01-19 13:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -14,27 +14,126 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:99
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:78
+msgid "BUSCAR"
+msgstr "SEARCH"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:102
 msgid "REGISTRARSE"
 msgstr "SIGN UP"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:105
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:108
 msgid "INICIAR SESIÓN"
 msgstr "LOG IN"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:115
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:131
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:118
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:134
 msgid "CERRAR SESIÓN"
 msgstr "LOG OUT"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:121
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:124
 msgid "MI PERFIL"
 msgstr "PROFILE"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:137
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:140
 msgid "ADMIN"
 msgstr "ADMIN"
 
-#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:146
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:149
 msgid "CARRITO"
 msgstr "SHOPPING CART"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:158
+msgid "IDIOMA"
+msgstr "LANG"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:164
+msgid "Castellano"
+msgstr "Spanish"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:168
+msgid "Valenciano"
+msgstr "Valencian"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:172
+msgid "Inglés"
+msgstr "English"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:190
+msgid "INICIO"
+msgstr "HOME PAGE"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:197
+msgid "TIENDA"
+msgstr "SHOP"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:204
+msgid "ACCESORIOS"
+msgstr "ACCESORIES"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:210
+msgid "ROPA"
+msgstr "CLOTHIG"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:216
+msgid "ZAPATILLAS"
+msgstr "SNEAKERS"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:222
+msgid "SOBRE NOSOTROS"
+msgstr "ABOUT US"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:228
+msgid "CONTACTANOS"
+msgstr "CONTACT US"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:248
+msgid "Navegacion"
+msgstr "Navegation"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:255
+msgid "Ventas online"
+msgstr "Online sells"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:259
+msgid "Caracteristicas"
+msgstr "Features"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:263
+msgid "Carrito"
+msgstr "Shopping cart"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:271
+msgid "Comercio movil"
+msgstr "Mobile commerce"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:275
+msgid "Envios"
+msgstr "Shipping"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:279
+msgid "Desarrollo Web"
+msgstr "Web Development"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:287
+msgid "Punto de venta"
+msgstr "Point of sale"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:307
+msgid "Nuevo producto!"
+msgstr "New product!"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:319
+msgid "Informacion de contacto"
+msgstr "Contact information"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:332
+msgid "Subscribete"
+msgstr "Subscribe"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:338
+msgid "Enviar"
+msgstr "Send"
+
+#~ msgid "Sobre Nosotros"
+#~ msgstr "About Us"

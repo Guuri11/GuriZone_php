@@ -27,24 +27,24 @@
     <!--NAVBAR-->
     <header class="site-navbar" role="banner">
         <div class="site-navbar-top">
-            <div class="container">
+            <div class="container-header">
                 <div class="row align-items-center">
 
-                    <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+                    <div class="col-4 col-md-4 order-2 order-md-1 site-search-icon text-left">
                         <form action="{{ router.generateURL('Producto','catalogo') }}" method="get" class="site-block-top-search">
                             <button type="submit" class="icon icon-search mr-5 bg-white"></button>
                             <input type="text" class="form-control border-0" name="search" placeholder="{% trans "BUSCAR" %}">
                         </form>
                     </div>
 
-                    <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+                    <div class="col-4 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                         <div >
                             <a href="{{ router.generateURL('Producto','index') }}" class=""><img class="img-fluid gurilogo" src="/../imgs/logo_black.png" width="45%"></a>
                         </div>
                     </div>
-                    <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+                    <div class="col-4 col-md-4 order-3 order-md-3 text-right">
                         <div class="site-top-icons">
-                            <ul>
+                            <ul class="site-menu">
                                 {% if usuario == 'anonimo' %} {# SI EL USER ES ANONIMO: OPCION REGISTRARSE #}
                                 <li><a href="{{ router.generateURL('Usuario','registrarse') }}"><span class="icon icon-person_add "></span> {% trans "REGISTRARSE" %}</a>
                                 <li><a href="{{ router.generateURL('Usuario','login') }}"><span class="icon icon-sign-in"></span> {% trans "INICIAR SESIÓN" %}</a></li>
@@ -60,11 +60,21 @@
                                         <span class="icon icon-shopping_cart"></span> {% trans "CARRITO" %}
                                     </a>
                                 </li>
-                                <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
+                                <li>
+                                    <div class="dropdown">
+                                        <a href="#" class="site-cart dropdown-toggle" data-toggle="dropdown">
+                                            <span class="icon icon-language"></span> {% trans "IDIOMA" %}
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item-text" href="?lang=esp">{% trans "Castellano" %}</a>
+                                            <a class="dropdown-item-text" href="?lang=val">{% trans "Valenciano" %}</a>
+                                            <a class="dropdown-item-text" href="?lang=ang">{% trans "Inglés" %}</a>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -80,11 +90,10 @@
                             <li><a href="{{ router.generateURL('Producto','catalogo') }}?categoria=zapatillas&page=1">{% trans "ZAPATILLAS" %}</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">{% trans "SOBRE NOSOTROS" %}</a></li>
                     <li><a href="{{ router.generateURL('Usuario','contacto') }}">{% trans "CONTACTANOS" %}</a></li>
                 </ul>
             </div>
-        </nav>
         </nav>
     </header>
     <!--FIN NAVBAR-->

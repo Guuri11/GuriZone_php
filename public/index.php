@@ -21,7 +21,6 @@ if (!array_key_exists('rol',$_SESSION)){
     $_SESSION['id'] = $id_usuario;
     $_SESSION['loggued'] = false;
 }
-
 $db = new DB();
 $di->set('PDO', $db->getConnection());
 
@@ -66,26 +65,6 @@ try{
 }catch (PDOException $exception){
     echo $exception->getMessage();
 }
-
-$lang="es_ES";
-// here we define the global system locale given the found language
-putenv("LANGUAGE=$lang");
-
-// this might be useful for date functions (LC_TIME) or money formatting (LC_MONETARY), for instance
-setlocale(LC_ALL, $lang);
-
-// this will make Gettext look for ../locales/<lang>/LC_MESSAGES/main.mo
-bindtextdomain('main', __DIR__ . '/../src/locales');
-
-// indicates in what encoding the file should be read
-bind_textdomain_codeset('main', 'UTF-8');
-
-// here we indicate the default domain the gettext() calls will respond to
-textdomain('main');
-
-// this would look for the string in forum.mo instead of main.mo
-// echo dgettext('forum', 'Welcome back!');
-
 
 $route = new Router($di);
 echo $route->route($request);
