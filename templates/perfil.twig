@@ -19,13 +19,13 @@
                     <hr/>
                 </div>
                 <div class="col-12">
-                    <h3 class="text-black text-center">NOMBRE</h3>
+                    <h3 class="text-black text-center">{{ user.nombre |upper }}</h3>
                     <div class="container">
                         <p>Usuario: {{ user.nombre }}</p>
                         <p>Email: {{ user.email }}</p>
                     </div>
-                    <div class="container">
-                        <a href="#" class="btn btn-primary">Editar perfil</a>
+                    <div class="container mt-3">
+                    <a href="{{ router.generateURL('Usuario','cambiarPass') }}" class="btn btn-primary">Cambiar contraseña</a>
                     </div>
                     {% if usuario == 'empleado' %}
                     <div class="container mt-3">

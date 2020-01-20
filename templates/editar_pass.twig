@@ -1,0 +1,52 @@
+{% extends "base.twig" %}
+{% block body %}
+    <div class="container">
+        <div class="justify-content-center gurizone-login p-lg-4 m-lg-5 p-md-4 m-md-3 p-sm-4 m-sm-5">
+            <h1 class="text-center">Cambiar contraseña</h1>
+            <!--RESOLUCION DEL UPDATE-->
+            {% if datos_enviados == true and errores is empty %}
+                <h3 class="text-success text-center">Actualización exitosa!</h3>
+            {% elseif datos_enviados == true and errores is not empty %}
+                <h3 class="text-danger text-center">Error en la actualizacion!</h3>
+                {% for error in errores %}
+                    <h5 class="text-danger text-center">{{ error }}</h5>
+                {% endfor %}
+            {% endif %}
+            <!--FIN RESOLUCION DEL UPDATE-->
+            <form action="{{ router.generateURL('Usuario','cambiarPass') }}" method="post">
+                <div class="form-group">
+                    {% if errores.password is defined%}
+                        <p class="text-danger">Por favor, introduzca una contraseña</p>
+                    {% elseif errores.pass_corta is defined %}
+                        <p class="text-danger">{{ errores.pass_corta }}</p>
+                    {% elseif errores.pass_no_igual is defined %}
+                        <p class="text-danger">{{ errores.pass_no_igual }}</p>
+                    {% endif %}
+                    <label for="pwd" class="text-black">Contraseña antigua:</label>
+                    <input type="password" class="form-control" id="old_password" placeholder="" name="old_password">
+                </div>
+                <div class="form-group">
+                    {% if errores.password is defined%}
+                        <p class="text-danger">Por favor, introduzca una contraseña</p>
+                    {% elseif errores.pass_corta is defined %}
+                        <p class="text-danger">{{ errores.pass_corta }}</p>
+                    {% elseif errores.pass_no_igual is defined %}
+                        <p class="text-danger">{{ errores.pass_no_igual }}</p>
+                    {% endif %}
+                    <label for="pwd" class="text-black">Contraseña nueva:</label>
+                    <input type="password" class="form-control" id="new_password" placeholder="" name="new_password">
+                </div>
+                {% if errores.password is defined%}
+                    <p class="text-danger">Por favor, repita su contraseña</p>
+                {% endif %}
+                <div class="form-group">
+                    <label for="pwd" class="text-black">Confirma tu contraseña nueva:</label>
+                    <input type="password" class="form-control" id="password_repeat" placeholder="" name="password_repeat">
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

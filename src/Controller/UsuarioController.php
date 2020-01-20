@@ -399,6 +399,56 @@ class UsuarioController extends AbstractController
         }
     }
 
+    public function cambiarPass(){
+        global $rol_usuario,$user;
+        $productosConsulta = new ProductoModel($this->db);
+        $categoriaConsulta = new CategoriasModel($this->db);
+        $usuarioConsulta = new UsuarioModel($this->db);
+        $rolConsulta = new RolesModel($this->db);
+        $ultimoProducto = $productosConsulta->getLatestProduct();
+        $errores = [];
+        $datos_enviados = false;
+
+        // Controlar que el usuario anonimo no puede entrar a la vista profile
+        if ($rol_usuario === 'anonimo'){
+            global $route;
+            header("Location: ".$route->generateURL('Usuario','login')); // redirigir al perfil
+        }
+        if ($_SERVER['REQUEST_METHOD']==='POST'){
+            //Recogemos los datos
+            $datos = $_POST;
+
+            // Comprobar que todos los campos han sido rellenados
+            foreach ($datos as $dato => $valor) {
+                if (empty($valor)) {
+                    $errores[$dato] = "Por favor, introduzca su ".$dato;
+                }
+            }
+            // validar contraseña vieja
+            $old_pass = $usuarioConsulta->getById($user->getIdCli())->getPassword();
+            if (password_verify($datos['old_pass'],$old_pass)){
+                // si es valida comprobamos la longitud de la nueva y la saneamos
+                //Comprobar que la contraseña sea valida
+                if (strlen($datos['password'])<6)
+                    $errores['pass_corta'] = "Contraseña demasiado corta! Necesita 6 carácteres como mínimo.";
+                if ($datos['password']!==$datos['password_repeat'])
+                    $errores['pass_no_igual'] = "Las contraseñas no coinciden!";
+
+            }
+
+            // si la nueva es valida la comparamos con la contraseña repetida
+
+            // si son la misma actualizamos datos
+        }
+        return $this->render('editar_pass.twig',[
+            'usuario'=>$rol_usuario,
+            'ultimo_producto'=>$ultimoProducto,
+            'user'=>$user
+        ]);
+
+
+    }
+
 
 
 }

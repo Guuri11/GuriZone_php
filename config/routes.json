@@ -64,6 +64,10 @@
     "controller": "Usuario",
     "method": "perfil"
   },
+  "mi_perfil/cambiar_pass": {
+    "controller": "Usuario",
+    "method": "cambiarPass"
+  },
   "contacto": {
     "controller": "Usuario",
     "method": "contactanos"
