@@ -59,7 +59,7 @@ class ProductoController extends AbstractController
                 $pdf = new Dompdf($options);
 
                 $pdf->loadHtml($this->render('producto_pdf.twig',['producto'=>$productoSeleccionado]));
-                $pdf->setPaper('A4',"portrait");
+                $pdf->setPaper('A4',"landscape");
                 $pdf->render();
 
                 $nombre_pdf = strtolower($productoSeleccionado->getModeloProd()).'_gurizone.pdf';

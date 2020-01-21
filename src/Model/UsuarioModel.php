@@ -224,6 +224,24 @@ class UsuarioModel{
         }
     }
 
+    public function updatePass(string $pass ,int $id):bool{
+        try{
+            $stmt = $this->db->prepare('UPDATE Usuario SET password=:password WHERE id_cli=:id_cli');
+            $datos = array(
+                ':id_cli'=>$id,
+                ':password'=>password_hash($pass,PASSWORD_DEFAULT)
+            );
+            $stmt->execute($datos);
+            if ($stmt->rowCount()){
+                return true;
+            }
+            else
+                return false;
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+
     public function selectPedidos(int $id){
         try{
             $stmt = $this->db->prepare('SELECT * FROM Pedidos WHERE cliente = :id');

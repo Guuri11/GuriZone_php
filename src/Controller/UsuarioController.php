@@ -417,6 +417,7 @@ class UsuarioController extends AbstractController
         if ($_SERVER['REQUEST_METHOD']==='POST'){
             //Recogemos los datos
             $datos = $_POST;
+            $datos_enviados = true;
 
             // Comprobar que todos los campos han sido rellenados
             foreach ($datos as $dato => $valor) {
@@ -424,26 +425,38 @@ class UsuarioController extends AbstractController
                     $errores[$dato] = "Por favor, introduzca su ".$dato;
                 }
             }
+            var_dump($errores);
+            $pass_vieja = filter_input(INPUT_POST,'old_password',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pass_nueva = filter_input(INPUT_POST,'new_password',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pass_repetida = filter_input(INPUT_POST,'password_repeat',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             // validar contraseña vieja
             $old_pass = $usuarioConsulta->getById($user->getIdCli())->getPassword();
-            if (password_verify($datos['old_pass'],$old_pass)){
-                // si es valida comprobamos la longitud de la nueva y la saneamos
+            var_dump($old_pass);
+            var_dump($pass_vieja);
+
+            if (password_verify($pass_vieja,$old_pass)){
+                // si es valida comprobamos la longitud de la nueva
                 //Comprobar que la contraseña sea valida
-                if (strlen($datos['password'])<6)
+                if (strlen($pass_nueva)<6)
                     $errores['pass_corta'] = "Contraseña demasiado corta! Necesita 6 carácteres como mínimo.";
-                if ($datos['password']!==$datos['password_repeat'])
+                    // si son la misma actualizamos datos
+                if ($pass_nueva !== $pass_repetida)
                     $errores['pass_no_igual'] = "Las contraseñas no coinciden!";
-
+                else{
+                    $actualizacion_exitosa = $usuarioConsulta->updatePass($pass_nueva,$user->getIdCli());
+                    if (!$actualizacion_exitosa)
+                        $errores[] = "Error al modificar contraseña";
+                }
+            }else{
+                $errores['old_pass_error']='No coincide su contraseña con la introducida!';
             }
-
-            // si la nueva es valida la comparamos con la contraseña repetida
-
-            // si son la misma actualizamos datos
         }
         return $this->render('editar_pass.twig',[
             'usuario'=>$rol_usuario,
             'ultimo_producto'=>$ultimoProducto,
-            'user'=>$user
+            'user'=>$user,
+            'errores'=>$errores,
+            'datos_enviados'=>$datos_enviados
         ]);
 
 
