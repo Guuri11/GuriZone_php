@@ -165,6 +165,10 @@ class UsuarioController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
+        if ($_SERVER['REQUEST_METHOD']==='POST' && array_key_exists('foto_perfil_nueva',$_FILES)){
+
+        }
+
         // Controlar que el usuario anonimo no puede entrar a la vista profile
         if ($rol_usuario === 'anonimo'){
             global $route;
