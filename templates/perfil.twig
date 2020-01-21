@@ -10,6 +10,7 @@
                     <div class="container mt-3">
                         <form action="{{ router.generateURL('Usuario','perfil') }}" method="post" enctype="multipart/form-data">
                             <div class="custom-file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="10000">
                                 <input type="file" class="custom-file-input" id="foto_perfil_nueva" name="foto_perfil_nueva">
                                 <label class="custom-file-label" for="customFile">Cambiar foto</label>
                                 <input type="submit" value="Actualizar foto" class="btn btn-primary mt-3 mb-3">
