@@ -31,8 +31,8 @@
         @media (min-width: 1200px) {
             .container {
                 max-width: 1140px; } }
-        .w-25{
-            width: 25%;
+        .w-50{
+            width: 50%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -48,7 +48,7 @@
     <p>Precio: {{ producto.getFotoProd }}</p>
     <p>Fecha salida: {{ producto.getFechaSalida|date('Y-m-d') }}</p>
     <p>
-        <img src="/opt/lampp/htdocs/GuriZone/public/imgs/productos/ropa/camisetas_nba/blazers/lillard_red.jpg" alt="Image" class="w-25">
+        <img src="/opt/lampp/htdocs/GuriZone/public{{ producto.getFotoProd }}" alt="Image" class="w-50">
     </p>
 </div>
 

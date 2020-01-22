@@ -9,7 +9,7 @@ if (array_key_exists('time',$_SESSION) && time()-$_SESSION['time'] >= 15*60){
 }
 
 // Claves App Twitter @gurizonebackend
-$consumer_key = 'trp5a5l4jbVCxChaH7yYD7W7q';
-$consumer_secret='w3JqxYJOSp6xbsZYEoHhTU00lWvNsaoBWL4fydBDkVYoHu8bC3';
-$access_token='1217927431757160453-f2eioQFmIEgoDShB5KxvGfG1e9kLle';
-$access_token_secret='LpOmaZMVHLUVvQ6WMSOh20qoeEgXpW9CuXTCgiONxi6GT';
+$consumer_key = '7B3W3adFLuPm24Bxwy4e113J3';
+$consumer_secret='zwQuxVactwkYI0ZaTsCee1sMnf9efRAVJ2bLQEkQAXfKruxtUQ';
+$access_token='1217927431757160453-3EV8IQk9KxYye4C2vEACTaWWe02KWn';
+$access_token_secret='uQVj0rgyRvaKmvtK18x4ujUGveu6OaXajGeeJh0HXnhJk';
