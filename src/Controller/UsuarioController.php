@@ -166,7 +166,30 @@ class UsuarioController extends AbstractController
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
         if ($_SERVER['REQUEST_METHOD']==='POST' && array_key_exists('foto_perfil_nueva',$_FILES)){
+            $errores = [];
+            $directorio = '/opt/lampp/htdocs/GuriZone/public/imgs/usuarios/';
+            $foto_subida = $directorio.basename($_FILES['foto_perfil_nueva']['name']);
+            $extension_foto = strtolower(pathinfo($foto_subida,PATHINFO_EXTENSION));
+            // comprobar que el fichero sea una foto
+            $check = getimagesize($_FILES['foto_perfil_nueva']['tmp_name']);
+            if($check === false)
+                $errores['fichero_no_foto'] = 'El fichero no es una foto';
+            // comprobar si el fichero existe
+            if (file_exists($foto_subida))
+                $errores['foto_existe'] = 'La foto ya existe';
+            // comprobar el tamaño de la foto
+            if ($_FILES['foto_perfil_nueva']['size']>10000)
+                $errores['tamano'] = 'El tamaño de la foto es demasiado grande. Maximo 10KB';
+            // comprobar el formato
+            if ($extension_foto !== 'jpg' && $extension_foto !== 'jpeg' && $extension_foto !== 'png')
+                $errores['formato'] = 'Formato de imagen no valido.';
 
+            echo "jeej";
+            var_dump($extension_foto);
+            var_dump($errores);
+            // si no hay errores, subir la foto
+            if (empty($errores))
+                move_uploaded_file($_FILES['foto_perfil_nueva']['tmp_name'],$foto_subida);
         }
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
