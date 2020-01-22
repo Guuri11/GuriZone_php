@@ -242,7 +242,7 @@ class UsuarioController extends AbstractController
         $fecha_final = NULL;
         $categoria = 'todo';
 
-        // Capa de proteccion para acceder al dashboard
+        // Capa de proteccion para acceder a la gestion de productos
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
             // Filtro por categoria
 
@@ -393,7 +393,7 @@ class UsuarioController extends AbstractController
         $rolConsulta = new RolesModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
-        // Capa de proteccion para acceder al dashboard
+        // Capa de proteccion para acceder a borrar un usuario
         if ( $rol_usuario === 'admin'){
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){

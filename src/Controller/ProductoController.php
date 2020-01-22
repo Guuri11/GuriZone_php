@@ -49,9 +49,12 @@ class ProductoController extends AbstractController
         if ($productoSeleccionado->getIdEmpleado()===$user->getIdCli())
             $producto_de_empleado = true;
 
+        // Control de si el usuario solicita ver el producto en PDF
         if ($_SERVER['REQUEST_METHOD']==='GET' && array_key_exists('pdf',$_GET)){
+            // obtiene el id del producto para usarlo de referencia
             $valor_pdf = filter_input(INPUT_GET,'pdf',FILTER_SANITIZE_FULL_SPECIAL_CHARS,FILTER_SANITIZE_STRING);
             $valor_pdf = intval($valor_pdf);
+            // si se solicita generar un pdf diferente al del producto al que estaba situado no lo genera
             if ($valor_pdf === $productoSeleccionado->getIdProd()){
                 $options = new Options();
                 $options->setIsRemoteEnabled(true);
@@ -173,7 +176,7 @@ class ProductoController extends AbstractController
         $datos_enviados = false;
         $errores = "";
 
-        // Capa de proteccion para acceder al dashboard
+        // Capa de proteccion para acceder al formulario para crear un producto
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
             if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $datos_enviados = true;
@@ -211,8 +214,8 @@ class ProductoController extends AbstractController
                             // Preparar para twittear foto del producto
                             $tweet_foto = $connection_tw->upload('media/upload',['media'=>'.'.$producto->getFotoProd()]);
                             // Texto del tweet
-                            $texto_tweet = 'Ojo! Nuevo producto en venta, os traemos las ';
-                            $texto_tweet .= $producto->getModeloProd().'. Entra a nuestra web y échales un vistazo:';
+                            $texto_tweet = 'Ojo! Nuevo producto en venta, os traemos el siguiente producto: ';
+                            $texto_tweet .= $producto->getModeloProd().'. Entra a nuestra web y échales un vistazo: ';
                             $texto_tweet .= 'http://gurizone.local';
 
                             $parametros_tweet = [
@@ -245,7 +248,7 @@ class ProductoController extends AbstractController
         $errores = "";
         $datos_enviados = false;
 
-        // Capa de proteccion para acceder al dashboard
+        // Capa de proteccion para acceder a un producto para editarlo
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado') {
             // Si se accede a editar producto y ID o su valor no existe redirigir a error.view
             if ($id > $ultimoProducto->getIdProd() || $id < 1) {
@@ -322,7 +325,7 @@ class ProductoController extends AbstractController
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
 
-        // Capa de proteccion para acceder al dashboard
+        // Capa de proteccion para acceder a borrar un producto
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
             // 1. Averiguar si se ha solicitado eliminar un producto y filtrarlo
             if($_SERVER['REQUEST_METHOD']=='POST' && $this->request->getParams()->has('borrar')){
