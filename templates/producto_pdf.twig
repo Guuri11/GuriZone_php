@@ -43,13 +43,13 @@
 <h1 class="text-center">{{ producto.getModeloProd }}</h1>
 
 <div class="container">
-    <p>
-        <img src="/opt/lampp/htdocs/GuriZone/public{{ producto.getFotoProd }}" alt="Image" class="w-25">
-    </p>
     <div>{{ producto.getDescripcion }}</div>
     <hr/>
-    <p>Precio: {{ producto.getPrecioUnidad }}</p>
+    <p>Precio: {{ producto.getFotoProd }}</p>
     <p>Fecha salida: {{ producto.getFechaSalida|date('Y-m-d') }}</p>
+    <p>
+        <img src="/opt/lampp/htdocs/GuriZone/public/imgs/productos/ropa/camisetas_nba/blazers/lillard_red.jpg" alt="Image" class="w-25">
+    </p>
 </div>
 
 </body>
