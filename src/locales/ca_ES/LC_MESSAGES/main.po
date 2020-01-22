@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-01-22 12:41+0100\n"
+"PO-Revision-Date: 2020-01-22 12:41+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ../../../../templates_php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:78
+msgid "BUSCAR"
+msgstr "BUSCAR"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:102
+msgid "REGISTRARSE"
+msgstr "REGISTRARSE"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:108
+msgid "INICIAR SESIÓN"
+msgstr "INICIAR SESSIÓ"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:118
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:134
+msgid "CERRAR SESIÓN"
+msgstr "TANCAR SESSIÓ"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:124
+msgid "MI PERFIL"
+msgstr "PERFIL"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:140
+msgid "ADMIN"
+msgstr "ADMIN"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:149
+msgid "CARRITO"
+msgstr "CISTELLA"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:158
+msgid "IDIOMA"
+msgstr "IDIOMA"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:164
+msgid "Castellano"
+msgstr "Castellà"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:168
+msgid "Valenciano"
+msgstr "Valencià"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:172
+msgid "Inglés"
+msgstr "Anglés"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:190
+msgid "INICIO"
+msgstr "INICI"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:197
+msgid "TIENDA"
+msgstr "TENDA"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:204
+msgid "ACCESORIOS"
+msgstr "ACCESSORIS"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:210
+msgid "ROPA"
+msgstr "ROBA"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:216
+msgid "ZAPATILLAS"
+msgstr "SABATES"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:222
+msgid "SOBRE NOSOTROS"
+msgstr "SOBRE NOSALTRES"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:228
+msgid "CONTACTANOS"
+msgstr "CONTACTAN'S"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:248
+msgid "Navegacion"
+msgstr "Navegació"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:255
+msgid "Ventas online"
+msgstr "Ventes online"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:259
+msgid "Caracteristicas"
+msgstr "Característiques"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:263
+msgid "Carrito"
+msgstr "Cistella"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:271
+msgid "Comercio movil"
+msgstr "Comerç mòbil"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:275
+msgid "Envios"
+msgstr "Enviaments"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:279
+msgid "Desarrollo Web"
+msgstr "Desenvolupament Web"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:287
+msgid "Punto de venta"
+msgstr "Punt de venta"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:307
+msgid "Nuevo producto!"
+msgstr "Nou producte!"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:319
+msgid "Informacion de contacto"
+msgstr "Informació de contacte"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:332
+msgid "Subscribete"
+msgstr "Subscriute'n"
+
+#: 7b/7bd977d2df05421879c3b9050b504717f5990439729a6f916a10ba5ac481e5d0.php:338
+msgid "Enviar"
+msgstr "Envia"
