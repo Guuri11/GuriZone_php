@@ -11,6 +11,7 @@ use App\Model\ProductoModel;
 use App\Model\RolesModel;
 use App\Model\UsuarioModel;
 use PDOException;
+use Sabberworm\CSS\Value\Value;
 
 
 class UsuarioController extends AbstractController
@@ -164,32 +165,28 @@ class UsuarioController extends AbstractController
         global $rol_usuario,$user;
         $productosConsulta = new ProductoModel($this->db);
         $ultimoProducto = $productosConsulta->getLatestProduct();
+        $usuariosConsulta = new UsuarioModel($this->db);
+        $errores = [];
 
         if ($_SERVER['REQUEST_METHOD']==='POST' && array_key_exists('foto_perfil_nueva',$_FILES)){
-            $errores = [];
             $directorio = '/opt/lampp/htdocs/GuriZone/public/imgs/usuarios/';
             $foto_subida = $directorio.basename($_FILES['foto_perfil_nueva']['name']);
             $extension_foto = strtolower(pathinfo($foto_subida,PATHINFO_EXTENSION));
-            // comprobar que el fichero sea una foto
-            $check = getimagesize($_FILES['foto_perfil_nueva']['tmp_name']);
-            if($check === false)
-                $errores['fichero_no_foto'] = 'El fichero no es una foto';
-            // comprobar si el fichero existe
-            if (file_exists($foto_subida))
-                $errores['foto_existe'] = 'La foto ya existe';
-            // comprobar el tamaño de la foto
-            if ($_FILES['foto_perfil_nueva']['size']>10000)
-                $errores['tamano'] = 'El tamaño de la foto es demasiado grande. Maximo 10KB';
-            // comprobar el formato
-            if ($extension_foto !== 'jpg' && $extension_foto !== 'jpeg' && $extension_foto !== 'png')
-                $errores['formato'] = 'Formato de imagen no valido.';
+            $errores = $usuariosConsulta->validateUploadPhoto($foto_subida,$extension_foto);
+            // si no hay errores, subir la foto a la carpeta
+            if (empty($errores) && !file_exists($foto_subida)){
+                $subido_ok = move_uploaded_file($_FILES['foto_perfil_nueva']['tmp_name'],$foto_subida);
+                if ($subido_ok){
+                    $user->setFotoPerfil('imgs/usuarios/'.$_FILES['foto_perfil_nueva']['name']);
+                    if (!$usuariosConsulta->updateFotoPerfil($user->getFotoPerfil(),$user->getIdCli()))
+                        $errores['fallo_actualizacion'] = "Ha habido un error en la actualizacion, intentelo mas tarde por favor";
 
-            echo "jeej";
-            var_dump($extension_foto);
-            var_dump($errores);
-            // si no hay errores, subir la foto
-            if (empty($errores))
-                move_uploaded_file($_FILES['foto_perfil_nueva']['tmp_name'],$foto_subida);
+                }
+            }elseif (empty($errores) && file_exists($foto_subida)){
+                $user->setFotoPerfil('imgs/usuarios/'.$_FILES['foto_perfil_nueva']['name']);
+                if (!$usuariosConsulta->updateFotoPerfil($user->getFotoPerfil(),$user->getIdCli()))
+                    $errores['fallo_actualizacion'] = "Ha habido un error en la actualizacion, intentelo mas tarde por favor";
+            }
         }
 
         // Controlar que el usuario anonimo no puede entrar a la vista profile
@@ -201,7 +198,8 @@ class UsuarioController extends AbstractController
             return $this->render('perfil.twig',[
                 'usuario'=>$rol_usuario,
                 'ultimo_producto'=>$ultimoProducto,
-                'user'=>$user
+                'user'=>$user,
+                'errores'=>$errores
             ]);
         }
     }
@@ -452,14 +450,11 @@ class UsuarioController extends AbstractController
                     $errores[$dato] = "Por favor, introduzca su ".$dato;
                 }
             }
-            var_dump($errores);
             $pass_vieja = filter_input(INPUT_POST,'old_password',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $pass_nueva = filter_input(INPUT_POST,'new_password',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $pass_repetida = filter_input(INPUT_POST,'password_repeat',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             // validar contraseña vieja
             $old_pass = $usuarioConsulta->getById($user->getIdCli())->getPassword();
-            var_dump($old_pass);
-            var_dump($pass_vieja);
 
             if (password_verify($pass_vieja,$old_pass)){
                 // si es valida comprobamos la longitud de la nueva

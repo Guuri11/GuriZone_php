@@ -7,6 +7,15 @@
                     <div>
                         <img src="../{{ user.getFotoPerfil }}" width="100px">
                     </div>
+                    {% if errores.fallo_actualizacion is defined %}
+                        <p class="text-danger mt-1">{{ errores.fallo_actualizacion }}</p>
+                    {% elseif errores.fichero_no_foto is defined %}
+                        <p class="text-danger mt-1">{{ errores.fichero_no_foto }}</p>
+                    {% elseif errores.tamano is defined %}
+                        <p class="text-danger mt-1">{{ errores.tamano }}</p>
+                    {% elseif errores.formato is defined %}
+                        <p class="text-danger mt-1">{{ errores.formato }}</p>
+                    {% endif %}
                     <div class="container mt-3">
                         <form action="{{ router.generateURL('Usuario','perfil') }}" method="post" enctype="multipart/form-data">
                             <div class="custom-file">

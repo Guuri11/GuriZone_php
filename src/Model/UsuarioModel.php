@@ -242,6 +242,24 @@ class UsuarioModel{
         }
     }
 
+    public function updateFotoPerfil(string $foto, int $id):bool{
+        try{
+            $stmt = $this->db->prepare('UPDATE Usuario SET foto_perfil=:foto_perfil WHERE id_cli=:id_cli');
+            $datos = array(
+                ':id_cli'=>$id,
+                ':foto_perfil'=>$foto
+            );
+            $stmt->execute($datos);
+            if ($stmt->rowCount()){
+                return true;
+            }
+            else
+                return false;
+        }catch (PDOException $exception){
+            echo $exception->getMessage();
+        }
+    }
+
     public function selectPedidos(int $id){
         try{
             $stmt = $this->db->prepare('SELECT * FROM Pedidos WHERE cliente = :id');
@@ -294,5 +312,26 @@ class UsuarioModel{
         }catch (PDOException $exception){
             echo $exception->getMessage();
         }
+    }
+
+    public function validateUploadPhoto(string $foto, string $extension_foto):array {
+        $errores = [];
+
+        // comprobar que el fichero sea una foto
+        $check = getimagesize($_FILES['foto_perfil_nueva']['tmp_name']);
+        if($check === false){
+            $errores['fichero_no_foto'] = 'El fichero no es una foto';
+            return $errores;
+        }
+        // comprobar el tamaño de la foto
+        if ($_FILES['foto_perfil_nueva']['size']>10000){
+            $errores['tamano'] = 'El tamaño de la foto es demasiado grande. Maximo 10KB';
+            return $errores;
+        }
+        // comprobar el formato
+        if ($extension_foto !== 'jpg' && $extension_foto !== 'jpeg' && $extension_foto !== 'png')
+            $errores['formato'] = 'Formato de imagen no valido.';
+
+        return $errores;
     }
 }
