@@ -220,10 +220,9 @@ class ProductoController extends AbstractController
                                 $texto_tweet = 'Ojo! Nuevo producto en venta, os traemos el siguiente producto: ';
                                 $texto_tweet .= $producto->getModeloProd().'. Entra a nuestra web y échales un vistazo: ';
                                 $texto_tweet .= 'http://gurizone.local';
-
                                 $parametros_tweet = [
                                     'status'=>$texto_tweet,
-                                    'media_ids'=>[$tweet_foto->media_id_string]
+                                    'media_ids'=>[$tweet_foto->media_id_string ?? './imgs/default_profile.jpg']
                                 ];
                                 // Subir Tweet
                                 $tweet = $connection_tw->post('statuses/update',$parametros_tweet);
