@@ -45,7 +45,7 @@
 <div class="container">
     <div>{{ producto.getDescripcion }}</div>
     <hr/>
-    <p>Precio: {{ producto.getPrecio }}</p>
+    <p>Precio: {{ producto.getPrecioUnidad }}€</p>
     <p>Fecha salida: {{ producto.getFechaSalida|date('Y-m-d') }}</p>
     <p>
         <img src="/opt/lampp/htdocs/GuriZone/public{{ producto.getFotoProd }}" alt="Image" class="w-50">
