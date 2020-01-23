@@ -168,7 +168,7 @@ class UsuarioController extends AbstractController
         $usuariosConsulta = new UsuarioModel($this->db);
         $errores = [];
 
-        if ($_SERVER['REQUEST_METHOD']==='POST' && array_key_exists('foto_perfil_nueva',$_FILES)){
+        if ($_SERVER['REQUEST_METHOD']==='POST' && array_key_exists('foto_perfil_nueva',$_FILES) && !empty($_FILES['foto_perfil_nueva']['name'])){
             $directorio = '/opt/lampp/htdocs/GuriZone/public/imgs/usuarios/';
             $foto_subida = $directorio.basename($_FILES['foto_perfil_nueva']['name']);
             $extension_foto = strtolower(pathinfo($foto_subida,PATHINFO_EXTENSION));

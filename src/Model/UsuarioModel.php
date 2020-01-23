@@ -143,6 +143,7 @@ class UsuarioModel{
                 return $stmt->fetch();
             }
         }catch (PDOException $e){
+
             echo $e->getMessage();
         }
     }
