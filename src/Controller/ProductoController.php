@@ -176,6 +176,7 @@ class ProductoController extends AbstractController
 
         $datos_enviados = false;
         $errores = "";
+        $warning = "";
 
         // Capa de proteccion para acceder al formulario para crear un producto
         if ( $rol_usuario === 'admin' || $rol_usuario === 'empleado'){
@@ -227,7 +228,7 @@ class ProductoController extends AbstractController
                                 // Subir Tweet
                                 $tweet = $connection_tw->post('statuses/update',$parametros_tweet);
                             }catch (TwitterOAuthException $exception){
-                                echo $exception;
+                                $warning = 'Fallo con la API de Twitter...';
                             }
                         }
                     }
@@ -237,7 +238,8 @@ class ProductoController extends AbstractController
                'usuario'=>$rol_usuario,
                'ultimo_producto'=>$ultimoProducto,
                'datos_enviados'=>$datos_enviados,
-                'errores'=>$errores
+                'errores'=>$errores,
+                'warning'=>$warning
             ]);
         } else{
             global $request;

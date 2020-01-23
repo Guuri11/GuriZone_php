@@ -9,6 +9,8 @@
                 {% for error in errores %}
                 <h5 class="text-danger text-center">{{ error }}</h5>
                 {% endfor %}
+            {% elseif datos_enviados == true and warning is not empty %}
+                <h3 class="text-warning text-center">{{ warning }}</h3>
             {% elseif datos_enviados == true and errores is empty %}
             <h3 class="text-success text-center">Inserción del producto realizada!</h3>
             {% endif %}
