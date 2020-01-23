@@ -324,8 +324,8 @@ class UsuarioModel{
             return $errores;
         }
         // comprobar el tamaño de la foto
-        if ($_FILES['foto_perfil_nueva']['size']>10000){
-            $errores['tamano'] = 'El tamaño de la foto es demasiado grande. Maximo 10KB';
+        if ($_FILES['foto_perfil_nueva']['size']>100000){
+            $errores['tamano'] = 'El tamaño de la foto es demasiado grande. Maximo 100KB';
             return $errores;
         }
         // comprobar el formato

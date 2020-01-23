@@ -1,19 +1,9 @@
-
-Ir al contenido
-Uso de Gmail con lectores de pantalla
-Conversaciones
-1,84 GB (12%) ocupados de 15 GB
-Gestionar
-Condiciones · Privacidad · Política del programa
-Última actividad de la cuenta: hace 9 horas
-Detalles
-
 -- phpMyAdmin SQL Dump
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Temps de generació: 09-01-2020 a les 12:12:22
+-- Temps de generació: 23-01-2020 a les 09:36:19
 -- Versió del servidor: 10.4.6-MariaDB
 -- Versió de PHP: 7.3.9
 
@@ -94,7 +84,7 @@ CREATE TABLE `Pedidos` (
 
 CREATE TABLE `Producto` (
   `id_prod` int(11) NOT NULL,
-  `id_empleado` int(11) NOT NULL DEFAULT 2,
+  `id_empleado` int(11) NOT NULL,
   `modelo_prod` varchar(255) NOT NULL,
   `marca_prod` varchar(255) NOT NULL,
   `categoria_prod` int(11) NOT NULL,
@@ -117,7 +107,7 @@ CREATE TABLE `Producto` (
 --
 
 INSERT INTO `Producto` (`id_prod`, `id_empleado`, `modelo_prod`, `marca_prod`, `categoria_prod`, `subcategoria_prod`, `color`, `color_disp`, `talla`, `talla_disp`, `stock_prod`, `num_ventas_prod`, `fecha_salida`, `precio_unidad`, `foto_prod`, `descripcion`, `descatalogado`) VALUES
-(8, 2, 'Calcetines NBA', 'Nike', 1, 3, 'blanco', 10, '40-45', 10, 10, 56, '2019-11-07 00:00:00', 15, '/imgs/productos/accesorios/calcetines.jpg', 'Calcetines oficiales de la NBA', 0),
+(8, 8, 'Calcetines NBA', 'Nike', 1, 3, 'blanco', 10, '40-45', 10, 10, 56, '2019-11-07 00:00:00', 15, '/imgs/productos/accesorios/calcetines.jpg', 'Calcetines oficiales de la NBA', 0),
 (9, 2, 'Gorra Blazers', 'NBA', 1, 3, 'negro', 10, 'universal', 10, 10, 45, '2019-10-09 00:00:00', 20, '/imgs/productos/accesorios/gorra_blazers.jpg', 'Gorra de los Portland Trail Blazers', 0),
 (10, 2, 'Gorra Bulls', 'NBA', 1, 3, 'negro', 10, 'universal', 10, 10, 56, '2019-10-17 00:00:00', 20, '/imgs/productos/accesorios/gorra_bulls.jpg', 'Gorra de los Chicago Bulls', 0),
 (11, 2, 'Sudadera Chicago Bulls', 'NBA', 2, 5, 'negro', 10, 'm', 10, 10, 23, '2019-11-05 09:00:00', 45, '/imgs/productos/ropa/calle/bulls_hoodie.jpg', 'Sudadera de los Chicago Bulls', 0),
@@ -141,9 +131,13 @@ INSERT INTO `Producto` (`id_prod`, `id_empleado`, `modelo_prod`, `marca_prod`, `
 (29, 2, 'Camiseta RJ Barret', 'NBA', 2, 4, 'azul', 10, 'l', 10, 10, 65, '2019-11-04 00:00:00', 70, '/imgs/productos/ropa/camisetas_nba/knicks/barret_blue.jpg', 'Camiseta de la promesa de los New York Knicks, RJ Barret', 0),
 (30, 2, 'Camiseta Tracy Mcgrady', 'NBA', 2, 4, 'azul', 10, 'm', 10, 10, 10, '2019-11-02 00:00:00', 90, '/imgs/productos/ropa/camisetas_nba/magic/mcgrady_black.jpg', 'Camiseta retro de Tracy McGrady con los Orlando Magic', 0),
 (32, 2, 'DM Spider', 'Adidas', 2, 11, 'rojo', 19, 'm', 19, 19, 0, '2019-11-15 11:58:25', 90, '/imgs/productos/zapatillas/spider.jpg', 'Primeras zapatillas Donovan Mitchell', 0),
-(33, 2, 'Camiseta Kyrie Irving', 'NBA', 2, 4, 'negro', 10, 's', 10, 10, 0, '2019-11-18 11:30:14', 90, '/imgs/productos/ropa/camisetas_nba/nets/irving_black.jpg', 'Camiseta de Kyrie Irving con los Brooklyn Nets', 0),
 (34, 2, 'PG 2', 'Nike', 3, 10, 'negro', 10, '41', 10, 10, 0, '2019-11-21 09:52:32', 100, '/imgs/productos/zapatillas/pg_2.jpg', 'Zapatillas Paul George 2', 0),
-(65, 2, 'Camiseta Stephen Curry', 'NBA', 2, 4, 'azul', 10, 's', 10, 10, 0, '2019-12-12 09:26:40', 95, '/imgs/productos/ropa/camisetas_nba/warriors/curry_blue.jpg', 'Camiseta de la estrella de los Golden State Warriors, Stephen Curry.', 0);
+(65, 2, 'Camiseta Stephen Curry', 'NBA', 2, 4, 'azul', 10, 's', 10, 10, 0, '2019-12-12 09:26:40', 95, '/imgs/productos/ropa/camisetas_nba/warriors/curry_blue.jpg', 'Camiseta de la estrella de los Golden State Warriors, Stephen Curry.', 0),
+(66, 2, 'Camiseta Allen Iverson retro', 'nba', 2, 4, 'negro', 45, 'xl', 45, 45, 0, '2020-01-23 08:12:08', 110, '/imgs/productos/ropa/camisetas_nba/sixers/iverson_black.jpg', 'Camiseta allen iverson', 0),
+(70, 8, 'Air Jordan 1', 'Jordan', 1, 9, 'verde', 45, '41', 45, 45, 0, '2020-01-23 09:06:30', 100, '/imgs/productos/zapatillas/air_jordan_1_green.jpg', 'Las Air Jordan 1 Mid se inspiran en las primeras AJ1 para que los aficionados de las originales aprecien lo lejos que ha llegado la marca Jordan desde 1985.', 0),
+(74, 8, 'Camiseta retro Shaquille Oneal', 'NBA', 2, 4, 'amarillo', 45, 'm', 45, 45, 0, '2020-01-23 09:18:07', 110, '/imgs/productos/ropa/camisetas_nba/lakers/oneal_yellow.jpg', 'Camiseta retro de uno de los pivots más dominantes de la historia de la NBA en su mejor época con la franquicia angelina, Shaquille O&amp;amp;amp;#39;neal.', 0),
+(75, 8, 'Camiseta Zion Williamson', 'NBA', 2, 4, 'rojo', 67, 'l', 67, 67, 0, '2020-01-23 09:20:19', 80, '/imgs/productos/ropa/camisetas_nba/pelicans/williamson_red.jpg', 'Posiblemente el prospecto más esperado desde 2003 (el año que draftearon a Lebron James), la nueva cara de la joven generación de la NBA, Zion Williamson.', 0),
+(76, 8, 'Camiseta Russell Wesbrook', 'NBA', 2, 4, 'blanco', 54, 's', 54, 54, 0, '2020-01-23 09:21:46', 801, '/imgs/productos/ropa/camisetas_nba/thunder/westbrook_white.jpg', 'Camiseta del rey de los triples dobles en su etapa con los OKC Thunder, Russell Westbrook.', 0);
 
 -- --------------------------------------------------------
 
@@ -152,7 +146,7 @@ INSERT INTO `Producto` (`id_prod`, `id_empleado`, `modelo_prod`, `marca_prod`, `
 --
 
 CREATE TABLE `Roles` (
-  `id_rod` int(11) NOT NULL,
+  `id_rol` int(11) NOT NULL,
   `tipo_rol` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -160,10 +154,11 @@ CREATE TABLE `Roles` (
 -- Bolcament de dades per a la taula `Roles`
 --
 
-INSERT INTO `Roles` (`id_rod`, `tipo_rol`) VALUES
+INSERT INTO `Roles` (`id_rol`, `tipo_rol`) VALUES
 (1, 'anonimo'),
 (2, 'admin'),
-(3, 'usuario');
+(3, 'clientes'),
+(4, 'empleados');
 
 -- --------------------------------------------------------
 
@@ -215,10 +210,12 @@ CREATE TABLE `Usuario` (
 --
 
 INSERT INTO `Usuario` (`id_cli`, `rol`, `nombre`, `apellidos`, `email`, `password`, `foto_perfil`) VALUES
-(1, 1, 'anonimo', '', '', '', ''),
-(2, 2, 'admin', '', 'admin@admin.com', 'admin', ''),
-(3, 3, 'usuario', '', 'usuario@usuario.com', 'usuario', ''),
-(4, 3, 'Sergio', 'Gurillo Corral', 'empleado@gurizone.com', 'empleado', 'imgs/default_profile.jpg');
+(1, 1, 'anonimo', '', '', '', 'imgs/default_profile.jpg'),
+(2, 2, 'admin', '', 'admin@admin.com', '$2y$10$Vriw3oEaEuMtjVVKznkIm.CxyfHyX1XAUBq/v8my9OHT5fkcCnSCC', 'imgs/usuarios/prueba.jpeg'),
+(3, 3, 'usuario', '', 'usuario@usuario.com', '$2y$10$fgEEh0xiBB63rIkCbpcjYel/dzWfSaMUZZ84pVVdVyB50whBGUsS2', 'imgs/default_profile.jpg'),
+(7, 4, 'Sergio', 'Gurillo Corral', 'sergio.gurillo@gurizone.com', '$2y$10$RBouvr21bE25tdykf/JzI.Srd8.Bkn31Ar1qafi5E2XCxR.nq.yim', 'imgs/usuarios/prueba.jpeg'),
+(8, 4, 'Empleado', 'Empleado empleado', 'empleado@gurizone.com', '$2y$10$F6v2DPyhGZa0EDbX9ksOaulcS3xTRL1eEd69a6sdLOLBrSPi9zrjy', 'imgs/default_profile.jpg'),
+(9, 3, 'Pepito', 'Garcia Hernandez', 'pepito.gh@gmail.com', '$2y$10$bM1xoX2D4PyS9UBPw6S5IOxrXycz6CbMyPoQHLlj9YnNRjF1bb6mu', 'imgs/usuarios/pepito.png');
 
 --
 -- Índexs per a les taules bolcades
@@ -258,7 +255,7 @@ ALTER TABLE `Producto`
 -- Índexs per a la taula `Roles`
 --
 ALTER TABLE `Roles`
-  ADD PRIMARY KEY (`id_rod`);
+  ADD PRIMARY KEY (`id_rol`);
 
 --
 -- Índexs per a la taula `Subcategoria`
@@ -294,13 +291,13 @@ ALTER TABLE `Pedidos`
 -- AUTO_INCREMENT per la taula `Producto`
 --
 ALTER TABLE `Producto`
-  MODIFY `id_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT per la taula `Roles`
 --
 ALTER TABLE `Roles`
-  MODIFY `id_rod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la taula `Subcategoria`
@@ -312,7 +309,7 @@ ALTER TABLE `Subcategoria`
 -- AUTO_INCREMENT per la taula `Usuario`
 --
 ALTER TABLE `Usuario`
-  MODIFY `id_cli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_cli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restriccions per a les taules bolcades
@@ -349,12 +346,9 @@ ALTER TABLE `Subcategoria`
 -- Restriccions per a la taula `Usuario`
 --
 ALTER TABLE `Usuario`
-  ADD CONSTRAINT `Usuario_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `Roles` (`id_rod`);
+  ADD CONSTRAINT `Usuario_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `Roles` (`id_rol`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-GuriZone(4).sql
-Mostrando GuriZone(4).sql.
