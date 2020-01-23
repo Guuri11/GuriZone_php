@@ -63,7 +63,7 @@
                                         </figure>
                                         <div class="block-4-text p-4">
                                             <h3><a href="{{ router.generateURL('Producto','mostrarProducto',{id:producto.getIdProd}) }}">{{ producto.getModeloProd }}</a></h3>
-                                            <p class="mb-0">{{ producto.getNumVentas }} vendidos</p>
+                                            <p class="mb-0">{{ producto.getNumVentasProd }} vendidos</p>
                                             <p class="text-primary font-weight-bold">{{ producto.getPrecioUnidad }}€</p>
                                         </div>
                                     </div>
@@ -99,7 +99,6 @@
                                         </figure>
                                         <div class="block-4-text p-4">
                                             <h3><a href="{{ router.generateURL('Producto','mostrarProducto',{id:producto.getIdProd}) }}">{{ producto.getModeloProd }}</a></h3>
-                                            <p class="mb-0">{{ producto.getNumVentas }} vendidos</p>
                                             <p class="text-primary font-weight-bold">{{ producto.getPrecioUnidad }}€</p>
                                         </div>
                                     </div>
